@@ -173,7 +173,7 @@ summary(fit)
 ```
 
 
-## Dependência espacial
+# Dependência espacial
 
 ## Diagrama de Moran
 
