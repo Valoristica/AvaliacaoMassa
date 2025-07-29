@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt"><head>
-<script src="05_Espacial_files/libs/clipboard/clipboard.min.js"></script>
-<script src="05_Espacial_files/libs/quarto-html/tabby.min.js"></script>
-<script src="05_Espacial_files/libs/quarto-html/popper.min.js"></script>
-<script src="05_Espacial_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="05_Espacial_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="05_Espacial_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="05_Espacial_files/libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="06_Espacial_files/libs/clipboard/clipboard.min.js"></script>
+<script src="06_Espacial_files/libs/quarto-html/tabby.min.js"></script>
+<script src="06_Espacial_files/libs/quarto-html/popper.min.js"></script>
+<script src="06_Espacial_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="06_Espacial_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="06_Espacial_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="06_Espacial_files/libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.7.27">
 
   <meta name="author" content="Luiz Droubi">
@@ -14,8 +14,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="05_Espacial_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="05_Espacial_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="06_Espacial_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="06_Espacial_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -95,11 +95,11 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="05_Espacial_files/libs/revealjs/dist/theme/quarto-edcff130eb01ac5e239e676278bbed8d.css">
-  <link href="05_Espacial_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="05_Espacial_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="05_Espacial_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="05_Espacial_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="06_Espacial_files/libs/revealjs/dist/theme/quarto-edcff130eb01ac5e239e676278bbed8d.css">
+  <link href="06_Espacial_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="06_Espacial_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="06_Espacial_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="06_Espacial_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
     .reveal div.sourceCode {
       margin: 0;
@@ -208,7 +208,7 @@ Luiz Droubi
     </div>
 </div>
 
-  <p class="date">25 de julho de 2025</p>
+  <p class="date">29 de julho de 2025</p>
 </section>
 <section id="introdução" class="slide level2">
 <h2>Introdução</h2>
@@ -285,157 +285,21 @@ Luiz Droubi
 </div></div>
 </div>
 </section>
-<section id="importando-dados-espaciais-no-r" class="slide level2">
-<h2>Importando dados espaciais no R</h2>
+<section id="criando-dados-espaciais-no-r" class="slide level2">
+<h2>Criando dados espaciais no R</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(sf)</span>
-<span id="cb1-2"><a href=""></a>dados <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"./data/DadosEspaciais/Eventos_Ejercicio_BUAP.shp"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>dados <span class="ot">&lt;-</span></span>
+<span id="cb1-2"><a href=""></a>  <span class="fu">read.table</span>(</span>
+<span id="cb1-3"><a href=""></a>    <span class="st">'kO/cidade_ecologica.csv'</span>,</span>
+<span id="cb1-4"><a href=""></a>    <span class="at">encoding =</span> <span class="st">"UTF-8"</span>,</span>
+<span id="cb1-5"><a href=""></a>    <span class="at">header =</span> T,</span>
+<span id="cb1-6"><a href=""></a>    <span class="at">sep =</span> <span class="st">";"</span> ,</span>
+<span id="cb1-7"><a href=""></a>    <span class="at">dec =</span> <span class="st">","</span></span>
+<span id="cb1-8"><a href=""></a>  )</span>
+<span id="cb1-9"><a href=""></a><span class="fu">colnames</span>(dados)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `Eventos_Ejercicio_BUAP' from data source 
-  `C:\Users\lfpdr\Google Drive\_CURSOS\_PROPRIOS\AvaliacaoMassa\data\DadosEspaciais\Eventos_Ejercicio_BUAP.shp' 
-  using driver `ESRI Shapefile'
-Simple feature collection with 352 features and 31 fields
-Geometry type: POINT
-Dimension:     XYZ
-Bounding box:  xmin: 656069.6 ymin: 6823633 xmax: 660311.9 ymax: 6827908
-z_range:       zmin: 0 zmax: 0
-CRS:           NA</code></pre>
+<pre><code>[1] "id" "x"  "y"  "z" </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">dim</span>(dados)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 352  32</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">colnames</span>(dados)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "DADO"     "BAI_LOC"  "ENDERECO" "COMPL"    "VALOR"    "FONTE"   
- [7] "TELEFONE" "TOPOGRAF" "PAVIM"    "TESTADA"  "PROFUND"  "AREALOTE"
-[13] "E"        "N"        "DATA"     "TEMPO"    "ZF_NOVA"  "IA"      
-[19] "N_PAV"    "VU"       "RENDA"    "CENTENA"  "ANOS"     "LNVALOR" 
-[25] "ET"       "NT"       "ET2"      "NT2"      "ETNT"     "D_AV"    
-[31] "LNVU"     "geometry"</code></pre>
-</div>
-</div>
-</section>
-<section id="plotando-os-dados-espaciais" class="slide level2">
-<h2>Plotando os dados Espaciais</h2>
-
-<img data-src="05_Espacial_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
-<section id="análise-exploratória" class="slide level2">
-<h2>Análise Exploratória</h2>
-
-<img data-src="05_Espacial_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
-<section id="análise-exploratória-1" class="slide level2">
-<h2>Análise Exploratória</h2>
-
-<img data-src="05_Espacial_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
-<section id="modelo-inicial" class="slide level2">
-<h2>Modelo Inicial</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(VU <span class="sc">~</span> RENDA <span class="sc">+</span> N_PAV <span class="sc">+</span> AREALOTE <span class="sc">+</span> TESTADA <span class="sc">+</span> PAVIM, <span class="at">data =</span> dados)</span>
-<span id="cb7-2"><a href=""></a><span class="fu">summary</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = VU ~ RENDA + N_PAV + AREALOTE + TESTADA + PAVIM, 
-    data = dados)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1039.03  -125.99   -21.07    65.98  2122.95 
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  34.43161   87.25604   0.395 0.693378    
-RENDA         0.15106    0.01994   7.575 3.31e-13 ***
-N_PAV        87.53072    5.63174  15.542  &lt; 2e-16 ***
-AREALOTE     -0.47295    0.13196  -3.584 0.000387 ***
-TESTADA       5.23891    4.43900   1.180 0.238731    
-PAVIM       -81.00889   37.65311  -2.151 0.032132 *  
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 336.9 on 346 degrees of freedom
-Multiple R-squared:  0.6013,    Adjusted R-squared:  0.5956 
-F-statistic: 104.4 on 5 and 346 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-</div>
-</section>
-<section id="diagnóstico" class="slide level2">
-<h2>Diagnóstico</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb9-2"><a href=""></a><span class="fu">plot</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="05_Espacial_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
-<section id="novo-modelo" class="slide level2">
-<h2>Novo modelo</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>fitLog <span class="ot">&lt;-</span> <span class="fu">update</span>(fit, <span class="fu">log</span>(VU)<span class="sc">~</span>.)</span>
-<span id="cb10-2"><a href=""></a><span class="fu">summary</span>(fitLog)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = log(VU) ~ RENDA + N_PAV + AREALOTE + TESTADA + PAVIM, 
-    data = dados)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1.57112 -0.33446 -0.05498  0.27665  1.62198 
-
-Coefficients:
-               Estimate  Std. Error t value  Pr(&gt;|t|)    
-(Intercept)  5.13694415  0.12608111  40.743   &lt; 2e-16 ***
-RENDA        0.00028909  0.00002882  10.033   &lt; 2e-16 ***
-N_PAV        0.08939556  0.00813762  10.985   &lt; 2e-16 ***
-AREALOTE    -0.00025445  0.00019067  -1.334     0.183    
-TESTADA      0.00511989  0.00641415   0.798     0.425    
-PAVIM       -0.22138765  0.05440707  -4.069 0.0000585 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.4868 on 346 degrees of freedom
-Multiple R-squared:  0.5727,    Adjusted R-squared:  0.5666 
-F-statistic: 92.76 on 5 and 346 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-</div>
-</section>
-<section id="problema-entre-área-e-frente" class="slide level2">
-<h2>Problema entre Área e Frente</h2>
-
-<img data-src="05_Espacial_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
-<section id="novo-modelo-1" class="slide level2">
-<h2>Novo Modelo</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = log(VU) ~ RENDA + N_PAV + AREALOTE + PAVIM, data = dados)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1.59842 -0.33078 -0.05379  0.27267  1.67007 
-
-Coefficients:
-               Estimate  Std. Error t value  Pr(&gt;|t|)    
-(Intercept)  5.16902934  0.11943950  43.277   &lt; 2e-16 ***
-RENDA        0.00028705  0.00002869  10.006   &lt; 2e-16 ***
-N_PAV        0.08904958  0.00812181  10.964   &lt; 2e-16 ***
-AREALOTE    -0.00014406  0.00013119  -1.098     0.273    
-PAVIM       -0.21926532  0.05431364  -4.037 0.0000667 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.4865 on 347 degrees of freedom
-Multiple R-squared:  0.572, Adjusted R-squared:  0.567 
-F-statistic: 115.9 on 4 and 347 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-</div>
-</section>
-<section id="testes-de-autocorrelação" class="slide level2">
-<h2>Testes de autocorrelação</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">library</span>(spdep)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="referências" class="slide level2">
@@ -451,19 +315,19 @@ F-statistic: 115.9 on 4 and 347 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="05_Espacial_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="05_Espacial_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="05_Espacial_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="05_Espacial_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="05_Espacial_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="05_Espacial_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="05_Espacial_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="05_Espacial_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="05_Espacial_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="05_Espacial_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="06_Espacial_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
