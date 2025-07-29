@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SAGA_METADATA>
+  <HISTORY>
+    <MODULE>Variogram</MODULE>
+    <OPTION type="table_field" id="FIELD" name="Attribute">19</OPTION>
+    <OPTION type="integer" id="DISTCOUNT" name="Initial Number of Distance Classes">100</OPTION>
+    <OPTION type="double" id="DISTMAX" name="Maximum Distance">100.000000</OPTION>
+    <OPTION type="integer" id="NSKIP" name="Skip Number">1</OPTION>
+    <DATA type="shapes" id="POINTS" name="Points">C:\019_Puebla\Eventos_Puebla_3.shp</DATA>
+  </HISTORY>
+  <SOURCE>
+    <FILE>C:\019_Puebla\Eventos_Puebla_3.shp</FILE>
+    <DATABASE></DATABASE>
+    <PROJECTION></PROJECTION>
+  </SOURCE>
+  <DESCRIPTION></DESCRIPTION>
+</SAGA_METADATA>

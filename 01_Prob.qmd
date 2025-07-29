@@ -1,0 +1,1241 @@
+---
+title: "Avaliação em Massa"
+subtitle: "*Probabilidade e Estatística Descritiva*"
+author: "Luiz Droubi"
+institute: Academia da Engenharia de Avaliações
+date: last-modified
+date-format: long
+title-slide-attributes:
+  data-background-image: img/PPT_abertura.png
+  #data-background-size: contain
+  #data-background-opacity: "0.5"
+  data-footer: "<a href='http://www.valoristica.com.br'>http://www.valoristica.com.br</a>"
+include-after-body: add-custom-footer.html
+lang: pt
+format:
+  revealjs:
+    theme: [default, style.scss]
+    logo: img/logo.png
+    # theme: beige
+    # smaller: true
+    scrollable: true
+    incremental: true
+    transition: slide
+    background-transition: fade
+fontsize: 1.8em
+bibliography: references.bib
+brand: true
+toc: true
+toc-depth: 1
+footer: "VALORÍSTICA"
+slide-number: true
+---
+
+```{r}
+#| include: false
+library(kableExtra)
+library(appraiseR)
+library(sf)
+library(ggplot2)
+library(ggpmisc)
+```
+
+# Introdução
+
+## Visão Geral do Problema
+
+![Modelo Urbano Monocêntrico Padrão [@alonso1964]](img/The-Monocentric-Model-by-Alonso-1964_W640.jpg)
+
+- Este modelo funciona razoavelmente bem até hoje, apesar de diversas mudanças
+- É conhecido o problema de cidades com restrições topográficas ou de outra
+natureza que impedem o crescimento da cidade em uma ou mais direções.
+  - Restrições são geradoras de anisotropia
+
+## Passo a passo
+
+- Um passo a passo mais básico:
+  1. Coletar uma amostra  com dados à diferentes distâncias do **CBD** (*Center 
+  Business District*);
+  2. Ajustar um modelo de regressão entre os preços e a distância ao centro;
+  3. Prever valores à diferentes distâncias do **CBD**
+  
+- No entanto, há empecilhos:
+  - Os dados não são homogêneos (diferentes características físicas);
+  - Dependência espacial pode afetar a estimação correta de coeficientes
+  - Eventual anisotropia
+  
+## Soluções para os empecilhos
+
+- Para levar em conta a heterogeneidade da amostra com relação às 
+características físicas dos imóveis, utiliza-se a *regressão linear múltipla*, 
+levando em conta o efeito destas características;
+- Para dar conta da dependência espacial, pode-se utilizar a regressão espacial,
+ou mesmo encontrar eventualmente variáveis que possam eliminar essa dependência;
+- Para dar conta da anisotropia, podem ser utilizados os métodos apropriados da 
+geoestatística.
+
+# Programa
+
+## Programa do Curso
+
+1. Revisão de Probabilidade e Estatística Descritiva
+2. Regressão Linear Simples
+3. Regressão Linear Múltipla 
+4. Regressão Espacial;
+5. Derivação de Fatores e Homogeneização dos dados;
+6. Geoestatística;
+7. Confecção de PVG's.
+
+
+# Probabilidade
+
+## Definição clássica de probabilidade
+
+- Definição clássica de Laplace:
+  - É a razão entre a chance ($f$) que um evento ($A$) ocorra e a soma das 
+  chances de todos os eventos possíveis ($N$):
+    - $$\mathbb P(A) = \frac{f}{N}$$
+  
+- Exemplo:
+  - Ao lançar um dado, a probabilidade de obtenção de um número dentro do 
+  conjunto $\{ 1, 2 ,3, 4, 5, 6\}$  é:
+    - $$\mathbb P(A) = \frac{1}{6}$$
+    
+- Problema com esta definição: define probabilidade de um evento baseado na
+"chance"  que o evento ocorra.
+  - A cobra come o rabo!
+  
+## Escola axiomática
+
+- @kolgomorov1950:
+  - Definiu axiomas a partir dos quais é possível desenvolver a Probabilidade 
+  como uma ciência rigorosa.
+    - Espaço Amostral ($S$)
+    - $\mathbb P(S) = 1$
+    - Se dois eventos $A$ e $B$ são mutuamente exclusivos, então:
+      - $\mathbb P(A + B) = \mathbb P(A) + \mathbb P(B)$
+      
+- Na escola axiomática, os eventos são subconjuntos do espaço amostral  
+  - Assim, é comum se referir aos eventos através da teoria dos conjuntos:
+    - $\mathbb P (A \cup B) =  \mathbb P(A) + \mathbb P(B)$
+    - $\mathbb P (A \cup B) =  \mathbb P(A) + \mathbb P(B) - \mathbb P (A \cap B)$
+    
+
+    
+## Escola Axiomática
+
+```{r}
+set.seed(654925)                          # Create example list
+list_venn <- list(Alto = sort(sample(1:100, 20)),
+                  Baixo = sort(sample(1:100, 20)),
+                  Centro = sort(sample(1:100, 20)),
+                  Suburbio = sort(sample(1:100, 20)))
+library(ggvenn) 
+ggvenn(list_venn, c("Alto", "Centro"))  
+```
+
+    
+## Probabilidade Complementar
+
+- $$\mathbb P(A') = 1 - \mathbb P(A)$$
+  - Por exemplo, se a probabilidade de um imóvel ser de Alto Padrão é de 25%
+    - Então a probabilidade de um imóvel não ser de Alto Padrão é de 75%!
+    
+## Probabilidade Condicional
+
+- A Probabilidade Condicional de um evento é a probabilidade que um evento
+ocorra, dado que outro evento aconteceu
+  - É designada por $\mathbb P(A|B)$
+  - É definida como o quociente entre $\mathbb P(A \cap B)$ e $\mathbb P(B)$:
+    - $$\mathbb P(A|B) = \frac{\mathbb P(A \cap B)}{\mathbb P(B)}$$
+    
+## Probabilidade Condicional
+    
+- Exemplo:
+  - Há 2.000 imóveis numa cidade
+    - 100 deles encontram-se no Centro
+      - $\mathbb P(C) = 100/2.000 = 0,05$
+    - 200 deles são de alto padrão 
+      - $\mathbb P(PC_A) = 200/2.000 = 0,10$
+      - Destes 200, 80 encontram-se localizados no Centro 
+        - $\mathbb P(PC_A \cup C) = 80/2.000 = 0,04$
+  - Dado que um imóvel situa-se no Centro
+    - Qual a probabilidade de que ele seja de alto padrão?
+      - $$\mathbb P(PC_A|C) = \frac{\mathbb P(PC_A \cap C)}{P_C}$$
+      
+## Probabilidade Condicional
+
+- Dado que um imóvel situa-se no Centro
+  - Qual a probabilidade de que ele seja de alto padrão?
+    - $$\mathbb P(PC_A|C) = \frac{\mathbb P(PC_A \cap C)}{P_C}$$
+    - $$\mathbb P(PC_A|C) = \frac{0,04}{0,05} = 80\%$$
+    
+## Probabilidade Condicional
+
+```{r}
+df <- data.frame(id = 1:2000,
+                 Padrao = c(rep("Alto", 200), rep("Não-Alto", 1800)),
+                 Local = c(rep("Centro", 90), rep("Subúrbio", 110),
+                           rep("Centro", 10), rep("Subúrbio", 1790))
+                 )
+df <- within(df, {
+  Local <- factor(Local)
+  Padrao <- factor(Padrao)
+})
+df <- within(df, {
+  PU <- ifelse(Local == "Centro", 10000, 7500)
+  PU <- ifelse(Padrao == "Alto", PU*1.25, PU)
+  PU <- PU + rnorm(n = 2000, mean = 0, sd = 2000)
+})
+list_venn <- list(Alto = 1:200,
+                  `Não-Alto` = 201:2000,
+                  Centro = 121:220,
+                  `Perif.` = c(1:120, 221:2000)
+)
+ggvenn(list_venn[c(1,3)])
+```
+
+## Probabilidade Condicional
+
+```{r}
+ggvenn(list_venn)
+```
+
+
+## Teorema de Bayes
+
+- $$\mathbb P(A|B) = \frac{\mathbb P(A) \mathbb P(B|A)}{\mathbb P(B)}$$
+
+- Exemplo:
+  - $\mathbb P(C|PC_A) = ?$
+  - $$\mathbb P(C|PC_A) = \frac{\mathbb P(C)\mathbb P(PC_A|C)}{\mathbb P(PC_A)}$$
+  - $$\mathbb P(C|PC_A) = \frac{0,05\cdot0,80}{0,10}$$
+  - $$\mathbb P(C|PC_A) = 40\%$$
+  
+## Teorema da Multiplicação
+
+- Se dois eventos são mutuamente independentes, então:
+  - $$\mathbb P (A\cdot B) = \mathbb P(A) \mathbb P(B)$$
+  
+- Caso contrário:
+  - $$\mathbb P (A\cdot B) = \mathbb P(A) \mathbb P(B|A)$$
+  
+## Variável Aleatória
+
+- Um termo um tanto confuso
+  - Seria mais apropriado *função aleatória* [@feller, 12]
+  
+- Variávies Aleatórias na verdade são funções definidas em um espaço amostral!
+
+- Informalmente, no entanto, definiremos *variável aleatória* como o:
+  - "Resultado numérico de um experimento" [@matloff2009, 39].
+  - Por exemplo, ao lançar uma moeda diversas vezes, podemos definir:
+    - cara: 0
+    - coroa: 1
+    - Espaço Amostral: $S = \{ 0, 1 \}$
+    - Variável Aleatória: $X = \{0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, \ldots\}$
+
+# Descrição de uma variável aleatória
+
+## Distribuições de Probabilidade
+
+- Existem diversas maneiras de descrever uma variável aleatória
+
+- A mais comum delas é definir as variáveis aleatórias através de sua *função
+densidade de probabildidade* (para as var. aleatórias contínuas) ou da
+sua *função massa de probabilidade* (para as var. aleatórias discretas)
+  - Por exemplo: ao jogar um dado, qual a probabilidade de obter o número 6?
+    - Distribuição de Bernoulli:
+      - $$\mathbb P(X = k) = p^k (1-p)^{1-k}$${#eq-Bernoulli}
+        - Define-se:
+          - $k=0$ como insucesso!
+          - $k=1$ como sucesso!
+        - $S = \{1, 2, 3, 4, 5, 6\}$
+        - $\mathbb P(X = 1) = (1/6)^1*(1-1/6)^{1-1} = 1/6$
+
+## Distribuição de Bernoulli
+
+- $$f(k,p) = \begin{cases}
+  p & \text{ se } k = 1\\
+  q = 1 - p & \text{ se } k = 0
+  \end{cases}$$
+  
+- Percebam:
+  - $$\sum_{i=1}^{k} f(k, p) = 1$$
+  - Toda função massa de probabilidade deve somar 1!
+        
+
+## Distribuição Binomial
+
+- A *Distribuição Binomial* é a generalização da *Distribuição de Bernoulli*
+para um número qualquer de tentativas
+  - $$\mathbb P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$${#eq-Binomial}
+    - $\binom{n}{k} = \frac{n!}{k!(n-k)!}$
+
+- Probabilidade de obter duas vezes o número 6 em 10 tentativas:
+  - $\mathbb P(X = k) = \mathbb P(X = 2) = \binom{10}{2} (1/6)^2 (1-1/6)^{10-2}$
+  - $\mathbb P(X = 2) = 45 (1/6)^2 (5/6)^8 = 29,07\%$
+    - **Explicação**: Existem 45 sequências possíveis de 10 lançamentos em que 2
+    vezes surgirão o número 6, com 1/6 de probabilidade, e oito vezes outros 
+    números, com 5/6 de probabilidade
+    
+## Distribuição Binomial
+
+- $\mathbb P(X = 2) = 45 (1/6)^2 (5/6)^8 = 29,07\%$
+        
+- No R:
+
+. . . 
+
+```{r}
+#| echo: true
+dbinom(2, 10, 1/6)
+```
+
+. . . 
+
+```{r}
+#| fig-height: 3.5
+#| fig-width: 7
+#| echo: true
+library(mosaic)
+plotDist('binom', params = list(size = 10, prob = 1/6), xlim = c(-1, 11),
+         main = "Experimento de lançamento de 1 dado.",
+         xlab = "k", ylab = expression(P(X) == k))
+```
+
+
+## Distribuição Binomial
+
+- O experimento de obter um resultado específico no lançamento de um dado tem 
+uma probabiliade relativamente baixa ($p << 0,5$).
+  - Por isso a distribuição é assimétrica!
+- O experimento do lançamento de uma moeda apresenta $p = 0,5$.
+
+. . . 
+
+```{r}
+#| label: fig-SymmetricalBinomial
+#| fig-cap: "Distribuição Binomial (n = 4, p = 1/2)."
+#| fig-height: 3.5
+#| fig-width: 7
+mosaic::plotDist('binom', params = list(size = 4, prob = 1/2), xlim = c(-1, 5),
+                 main = "Experimento de lançamento de 1 moeda.",
+                 xlab = "k", ylab = expression(P(X) == k)                 )
+```
+
+
+## Binomial e Normal
+
+- Resultado de um experimento de lançamento de uma moeda:
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+
+```{r}
+#| label: fig-Binomial
+#| fig-cap: "Distribuição Binomial (n = 10, p = 1/2)."
+#| fig-width: 4
+#| fig-height: 4
+mosaic::plotDist('binom', params = list(10, 1/2),
+                 main = "Lançamento de uma moeda",
+                 sub = "Probabilidade dos Resultados Possíveis")
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| label: fig-Binomial2
+#| fig-cap: "Distribuição Binomial (n = 100, p = 1/2)."
+#| fig-width: 4
+#| fig-height: 4
+mosaic::plotDist('binom', params = list(100, 1/2),
+                 main = "Lançamento de uma moeda",
+                 sub = "Probabilidade dos Resultados Possíveis",
+                 xlab = "k", ylab = expression(P(X == k)))
+```
+
+:::
+::::
+
+- A distribuição binomial, no infinito, tende para uma forma de sino, quando $p=1/2$!
+
+## Distribuição Normal Padrão
+
+- Uma variável $Z$ com Distribuição *Normal Padrão* é a var. que tem 
+*função densidade de probabilidade* igual a:
+  - $$\phi(t) = f_Z(t) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}t^2}$${#eq-NormalPadrao}
+    - É a exponencial de uma parábola, multiplicada pela constante $1/\sqrt{2\pi}$
+    
+- Por que multiplicar por $1/\sqrt{2\pi}$?
+  - $\int_{-\infty}^{\infty} e^{-\frac{1}{2}t^2}\, \mathrm{d}t = \sqrt{2\pi}$
+  - $\int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}t^2}\, \mathrm{d}t = 1$
+    - Toda função densidade de probabilidade deve somar 1!
+  
+- A distribuição Normal Padrão tem média zero e desvio-padrão igual a 1,0
+  - Refere-se a ela como: $\mathcal N(0, 1)$
+  
+## Distribuição Normal Padrão
+
+```{r}
+#| label: fig-StdNormal
+#| fig-cap: "Distribuição Normal Padrão."
+mosaic::plotDist("norm", main = "Distribuição Normal Padrão",
+                 xlab = "t", ylab = expression(~phi(t) == f[Z](t)))
+```
+
+
+
+## Um pouco de história
+
+![Leis dos erros de Laplace](./img/Laplace_laws.png)
+
+## Um pouco de história
+
+![Aproximação Normal da Binomial](./img/DeMoivre.png)
+
+## Um pouco de história
+
+![Aproximação Normal da Binomial](./img/Binomial_Normal_Approx.gif)
+
+# Transformações de variáveis aleatórias  
+  
+## Transformação Linear
+
+- Pode-se efetuar uma transformação de uma var. aleatória $X$ assim:
+  - $$Y = h(X) = aZ + b$$
+    - Estas transformações são chamadas de lineares
+  - Quando $X$ é uma var. discreta:
+    - $$p_Y(y) = p_X(h^{-1}(Y)) = p_X\left (\frac{Y-b}{a} \right )$$
+  - Quando $X$ é uma var. contínua:
+    - $$f_Y(y) = f_X(g(y))\cdot \left | \frac{\mathrm d g(y)}{\mathrm d y}\right | = f_X(g(y))\cdot |g'(y)|$${#eq-Jacobi}
+      - $g(Y) = h^{-1}(Y)$
+      - $|g'(y)|$ é o Jacobiano da transformação!
+
+## Distribuição Normal
+
+- A partir da *Normal Padrão*, $\mathcal N(0,1)$, é possível obter qualquer 
+outra distribuição normal, $\mathcal N(\mu, \sigma^2)$)!
+  - Basta fazer:
+    - $Y = h(Z) = \sigma_Y Z + \mu_Y$
+    - $g(Y) = h^{-1}(Y) = \frac{Y-\mu_Y}{\sigma_Y}$ 
+    - $|g'(Y)| = |1/\sigma_Y|$
+
+- Como fica a equação da normal genérica:
+  - $f_Y(t) = f_Z \left (\frac{t - \mu_Y}{\sigma_Y}\right )\cdot \frac{1}{|\sigma_Y|}$
+  - $f_Y(t) = \frac{1}{\sqrt{2\pi}} e^{-\frac{(t-\mu_Y)^2}{2\sigma_Y^2}}\cdot\frac{1}{|\sigma_Y|}$
+  - $f_Y(t) = \frac{1}{\sigma_Y\sqrt{2\pi}} e^{-\frac{(t-\mu_Y)^2}{2\sigma_Y^2}}$
+  
+## Distribuição Normal
+
+- $$f(t) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(t-\mu)^2}{2\sigma^2}},\, \text{para }-\infty<t<\infty$${#eq-Normal}
+
+- Nos referiremos a uma var. aleatória $X$ com distribuição normal genérica como 
+a da @eq-Normal assim:
+  - $X \sim \mathcal N(\mu, \sigma^2)$
+  
+- Percebam:
+  - $\mu$ é um parâmetro que muda a *posição* da distribuição!
+  - $\sigma$ é um parâmetro que muda a *escala* da distribuição!
+  
+## Distribuição Normal
+
+- O contrário também é verdadeiro:
+  - É possível obter a *Normal Padrão* a partir de uma distribuição normal
+  qualquer!
+  - Basta fazer:
+    $$Z = \frac{Y - \mu_Y}{\sigma_Y}$$
+    
+- Exemplo:
+  - Se $Y \sim \mathcal N(100, 10^2)$
+    - A quantos desvios-padrões de distância se encontra o valor 125? Qual a
+    probabilidade de ocorrência de valores iguais ou maiores do que ele?
+      - $$Z = (125 - 100)/10 =2,5$$
+        - o desvio se encontra a 2,5DP de distância da média
+        
+## Distribuição Normal
+
+- Probabilidade de ocorrências de valores iguais ou maiores:
+  - Tabela de Escores-Z!
+    - $\mathbb P(Z \geq 2,5) = 1 - 0,99379 = 0,00621 = 0,62\%$
+          
+- No R:
+
+. . . 
+
+```{r}
+#| echo: true
+1 - pnorm(2.5)
+```
+
+- Ou:
+
+. . . 
+
+```{r}
+#| echo: true
+1 - pnorm(125, mean = 100, sd = 10)
+```
+
+## Distribuição Normal
+
+```{r}
+#| label: fig-Normal
+#| fig-cap: "Distribuição Normal $\\mathcal N(100, 10^2)$ ($\\mu = 100,\\, \\sigma = 10$)."
+mosaic::plotDist("norm", params = c(100, 10), main = "Distribuição Normal",
+                 xlab = "t", ylab = expression(~f[X](t)))
+```
+
+
+
+    
+## Lei dos Grandes Números (LGN)
+
+- Está na raiz do nascimento da Teoria das Probabildiades a Lei *Fraca* dos
+Grandes Números!
+  
+- Teorema 3.1 (A Lei Fraca dos Grandes Números). Seja $X_1, \ldots , X_n$ 
+variáveis aleatórias independentes e identicamente distribuídas com valor 
+esperado $\mathbb E(X_i) = \mu$ e variância finita $\mathbb V(X_i) < \infty$,
+para $i = 1, \ldots, n$. A média amostral é definida como:
+
+. . . 
+
+$$\overline X_n = \frac{1}{n}\sum_{i=1}^n = X_i$$
+
+Então, para qualquer número positivo $\epsilon > 0$, a probabilidade que a 
+diferença entre a média amostral e o valor esperado $\mu$ seja menor do que 
+$\epsilon$ vai se aproximar de 1, à medida que o tamanho da amostra se aproxima 
+de infinito:
+
+. . .
+
+
+$$\lim_{n \rightarrow \infty} = \mathbb P (|\overline X_n - \mu| < \epsilon) = 1$$
+
+## Distribuição de Cauchy Padrão
+
+- A distribuição de *Cauchy Padrão* tem *função densidade de probabilidade* (*fdp*):
+  - $$f_X(t) = \frac{1}{\pi}\cdot \left ( \frac{1}{1+t^2}\right)$${#eq-StdCauchy}
+  
+- A distribuição de Cauchy genérica tem *fdp*:
+  - $$f_X(t) = \frac{1}{\pi\gamma}\left ( \frac{1}{1+\left (\frac{t-t_0}{\gamma} \right )^2}\right)$${#eq-Cauchy}
+    - A @eq-Cauchy é obtida através da transformação linear da @eq-StdCauchy:
+      - $t_0$ é um parâmetro de posição
+      - $\gamma$ é um parâmetro de escala
+
+- A distribuição de Cauchy não apresenta média nem variância finitas!
+  
+## Distribuição de Cauchy
+
+```{r}
+#| fig-label: fig-Cauchy
+#| fig-cap: Distr. de Cauchy Padrão (em vermelho) vs. Distr. Normal Padrão (em azul)
+#| fig-keep: last
+mosaic::plotDist("norm")
+mosaic::plotDist("cauchy", add = T, col = "red")
+```
+
+- A distribuição de Cauchy possui caudas mais pesadas do que a distribuição normal!
+
+
+## LGN
+
+::: {#fig-LLN layout-ncol="2"}
+```{r}
+#| label: fig-LLNa
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Normal Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(1)
+m = 
+v <- list()
+for (i in 1:1000) {
+  x <- rnorm(i, mean = 0, sd = 1)
+  v[[i]] <- mean(x)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v, xlab = "n", ylab = "Média amostral", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+```{r}
+#| label: fig-LLNb
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Cauchy Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(2)
+v1 <- list()
+for (i in 1:1000) {
+  x <- rcauchy(i, location = 0, scale = 1)
+  v1[[i]] <- mean(x)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v1, xlab = "n", ylab = "Média amostral", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+Lei dos Grandes Números
+:::
+
+## Como estimar o parâmetro da Cauchy?
+
+- Se a média amostral não é consistente para estimar o parâmetro de posição da
+Distribuição de Cauchy, como fazê-lo?
+  - A questão é que alguns poucos dados extremos da amostra desestabilizam a
+  média amostral!
+  - Precisa-se, portanto, de um estimador robusto a *outliers*!
+    - É natural pensar na mediana!
+    - Porém, há outras possibilidades, como a média aparada!
+    
+## LGN - mediana
+
+::: {#fig-LLN2 layout-ncol="2"}
+
+```{r}
+#| label: fig-LLN2a
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Normal Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(1)
+m = 
+v <- list()
+for (i in 1:1000) {
+  x <- rnorm(i, mean = 0, sd = 1)
+  v[[i]] <- median(x)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v, xlab = "n", ylab = "Mediana amostral", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+```{r}
+#| label: fig-LLN2b
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Cauchy Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(2)
+v1 <- list()
+for (i in 1:1000) {
+  x <- rcauchy(i, location = 0, scale = 1)
+  v1[[i]] <- median(x)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v1, xlab = "n", ylab = "Mediana amostral", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+Lei dos Grandes Números - mediana
+:::
+    
+## LGN - média aparada
+
+- Com a média aparada de 20%:
+
+. . . 
+
+::: {#fig-LLN2 layout-ncol="2"}
+```{r}
+#| label: fig-LLN3a
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Normal Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(1)
+m = 
+v <- list()
+for (i in 1:1000) {
+  x <- rnorm(i, mean = 0, sd = 1)
+  v[[i]] <- mean(x, tr = .2)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v, xlab = "n", ylab = "Média aparada (20%)", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+```{r}
+#| label: fig-LLN3b
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Cauchy Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(2)
+v1 <- list()
+for (i in 1:1000) {
+  x <- rcauchy(i, location = 0, scale = 1)
+  v1[[i]] <- mean(x, tr = .2)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v1, xlab = "n", ylab = "Média aparada (20%)", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+Lei dos Grandes Números - média aparada (20%)
+:::
+
+
+## A média aparada
+
+![](./img/TrimmedMean_Normal.png)
+
+## Transformações não-lineares
+
+- Também podemos utilizar funções $h(X)$ não-lineares para transformar variáveis
+aleatórias
+  - Por exemplo: $Y = h(Z) = Z^2$
+    - A variável $Y$ obtida com a elevação ao quadrado de uma var. com dist. 
+    normal padrão tem distribuição dita $\chi^2_{(1)}$
+      - $$f_Y(t) = \begin{cases}
+      \frac{1}{\sqrt{2\pi t}} e^{-\frac{t}{2}} & \text { se } t> 0 \\
+      0 & \text{ se } t \leq 0
+      \end{cases}$$
+  
+- Uma medida da *dispersão* amostral, denominada *variância* é:
+  - $$\mathbb V(X) = \frac{1}{n}\sum_{i = 1}^{n} (X_i - \mu)^2$${#eq-Variance}
+    - É fácil notar que $Y = \mathbb V(X) \sim \chi^2_{(1)}$
+    
+## Distribuição $\chi^2_{(1)}$
+
+```{r}
+#| echo: true
+#| label: fig-chiSquared
+#| fig-cap: "Distribuição $\\chi^2$ com 1 grau de liberdade."
+#| fig-height: 4
+#| fig-width: 7
+plotDist('chisq', params = list(df = 1), ylim = c(0, 1),
+         main = expression("Distribuição" ~chi[(1)]^2),
+         xlab = "t", ylab = expression(f[Y](t) == Z^2))
+```
+
+- $\mathbb E(Y) = 1$ (variância da distribuição normal padrão é igual a 1!)
+
+
+## Transformações não-lineares
+
+- Seja $Z$ uma variável com distribuição normal padrão
+  - Seja $\mu$ e $\sigma>0$ dois números reais
+    - Então $$X = e^{\mu + \sigma Z}$${#eq-TransfLognormal}
+      - tem distribuição dita lognormal!
+
+- Inversamente, se $X$ é uma variável com distribuição lognormal
+  - Então $Y = \ln(X)$ 
+    - É uma variável com distribuição normal!
+
+- A distribuição lognormal tem *fdp*:
+  - $$f_X(t) = \frac{1}{t\sigma\sqrt{2\pi}}\exp\left (-\frac{(\ln(t) - \mu)^2}{2\sigma^2} \right)$${#eq-Lognormal}
+  
+## Distribuição Lognormal
+
+```{r}
+#| echo: true
+#| label: fig-Lognormal
+#| fig-cap: "Distribuição Lognormal"
+mosaic::plotDist("lnorm", params = list(meanlog = 0, sdlog = 0.25),
+                 main = "Distribuição Lognormal",
+                 xlab = "t", ylab = expression(f[Y](t) == e^{0.25*Z}))
+```
+
+
+```{r}
+#| eval: false
+library(EnvStats)
+mosaic::plotDist("lnormAlt", params = list(mean = 1, cv = .25),
+                 main = "Distribuição Lognormal")
+```
+
+## Distribuição Lognormal
+
+```{r}
+#| echo: true
+#| label: fig-Lognormal2
+#| fig-cap: "Distribuição Lognormal ($\\mu^* = 5000$)"
+mosaic::plotDist("lnorm", params = list(meanlog = log(5000), sdlog = 0.25),
+                 main = "Distribuição Lognormal",
+                 xlab = "t", 
+                 ylab = expression(f[Y](t) == e^{0.25*Z~+~plain(ln)~5000})
+                 )
+```
+
+## Distribuição Lognormal
+
+### Estimação de parâmetros
+
+- Os parãmetros da distribuição lognormal podem ser assim estimados:
+  - $$\hat \mu = \frac{1}{n} \sum_{i=1}^n \ln(X_i)$$
+  - $$\hat \sigma^2 = \frac{1}{n} \sum_{i=1}^n (\ln(X_i)-\hat\mu)^2$$
+
+# Gráficos
+
+## Dados
+
+```{r}
+#| echo: true
+library(wooldridge)
+data(hprice1)
+head(hprice1, n = 10)
+```
+
+## Stripchart
+
+```{r}
+#| echo: true
+stripchart(hprice1$price)
+```
+
+
+## Diagramas de Caixa
+
+```{r}
+#| echo: true
+boxplot(hprice1$price, horizontal = T)
+```
+
+## Diagramas de Caixa
+
+```{r}
+#| echo: true
+boxplot(hprice1$price, horizontal = T)
+stripchart(hprice1$price, add = T)
+```
+
+## Diagramas de Caixa
+
+
+![Como é construído um Diagrama de Caixa](./img/boxplot_1.png)
+
+
+## Os cinco números de Tukey
+
+- O famoso estatístico John Tukey, em sua obra clássica, *Exploratory Data
+Analysis*, sugeriu os diagramas de caixa para ilustrar rapidamente os cinco
+números que considerava sugestivos da amostra:
+  - Valor Mínimo
+  - Primeiro Quartil
+  - Segundo Quartil ou Mediana
+  - Terceiro Quartil
+  - Valor Máximo
+  
+## O que são Quartis?
+
+- Para uma variável aleatória $X = X_1, X_2, \ldots, X_n$, o k-ésimo quartil,
+$Q_k$, é definido como o valor que separa a amostra em dois subconjuntos tal que
+(Moors 1988, 25):
+  - $$\mathbb P(X < Q_K) \leq k/4, \, \mathbb P(X > Q_K) \leq 1 - k/4, \, k = 1, 2, 3$$ 
+
+- Também pode-se dizer, mas é menos comum, que $Q_0 = \min(X)$ e $Q_4 = \max(X)$
+
+## O que são Percentis?
+
+- Analogamente aos quartis, os percentis são:
+  - $$\mathbb P(X < P_K) \leq k/100, \, \mathbb P(X > P_K) \leq 1 - k/100 \, k = 1, 2, \ldots, 99$$ 
+
+- Também pode-se dizer que $P_0 = \min(X)$ e $P_{100} = \max(X)$
+
+- Também é possível definir *Tercis*, *Quintis*, e assim por diante!
+  - Tercis:
+    - $$\mathbb P(X < T_K) \leq k/3, \, \mathbb P(X > T_K) \leq 1 - k/3, \, k = 1, 2$$
+
+## Estimadores robustos
+
+- Existem estimadores baseados em tercis, quartis, etc.
+  - Por exemplo, a mediana de Gastwirth:
+    - $$GW(X) = 0,3\cdot T_1 + 0,4\cdot Q_2 + 0,3\cdot T_2$${#eq-GW}
+  - *Trimean* de Tukey:
+    - $$TM(X) = \frac{Q_1 + 2Q_2 + Q_3}{4}$${#eq-Trimean}
+  - Estes estimadores são conhecidos como *L-Estimadores*
+    - São estimadores robustos!
+
+
+## Histograma
+
+```{r}
+#| echo: true
+hist(hprice1$price)
+```
+
+
+
+## Densidade
+
+```{r}
+#| echo: true
+hist(hprice1$price, freq = FALSE)
+lines(density(hprice1$price, bw = "SJ"), col = "red")
+```
+
+## Densidade
+
+```{r}
+#| echo: true
+hprice1$PU <- 1000*hprice1$price/hprice1$lotsize
+hist(hprice1$PU, freq = FALSE)
+lines(density(hprice1$PU, bw = "SJ"), col = "red")
+```
+
+## Densidade
+
+```{r}
+#| echo: true
+hprice1$PU <- 1000*hprice1$price/hprice1$lotsize
+hist(hprice1$PU[hprice1$PU < 200], freq = FALSE)
+lines(density(hprice1$PU, bw = "SJ"), col = "red")
+```
+
+
+## Como obter normalidade
+
+```{r}
+library(car)
+symbox(hprice1$price)
+```
+
+
+# Medidas de Tendência Central
+
+## Medidas de Tendência Central
+
+```{r}
+#| label: fig-densidadeMedidas
+#| fig-cap: "Ilustração das posições de medidas de tendência central numa distribuição lognormal."
+# Medidas de Tendência Central da amostra
+mediana <- 1
+desvio <- exp(1)
+media <- mediana*exp(log(desvio)^2/2)
+moda <- mediana/exp(log(desvio)^2)
+x <- seq(0, 3, .05)
+y <- dlnorm(x, 
+            meanlog = log(mediana),
+            sdlog = log(desvio))
+data <- data.frame(x = x, y = y)
+# Gráfico Lognormal
+p_logN <- ggplot(data, aes(x = x, y = y)) +
+  geom_line() +
+  scale_y_continuous(limits = c(0, max(data$y)+.05), expand = c(0, 0)) +
+  scale_x_continuous(limits = c(0, max(data$x)), expand = c(0, 0)) +
+  geom_segment(aes(x = media, y = 0, xend = media, 
+                   yend = dlnorm(media, meanlog = log(mediana), sdlog = log(desvio)),
+                   colour = "Média")) +
+  geom_segment(aes(x = mediana, y = 0, xend = mediana,
+                   yend = dlnorm(mediana, meanlog = log(mediana), sdlog = log(desvio)),
+                   colour = "Mediana")) +
+  geom_segment(aes(x = moda, y = 0, xend = moda, 
+                   yend = dlnorm(moda, meanlog = log(mediana), sdlog = log(desvio)),
+                   colour = "Moda")) +
+  ylab("Densidade") +
+  theme(legend.position="bottom", legend.text=element_text(size=6), 
+        legend.title=element_text(size=8)) +
+  labs(title = "Distribuição Lognormal", 
+       subtitle = latex2exp::TeX("$\\mu = log(1)$, $\\sigma = log(e)$"))
+p_logN
+```
+
+
+## Medidas de Tendência Central Clássicas
+
+Medidas Clássicas: moda, média e mediana!
+
+- Na distribuição lognormal:
+
+  - Mediana:
+    - $\tilde X = \exp(\mu)$
+  
+  - Média:
+    - $\overline X = \exp\left (\mu + \frac{1}{2}\sigma^2 \right)$
+
+  - Moda:
+    - $M_O(X) = \exp\left (\mu -\sigma^2 \right)$
+    
+
+## Média Geométrica
+
+- Média Geométrica: 
+  - $$\text{GM}(X) = \hat \mu_g(X) = \sqrt[n]{X_1\cdot X_2 \ldots X_n}$${#eq-GM}
+  
+- Ex.: Um investimento apresenta os seguintes retornos mensais:
+  - $X = (2,0\%, 1,25\%, 1,75\%)$
+  - Qual o retorno médio?
+    - $\hat\mu_g(1 + X) = \sqrt[3]{1,02\cdot 1,0125\cdot 1,0175} \approx 1,0167$
+    - Retorno médio:
+      - $\hat\mu_g(X)  = 1,0167 - 1 = 1,67\%$
+- No R:
+
+. . . 
+
+```{r}
+#| echo: true
+library(psych)
+retornos <- 1 + c(2.0, 1.25, 1.75)/100
+geometric.mean(retornos)
+```      
+
+
+## Média Geométrica
+
+- Alternativa:
+  - Um investimento apresenta os seguintes retornos mensais:
+    - $X = (2,0\%, 1,25\%, 1,75\%)$
+    - Qual o retorno médio?
+      - $\hat\mu_g(1 + X) = \exp\left (\frac{\ln(X_1) + \ln(X_2) + \ldots + \ln(X_n)}{n}\right)$
+        - $\hat\mu_g(1 + X) = \exp\left (\frac{\ln(1,02) + \ln(1,0125) + \ln(1,0175)}{3}\right) = 1,0167$
+    - Retorno médio:
+      - $\hat\mu_g(1 + X) = 1,0167 - 1 = 1,67\%$
+    - Verificação:
+      - $\hat\mu_g(1 + X)^3 = (1+1,67/100)^3 \approx 1,051$
+      - $(1,02\cdot 1,0125\cdot 1,0175) \approx 1,051$ (Ok!)  
+
+      
+## Vantagens dos *log-retornos*
+
+- É comum que analistas financeiros trabalhem com *log-retornos*, em lugar dos
+retornos crus.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- $$
+R = \frac{V_{t+1}}{V_t} - 1
+$${#eq-SR}
+
+:::
+::: {.column width="50%"}
+
+- $$
+LR = \ln \left (\frac{V_{t+1}}{V_t} \right )
+$${#eq-SR}
+
+:::
+::::
+
+- Exemplo: Se uma ação subiu 100% durenta o ano de 2023 e caiu 50% durante
+o ano de 2024, calcule o retorno total da posse da ação durante o período:
+
+- $100\% - 50\% = 50\%$ (Errado!)
+
+- $\ln(1+100\%) + \ln(1-50\%) = \ln(2) - \ln(0,5) = 0,6931 - 0,6931 = 0$
+
+  - Os *log-retornos* podem ser somados!
+  
+## Desvio-Padrão Geométrico
+
+- O desvio-padrão geométrico é o análogo do desvio-padrão no domínio *log*:
+
+- O desvio-padrão geométrico mede a dispersão *lognormal* em torno da média
+geométrica:
+  - $$\sigma_g = \exp\sqrt{\frac{1}{n}}\sum_{i=1}{n} \left (  \ln \frac{A_i}{\mu_g}\right )$$
+    
+## Média Harmônica
+
+- Na distribuição lognormal, a média geométrica é igual à mediana [@Vogel02012022]
+
+- A moda, por sua vez, é igual à média harmônica:
+  - $$\text{HM}(X) = \frac{1}{\frac{1}{x_1} + \frac{1}{x_2} + \cdots + \frac{1}{x_n}}$${#eq-HM}
+  
+- A média harmônica tem propriedades interessantes:
+  - Ao contrário do que ocorre com a média aritmética, em que os valores mais 
+  altos e mais baixos impactam mais no seu cômputo
+  - Na média harmônica preponderam os valores mais baixos!
+  
+## Média Harmônica
+
+- Exemplo:
+  - Uma cidade conta com dois polos de atratividade: um parque e um shopping.
+    - Algumas pessoas preferem morar nas proximidades do parque
+    - Outras pessoas preferem morar nas proximidades do shopping
+    - Imagine que os polos estejam separados de tal modo que alguém que resolva 
+  comprar uma casa a 100m do parque, ficará a 3900m do shopping e vice-versa
+    - Ora, se tirarmos a média aritmética das distâncias, então estaremos a 2000m
+    de distância, em média, de ambos os polos.
+    - Ocorre que as casas valem mais perto de um polo ou de outro e valem menos à
+  medida que nos afastamos de ambos os polos
+    - Uma terceira casa que diste 2000m de ambos os polos é muito menos valorizada 
+  do que as casas a 100m de um dos polos. A média aritmética das distâncias, 
+  contudo, seria a mesma para as 3 casas
+  
+
+## Média Harmônica
+
+- Exemplo:
+  - Com a média harmônica, teríamos:
+    - $\tilde{D}_{1,2} = \frac{2\cdot100\cdot3.900}{100+3.900} = 195 m$
+    - $\tilde{D}_3 = \frac{2\cdot2.000\cdot2.000}{2.000+2.000} = 2.000m$
+
+- A média harmônica privilegia os menores valores em detrimento dos maiores!
+
+- No R:
+
+. . . 
+
+```{r}
+#| echo: true
+harmonic.mean(c(100, 3900))
+```
+
+
+## Medidas de Tendência Central
+
+- E a média aparada da distribuição lognormal?
+
+. . . 
+
+![](./img/TrimmedMean_Lognormal.png)
+
+
+## Medidas de Tendência Central 
+
+
+```{r}
+#| label: fig-logs
+#| fig-cap: "Distribuição lognormal com $\\mu = 0$ e diversos valores de $\\sigma$"
+library(reshape2)
+x <- seq(0, 3, 0.01)
+sigma <- c(2, 1.5, 1, .5, .25)
+y <- lapply(sigma, dlnorm, x = x, meanlog = log(1))
+data <- data.frame(x, y[[1]], y[[2]], y[[3]], y[[4]], y[[5]])
+colnames(data) <- c("x", "y1", "y2", "y3", "y4", "y5")
+data <- melt(data, id = 1)
+ggplot(data, aes(x = x, y = value, 
+                 color = factor(variable, labels = as.character(sigma)))) +
+  geom_line() +
+  scale_y_continuous(limits = c(0, max(data$value)), expand = c(0, 0)) + 
+  scale_x_continuous(limits = c(0, max(data$x)), expand = c(0, 0)) +
+  labs(title = "Distribuições lognormais",
+       subtitle = latex2exp::TeX("$\\mu = log(1) = 0$"),
+       color = latex2exp::TeX("$\\sigma$"))
+```
+
+- As diferenças entre média, moda e mediana se exacerbam quando $\sigma$ aumenta!
+
+## Média Quadrática
+
+- A média quadrática, ou raiz da média quadrática (*root mean square*) é:
+
+  - $$X_{RMS} = \sqrt{\frac{1}{n}(X_1^2 + X_2^2 + \ldots + D_n^2)}$$
+  
+- A média quadrática privilegia os maiores valores
+
+- Média Quadrática dos Desvios:
+  - $$\text{MSE}(Y) = \frac{1}{n} \sum_{i=1}^n (Y_i - \hat Y_i)^2$$
+  
+- O desvio-padrão é uma média *rms* dos desvios:
+
+  - $$\sigma = \sqrt{\frac{1}{n}\sum_{i=1}^n (Y_i - \mu)^2}$${#eq-DesvioPadrao}
+
+## Coeficiente de Variação
+
+- Quando $\sigma$ é relativamente baixo ($\sigma \approx 0,25$), então a 
+distribuição lognormal é quase uma distribuição normal!
+  - Na distribuição normal moda, média e mediana coincidem!
+  
+- À medida que $\sigma$ aumenta, aumenta a diferença entre moda, média e mediana!
+
+- Devemos estar atentos à $\sigma$, portanto!
+
+- Ou ao Coeficiente de Variação:
+  - A definição de coeficiente de variação é:
+    - $$CV = \frac{\sigma}{\mu}$${#eq-CV}
+  - Na distribuição lognormal:
+    - $$CV[X] = \sqrt{e^{\sigma^2} - 1}$${#eq-CVLogNormal}
+  
+  
+# Gráficos em duas dimensões
+  
+## Diagrama de Dispersão
+
+
+```{r}
+#| echo: true
+plot(PU ~ lotsize, data = hprice1)
+```
+
+## Diagrama de Dispersão
+
+
+```{r}
+#| echo: true
+plot(PU ~ log(lotsize), data = hprice1)
+```
+
+## Diagrama de Dispersão
+
+
+```{r}
+#| echo: true
+plot(log(PU) ~ log(lotsize), data = hprice1)
+```
+
+
+## Diagrama de Dispersão
+
+
+```{r}
+#| echo: true
+plot(log(PU) ~ log(lotsize), data = hprice1)
+abline(lm(log(PU) ~ log(lotsize), data = hprice1), col = "red")
+```
+
+## Uma primeira regressão 
+
+```{r}
+#| echo: true
+fit <- lm(log(PU) ~ log(lotsize), data = hprice1)
+summary(fit)
+```
+
+
+## Resíduos do Modelo
+
+```{r}
+#| echo: true
+plot(fit, which = 1)
+```
+
+
+## Atualização do Modelo
+
+```{r}
+#| echo: true
+fit1 <- update(fit, subset = -c(47, 77))
+summary(fit1)
+```
+
+## Resíduos do Modelo
+
+```{r}
+#| echo: true
+plot(fit1, which = 1)
+```
+
+
+## Gráfico do Modelo 1
+
+```{r}
+#| echo: true
+plot(log(PU) ~ log(lotsize), data = hprice1)
+abline(fit1, col = "purple")
+```
+
+## Gráfico de ambos
+
+
+```{r}
+#| echo: true
+plot(log(PU) ~ log(lotsize), data = hprice1)
+abline(fit, col = "red")
+abline(fit1, col = "purple")
+```
+
+
+
+## Referências
+

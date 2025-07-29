@@ -1,0 +1,52 @@
+/*-- scss:defaults --*/
+$presentation-heading-color: #938C80;
+$presentation-title-slide-text-align: right;
+$link-color: #D1C6B6;
+$link-color-hover: #938C80;
+/*$light-bg-text-color: #D1C6B6;*/
+$dark-bg-link-color: #450B05;
+$body-color: #450B05;
+$dark-bg-text-color: #D1C6B6 !default;
+$text-muted: lighten($body-color, 95%);
+/*$body-bg: #D1C6B6;*/
+
+// Logo position
+.reveal .slide-logo {
+  height: 150px !important;
+  width: 150px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+// Slide numbers to the bottom-left
+.slide-number, .reveal.has-logo .slide-number {
+  bottom: 20px !important;
+  right: 30px !important;
+  top: unset !important;
+  color: #D1C6B6 !important;
+}
+.reveal .slide blockquote {
+  border-left: 3px solid $text-muted;
+  padding-left: 0.5em;
+  background-color: transparent;
+  color: #938C80;
+}
+.quarto-title-author-name {
+  // font-size: 100px;
+  color:  #D1C6B6 !important;
+}
+
+.quarto-title-affiliation {
+  color:  #D1C6B6 !important
+}
+
+.subtitle {
+  color:  #D1C6B6 !important
+}
+.reveal .citation a {
+  color: inherit;
+}
+
+.date {
+  // font-size: 80px;
+  color:  #D1C6B6 !important;
+}

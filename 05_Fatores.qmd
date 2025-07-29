@@ -1,0 +1,337 @@
+---
+title: "Avaliação em Massa"
+subtitle: "*Fatores*"
+author: "Luiz Droubi"
+institute: Academia da Engenharia de Avaliações
+date: last-modified
+date-format: long
+title-slide-attributes:
+  data-background-image: img/PPT_abertura.png
+  #data-background-size: contain
+  #data-background-opacity: "0.5"
+  data-footer: "<a href='http://www.valoristica.com.br'>http://www.valoristica.com.br</a>"
+include-after-body: add-custom-footer.html
+lang: pt
+format:
+  revealjs:
+    theme: [default, style.scss]
+    logo: img/logo.png
+    # theme: beige
+    # smaller: true
+    scrollable: true
+    incremental: true
+    transition: slide
+    background-transition: fade
+fontsize: 1.8em
+bibliography: references.bib
+brand: true
+toc: true
+toc-depth: 1
+footer: "VALORÍSTICA"
+slide-number: true
+---
+
+```{r}
+#| include: false
+library(kableExtra)
+library(appraiseR)
+library(sf)
+library(broom)
+homePrices <- readRDS("data/homePrices.rds")
+homePrices <- within(homePrices, {
+  PU <- SalePrice/Lot
+  Age <- 1998 - Year
+  Quality <- factor(Quality, levels = c(1, 2, 3),
+                  labels = c("Primeira", "Segunda",
+                                "Terceira"))
+}) 
+```
+
+
+# Exemplo 1
+
+```{r}
+#| echo: true
+library(readxl)
+dados <- read_excel("./data/Zeni_2024_p64.xlsx")
+```
+
+## Modelo
+
+```{r}
+#| echo: true
+fit <- lm(log(PU) ~ log(A) + log(D), data = dados)
+S(fit)
+```
+
+## Resíduos Parciais
+
+```{r}
+#| echo: true
+crPlots(fit)
+```
+
+## Novo Modelo
+
+```{r}
+fit <- lm(log(PU) ~ log(A) + D, data = dados)
+S(fit)
+```
+
+## Centralização de Dados
+
+- Uma opção para melhorar a interpretação dos modelos é a centralização de dados
+em relação a um imóvel paradigma
+
+. . . 
+
+```{r}
+#| echo: true
+median(dados$A)
+median(dados$D)
+```
+
+## Modelo Centralizado
+
+```{r}
+#| echo: true
+fitCenter <- lm(log(PU) ~ log(A/11000) + I(D-980), data = dados)
+S(fitCenter)
+```
+
+
+- $\overline{PU}_{Hom} = \exp(\hat\beta_0) = \exp(4,82) \approx 127,0 \text{ R\$/m^2}$ 
+
+## Dedução de Fatores
+
+- $\widehat{\ln(PU)} = 4,82 -0,348 \ln(A/11.000) - 0,0005 (D - 980)$
+- $\widehat{PU} = \exp[4,82 - 0,348\ln(A/11.000) - 0,0005 (D - 980)]$
+- $\exp(x_1 + x_2 + \ldots + x_n) = \exp(x_1)\cdot \exp(x_2) \cdot \ldots \cdot \exp(x_n)$
+  - $\widehat{PU} = \exp[4,82)\cdot\exp[- 0,348\ln(A/11.000)]\cdot \exp[- 0,0005 (D - 980)]$
+- $\exp(k\cdot x) = \exp(x)^k = \exp(k)^x$
+  - $\widehat{PU} = 128\cdot(A/11.000)^{-0,348}\cdot \exp(-0,0005)^{(D - 980)}$
+  - $\widehat{PU} = 128\cdot(A/11.000)^{-0,348}\cdot 0,9995^{(D - 980)}$
+  - $\widehat{PU} = 128\cdot F_S^\cdot F_D$
+    - $F_S = (A/11.000)^{-0,348}$
+    - $F_D = 0,9995^{(D - 980)}$
+- Ver no Excel
+
+# Exemplo 2
+
+## Modelo Final
+
+```{r}
+#| echo: true
+fit11 <- lm(log(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality + Pool +
+         Style + Baths, 
+         data = homePrices, subset = -c(11, 24, 86, 104, 202, 513))
+S(fit11)
+```
+
+# Equação de Estimação
+
+## Equação de Estimação
+
+- A equação de regressão para o modelo final adotado é:
+  - $$\begin{aligned}
+  \ln(PU) = 5,43 - 0,87\ln(Lot) + 0,82\ln(SqFeet) - \\
+  0,12\ln(1 + Age) - 0,23\cdot\text{Quality2ª} - 0,29\cdot\text{Quality3ª} + \\
+  0,12\cdot\text{Pool}-0,016\cdot Style + 0,05\cdot Baths
+  \end{aligned}
+  $$
+  
+- Exponenciando ambos os lados, chegamos à equação de estimação:
+  - $$\begin{aligned}
+  PU = \exp[5,43 - 0,87\ln(Lot) + 0,82\ln(SqFeet) - \\
+  0,12\ln(1 + Age) - 0,23\cdot\text{Quality2ª} - 0,29\cdot\text{Quality3ª} + \\
+  0,12\cdot\text{Pool}-0,016\cdot Style + 0,05\cdot Baths]
+  \end{aligned}
+  $$
+  
+  - $$
+  \begin{aligned}
+  PU = \exp(5,43)\cdot\exp(-0,87\ln(Lot))\cdot\exp(0,82\ln(SqFeet)) \\
+  \exp(-0,12\ln(1 + Age))\cdot \exp(- 0,23\cdot\text{Quality2ª}) \cdot \\
+  \exp(- 0,29\cdot\text{Quality3ª}) \cdot \exp(0,12\cdot\text{Pool}) \\
+  \cdot\exp(-0,016\cdot Style) \cdot\exp(0,05\cdot Baths)
+  \end{aligned}
+  $$
+  
+## Equação de Estimação
+
+- Pode-se melhorar a apresentação da equação de estimação através da 
+simplificação dos termos
+
+- Lembrando que $\exp(k\cdot x) = \exp(x)^k$, então:
+  - $\exp[-0,87\cdot \ln(Lot)] = \exp[\ln(Lot)]^{-0,87} = Lot^{-0,87}$
+  - $\exp[0,82\cdot \ln(SqFeet)] = \exp[\ln(SqFeet)]^{0,82} = SqFeet^{0,82}$
+  - $\exp[-0,12\cdot \ln(1 + Age)] = \exp[\ln(1 + Age)]^{-0,12} = (1+Age)^{-0,12}$
+
+- Outra opção é: $\exp(k\cdot x) = \exp(k)^x$. Então:
+  - $\exp(-0,23\cdot\text{Quality2ª}) = 0,79^{\text{Quality2ª}}$
+  - $\exp(-0,29\cdot\text{Quality3ª}) = 0,75^{\text{Quality3ª}}$
+  - $\exp(0,12\cdot\text{Pool}) = 1,13^{\text{Pool}}$
+  - $\exp(-0,016\cdot Style) = 0,985^{Style}$
+  - $\exp(0,05\cdot Baths) = 1,05^{Baths}$
+
+## Equação de Estimação
+
+- $$
+  \begin{aligned}
+  PU = 228,15\cdot Lot^{-0,87}\cdot\ SqFeet^{0,82}\cdot (1 + Age)^{-.12} \cdot 0,79^{\text{Quality2ª}} \cdot\\
+  0,75^{\text{Quality3ª}} \cdot 1,13^{\text{Pool}} \cdot 0,985^{Style} \cdot 1,05^{Baths}
+  \end{aligned}
+  $$
+  
+- Interpretação:
+  - Cada Banheiro aumenta PU em 5%
+  - A var. estilo da residência diminui 1,5% a cada subida nível
+  - Uma piscina aumenta PU em 13%
+  - Uma casa de baixo padrão de acabamento vale 25% menos
+  - Uma casa de médio padrão de acabamento vale 21% menos
+  - Cada 1% de aumento na idade da residência diminui PU em 0,12%
+  - Cada 1% de aumento na área construída aumenta PU em 0,82%
+  - Cada 1% de aumento na área do lote diminui PU em 0,87% 
+
+# Centralização de Dados
+
+## Centralização de Dados
+
+```{r}
+#| echo: true
+library(collapse)
+fmode(homePrices$Lot)
+fmode(homePrices$SqFeet)
+fmode(homePrices$Baths)
+```
+
+- Suponhamos então uma casa paradigma com as seguintes características:
+
+. . .
+
+:::: {.columns}
+::: {.column width="40%"}
+  - Lot: 22.000
+  - SqFeet: 1.600
+  - Age: 0
+  - Quality: Primeira
+:::
+::: {.column width="40%"}
+  - Pool: 0
+  - Style: 1
+  - Baths: 3
+:::
+::::
+  
+## Centralização dos Dados
+
+```{r}
+#| echo: true
+fitCenter <- lm(log(PU) ~ log(Lot/22000) + log(SqFeet/1600) + log1p(Age) + Quality + 
+                  Pool + I(Style-1) + I(Baths-3), 
+         data = homePrices, subset = -c(11, 24, 86, 104, 202, 513))
+S(fitCenter)
+```
+
+- Todos os coeficientes são idênticos, exceto pelo intercepto, que agora vale:
+  - $\exp(2,85) = \overline{PU}_{Hom} =$ `r brf(exp(coef(fitCenter)[1]))` US$/sqft
+  
+# Derivação de Fatores
+
+## Derivação de Fatores
+
+- Com o modelo centralizado, fica mais fácil inferir fatores de homogeneização e
+utilizá-los:
+  - Por exemplo:
+    - Fator Área do Lote ($S$): $F_S = \left(\frac{S}{22.000}\right)^{-0,87}$
+    
+- Demonstração:
+
+. . . 
+
+
+```{r}
+#| echo: true
+p <- predict(fitCenter,
+  newdata = list(Lot = 22000, SqFeet = 1600, Age = 0, 
+             Quality = "Primeira", Pool = 0, 
+             Style = 1, Baths = 3))
+exp(p)
+```
+
+. . . 
+
+```{r}
+#| echo: true
+p1 <- predict(fitCenter,
+  newdata = list(Lot = 24200, SqFeet = 1600, Age = 0, 
+             Quality = "Primeira", Pool = 0, Style = 1, 
+             Baths = 3))
+exp(p1)
+```
+
+
+## Derivação de Fatores
+
+- Para avaliar, fazemos:
+  - $$PU_{aval} = \overline{PU}_{Hom}\cdot F_1 \cdot F_2 \ldots F_k$$
+  
+- Utilizando fatores, a predição do exemplo anterior, para um lote com 24.200 
+$m^2$, fica::
+  - $F_S = \left(\frac{S}{22.000}\right)^{-0,87} = \left(\frac{24.200}{22.000}\right)^{0,87} = 1,1^{-0,87} = 0,92$
+  - $PU_{aval} = \overline{PU}_{Hom}\cdot F_S = 17,36\cdot 0,92 = 15,97\text{ US\$/sqft}$
+  
+- As avaliações realizadas com fatores fundamentados são "exatas" em todo o
+domínio de validade do modelo!
+  
+# Homogeneização
+
+## Homogeneização
+
+- Para homogeneizar faremos:
+  - $$PU_{Hom_i} = \frac{PU_{Obs}}{F_1 \cdot F_2 \ldots F_k}$$
+  
+- A ideia é:
+  - Ao observar um dado constatamos que seu $PU_i = 16,25\text{ US\$/sqft}$
+  - Este lote possui as mesmas características de um lote padrão, exceto pela sua
+  área, que é 10% maior (24.200 sqft)
+  - Qual seria o preço observado desde dado amostral se ele tivesse a mesma área
+  do lote padrão?
+    - $$PU_{Hom} = \frac{16,25}{\left (\frac{22.400}{22.000} \right )^{-0,87}} = \frac{16,25}{0,94} = 17,28\text{ US\$/sqft}$$
+
+## Por que homoegeneizar a amostra?
+
+- Se já temos ajustado um modelo de regressão com o qual conseguimos prever 
+valores dentro ou fora da amostra
+  - Por que homoegeneizar os dados amostrais?
+  
+- A resposta é que, com todos a amostra homogeneizada para as mesmas 
+características, se esta amostra conta com coordenadas geográficas, então o que
+temos é uma **variável regionalizada**
+  - Não podíamos comparar os $PU_i$ dos imóveis entre si diretamente, pois estes
+  $PU_i$ se referiam à imóveis com diferentes características
+    - Seria equivalente a coletar o preço do kilo da laranja em um mercado, da
+    banana em outro, do abacaxi em um terceiro, e depois tratar esses preços 
+    espacialmente, como se eles se referissem à mesma coisa
+  - Porém, como conseguimos homogeneizar os dados em relação a um conjunto
+  único de características (as características de um imóvel paradigma), então
+  podemos trabalhá-los espacialmente
+  
+## Problema
+  
+- Só restou um problema:
+  - Esta homogeneização que fizemos é válida?
+    - Os nossos coeficientes foram estimados apropriadamente?
+    
+- Todo o processo de homogeneização deve ser realizado com tratamento científico
+  - Os fatores utilizados devem ser derivados de maneira racional, através de um
+  modelo **RLM**
+  - No entanto, não consideramos quaisquer variáveis de localização no modelo
+  - Se os dados forem dependentes espacialmente, os nossos coeficientes poderão
+  estar viesados
+    - Nossos fatores podem estar errados
+  
+- É preciso considerar a verificação da dependência espacial, muito comum no
+mercado imobiliário
+
+## Referências

@@ -1,0 +1,1255 @@
+---
+title: "Avaliação em Massa"
+subtitle: "*Modelagem*"
+author: "Luiz Droubi"
+institute: Academia da Engenharia de Avaliações
+date: last-modified
+date-format: long
+title-slide-attributes:
+  data-background-image: img/PPT_abertura.png
+  #data-background-size: contain
+  #data-background-opacity: "0.5"
+  data-footer: "<a href='http://www.valoristica.com.br'>http://www.valoristica.com.br</a>"
+include-after-body: add-custom-footer.html
+lang: pt
+format:
+  revealjs:
+    theme: [default, style.scss]
+    logo: img/logo.png
+    # theme: beige
+    # smaller: true
+    scrollable: true
+    incremental: true
+    transition: slide
+    background-transition: fade
+fontsize: 1.8em
+bibliography: references.bib
+brand: true
+toc: true
+toc-depth: 1
+footer: "VALORÍSTICA"
+slide-number: true
+---
+
+```{r}
+#| include: false
+library(kableExtra)
+library(appraiseR)
+library(sf)
+library(broom)
+```
+
+
+# Modelo Aditivo
+
+## Modelo Aditivo
+
+- Na *RLM* podemos adicionar outras variáveis explicativas ao modelo:
+  - $$\mathbf y = \beta_0 + \beta_1 \pmb X_1 + \beta_2 \pmb X_2 + \ldots + \beta_k \pmb X_k + \pmb \epsilon$${#eq-ModeloAditivo}
+
+- Porém, também poderíamos acrescentar outros termos de ordem superior, ou seja,
+com a interação entre as variáveis
+  - Por exemplo, com duas variáveis, poderíamos ajustar um modelo com termos de
+  segunda ordem assim:
+    - $$\mathbf y = \beta_0 + \beta_1 \pmb X_1 + \beta_2 \pmb X_2 + \beta_4 X_1^2 + \beta_5 X_2^2 + \beta_3 \pmb X_1X_2 + \pmb \epsilon$${#eq-SegundaOrdem}
+    
+- Inicialmente trataremos apenas dos termos de primeira ordem e vamos nos
+restringir, portanto, ao modelo aditivo
+
+# Teorema Central do Limite
+
+## Teorema Central do Limite
+
+- O *Teorema Central do Limite* (TLC) pode ser apresentado em diversas formas
+  - *Central*, em *Teorema Central do Limite* deve ser compreendido como um 
+  sinônimo de *Fundamental*.
+  
+. . . 
+
+::: {#thm-line}
+### Teorema Central do Limite
+
+Seja um conjunto de $n$ variáveis aleatórias independentes $X_1$, $X_2$, ...,
+$X_n$, todas com a mesma distribuição, de valor esperado $\mu$ e variância
+$\sigma^2$. A nova variável $T = X_1 + X_2 + ... + X_n$ tem distribuição
+assintoticamente normal com média $\mu_T = n\mu$ e variância 
+$\sigma_T^2=n\sigma^2$ [@matloff2009,p. 158-159].
+:::
+
+- Segundo @Stigler244 [p. 5-20], ainda segundo o TLC, a média das variáveis 
+$X_1, X_2, \ldots, X_n$, $\overline X = T/n = 1/n\sum_{i=1}^n X_n$ apresentará,
+assintoticamente:
+
+. . . 
+
+$$
+\bar X \sim \mathcal N(\mu, \sigma^2/n)
+$${#eq-MeanDistribution}
+
+## Convergência
+
+- Mas quantas variáveis são necessárias para convergência?
+  - Depende da distribuição delas
+  - Para @matloff2009: "tipicamente $n = 20$ ou mesmo $n = 10$ é suficiente" 
+  (para atingir a normalidade da soma)
+  - Segundo Stigler (s.d., 5–21), se as variáveis $X_1$, $X_2$, ..., $X_n$ 
+  tiverem distribuição normal, então a @eq-MeanDistribution é exata (e não 
+  aproximadamente normal, como diz o teorema).
+  - Na prática utilizamos bem menos variáveis de uma vez.
+    - Contudo, se a distribuição das variáveis $X_i$ for próxima da distribuição
+    normal, a aproximação pode ser excelente para $n$ tão baixo quanto 5 ou 10 
+    (ver @Stigler244 [5–22])
+    
+- As variáveis $X_i$ devem ser *i.i.d*?
+  - o TLC de Lyapunov, por exemplo, afirma apenas que as variáveis devem ser 
+  independentes, mas não identicamente distribuídas, o que já é um grande alívio
+
+## Velocidade da convergência
+
+- 4 variáveis com distribuição uniforme:
+
+. . . 
+
+```{r}
+#| label: fig-UniformX
+#| fig-cap: "Histograma de 4 variáveis independentes com distribuição uniforme."
+#| fig-subcap:
+#|   - "A"
+#|   - "B" 
+#|   - "C"
+#|   - "D"
+#| layout-ncol: 2
+#| fig-height: 3
+#| fig-width: 6
+library(tibble)
+library(ggplot2)
+set.seed(1)
+n <- 1000
+min <- 0
+max <- 1
+a <- runif(n, min = min, max = max)
+b <- runif(n, min = min, max = max)
+c <- runif(n, min = min, max = max)
+d <- runif(n, min = min, max = max)
+df <- tibble(A = a, B = b, C = c, D = d, `A + B` = a+b, `A + B + C` = a+b+c,
+             `A + B + C + D` = a+b+c+d)
+p1 <- ggplot(df, aes(x = A, y = after_stat(density))) +
+  geom_histogram(breaks = .1*0:10, labels = .1*1:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p2 <- ggplot(df, aes(x = B, y = after_stat(density))) +
+  geom_histogram(breaks = .1*0:10, labels = .1*1:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p3 <- ggplot(df, aes(x = C, y = after_stat(density))) +
+  geom_histogram(breaks = .1*0:10, labels = .1*1:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p4 <- ggplot(df, aes(x = D, y = after_stat(density))) +
+  geom_histogram(breaks = .1*0:10, labels = .1*1:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p1; p2; p3; p4
+```
+
+## Velocidade de Convergência
+
+```{r}
+#| label: fig-FastestTLC
+#| fig-cap: "Histograma da média de duas ou mais var. independentes com dist. uniforme."
+#| fig-subcap:
+#|   - "(A + B)/2"
+#|   - "(A + B + C)/3"
+#|   - "(A + B + C + D)/4" 
+#| layout-ncol: 3
+p1 <- ggplot(df, aes(x = `A + B`/2, y = after_stat(density))) +
+  geom_histogram(breaks = .1*0:10, labels = .1*1:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p2 <- ggplot(df, aes(x = `A + B + C`/3, y = after_stat(density))) +
+  geom_histogram(breaks = .1*0:10, labels = .1*1:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p3 <- ggplot(df, aes(x = `A + B + C + D`/4, y = after_stat(density))) +
+  geom_histogram(breaks = .1*0:10, labels = .1*1:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p1;p2;p3
+```
+
+- Com 3 variáveis já temos distribuição praticamente normal!
+
+# Exemplo de Modelo Aditivo
+
+## Dados
+
+```{r}
+#| echo: true
+#| eval: false
+homePrices <- readRDS("data/homePrices.rds")
+homePrices <- within(homePrices, {
+  PU <- SalePrice/Lot
+  Age <- 1998 - Year
+}) 
+library(skimr)
+skim(homePrices)
+```
+
+```{r}
+#| results: hide
+homePrices <- readRDS("data/homePrices.rds")
+homePrices <- within(homePrices, {
+  PU <- SalePrice/Lot
+  Age <- 1998 - Year
+}) 
+library(skimr)
+a <- skim(homePrices)
+b <- print(a, include_summary = FALSE)
+```
+
+## Dados
+
+```{r}
+#| label: tbl-homePrices
+#| tbl-cap: "Sumário de um conjunto de dados de venda de casas nos EUA."
+# data("homePrices")
+kable(b, digits = 2,
+      format.args = list(big.mark = ".", decimal.mark = ","), 
+      col.names = c("type", "Variable", "missing", "%", "mean",
+                    "sd", "p0", "p25", "p50", "p75", "p100", "hist")) |>
+  kable_styling(font_size = 18)
+```
+
+```{r}
+#| eval: false
+data("aptosBebedouro")
+kable(aptosBebedouro[, c(1:9)],
+      format.args = list(big.mark = ".", decimal.mark = ","), 
+        digits = 2)
+```
+
+## Modelo Inicial
+
+```{r}
+#| echo: true
+fit <- lm(PU ~ Lot + SqFeet, data = homePrices)
+summary(fit)
+```
+
+## Plotagem do Modelo
+
+- NA *RLM* o modelo somente pode ser plotado com resíduos parciais:
+
+- Resíduos totais são a diferença entre os valores observados e os valores previstos:
+  - $\mathbf y = \beta_0 + \beta_1 \pmb X_1 + \beta_2 \pmb X_2 + \ldots + \beta_k \pmb X_k + \pmb \epsilon$
+  - $\mathbf{\hat y} = \hat \beta_0 + \hat \beta_1 \pmb X_1 + \hat \beta_2 \pmb X_2 + \ldots + \hat \beta_k \pmb X_k$
+  - $\mathbf y = \mathbf{\hat y} + \pmb{\hat\epsilon}$
+  - $\pmb{\hat \epsilon} = \mathbf y - \hat{\mathbf y}$
+  - $\pmb{\hat \epsilon} = \mathbf y - (\hat \beta_0 + \hat \beta_1 \pmb X_1 + \hat \beta_2 \pmb X_2 + \ldots + \hat \beta_k \pmb X_k)$
+
+    
+- Resíduos Parciais são obtidos ao acrescentar aos resíduos totais o efeito 
+isolado de uma das variáveis explicativas:
+
+  - $$\pmb{\hat \epsilon_i} = \mathbf y - \hat{\mathbf y} + \beta_i X_i$${#eq-partialResiduals}
+  
+- Por exemplo:
+  - $\pmb{\hat \epsilon_1} = \mathbf y - \hat \beta_0 - \hat \beta_1 \pmb X_1 + \hat \beta_1 \pmb X_1 - \hat \beta_2 \pmb X_2  - \ldots - \hat \beta_k \pmb X_k$
+  
+## Gráficos de Resíduos Parciais
+
+- Os gráficos de resíduos parciais são obtidos fazendo:
+  - $\pmb{\hat \epsilon_1} = \mathbf y - \hat \beta_0 - \hat \beta_1 \pmb X_1 + \hat \beta_1 \pmb X_1 - \hat \beta_2 \pmb X_2  - \ldots - \hat \beta_k \pmb X_k$
+  - $\pmb{\hat \epsilon_2} = \mathbf y - \hat \beta_0 - \hat \beta_1 \pmb X_1  - \hat \beta_2 \pmb X_2 + \hat \beta_2 \pmb X_2 - \ldots - \hat \beta_k \pmb X_k$
+  - $\ldots$
+  - $\pmb{\hat \epsilon_k} = \mathbf y - \hat \beta_0 - \hat \beta_1 \pmb X_1  - \hat \beta_2 \pmb X_2  - \ldots - \hat \beta_k \pmb X_k + \hat \beta_k \pmb X_k)$
+  
+  - E depois plotando:
+    - $\pmb{\hat \epsilon_i}$  *vs.* $X_i$
+    
+## Gráficos de Resíduos Parciais
+
+```{r}
+#| echo: true
+#| fig-height: 4.75
+library(car)
+crPlots(fit)
+```
+
+## Corrigindo não-linearidades
+
+```{r}
+#| echo: true
+fit1 <- lm(PU ~ I(Lot^-1) + SqFeet, data = homePrices)
+summary(fit1)
+```
+
+## Gráficos de Resíduos Parciais
+
+```{r}
+#| echo: true
+#| fig-height: 4.75
+library(car)
+crPlots(fit1)
+```
+
+## Aumentando a complexidade do modelo
+
+```{r}
+#| echo: true
+fit2 <- update(fit1, .~. + Age)
+summary(fit2)
+```
+
+##
+
+```{r}
+#| echo: true
+#| fig-height: 7
+#| fig-width: 7
+#| fig-align: "center"
+crPlots(fit2)
+```
+
+
+## Aumentando a complexidade do modelo
+
+```{r}
+#| echo: true
+fit3 <- update(fit2, .~. + Quality)
+summary(fit3)
+```
+
+## Modelo Transformado
+
+```{r}
+#| echo: true
+#| fig-height: 7
+#| fig-width: 7
+#| fig-align: "center"
+crPlots(fit3)
+```
+
+
+# Variáveis qualitativas
+
+## Variáveis qualitativas
+
+- Até agora tratamos apenas da relação entre variáveis numéricas ou quantitavas
+- Existem, porém, diversas variáveis qualitativas que devemos utilizar para 
+tratar a amostra que, em geral, é heterogênea
+  - Padrão de Acabamento
+  - Presença ou ausência de algum item em particular
+    - P. ex.: piscina, aquecimento,ar-condicionado central, etc.
+- As variáveis qualitativas são usualmente modeladas como variáveis dicotômicas
+  - Isoladas
+  - Em grupo
+  
+## Exemplo
+
+```{r}
+#| echo: true
+homePrices <- within(homePrices,
+                     Quality <- factor(Quality, levels = c(1, 2, 3),
+                                       labels = c("Primeira", "Segunda",
+                                                     "Terceira"))
+                     )
+fit3 <- update(fit2, .~. + Quality)
+S(fit3)
+```
+
+## Como funcionam as variáveis dicotômicas?
+
+- As variáveis dicotômicas isoladas usualmente recebem um código de dois números:
+  - P. Ex.:
+    - Com Piscina: 1
+    - Sem Piscina: 0
+
+- As variáveis dicotômicas em grupo são variáveis que recebem um código 0/1, 
+porém para isto utilizam $g-1$ variáveis para poder diferenciar os $g$ grupos.
+
+. . . 
+
+```{r}
+#| echo: true
+head(model.matrix(fit3), n = 12)
+```
+
+## Plotagem do Modelo
+
+```{r}
+#| echo: true
+#| fig-align: "center"
+#| fig-height: 7
+#| fig-width: 7
+crPlots(fit3)
+```
+
+
+
+## Identificando *outliers*
+
+```{r}
+#| echo: true
+#| fig-align: "center"
+#| fig-height: 7
+#| fig-width: 7
+crPlots(fit3, id = TRUE)
+```
+
+## Removendo *outliers*
+
+```{r}
+#| echo: true
+fit4 <- lm(PU ~ I(Lot^-1) +SqFeet + Age + Quality,
+           data = homePrices, subset = -c(86, 104))
+S(fit4, adj.r2 = T)
+```
+
+
+## Aumentando a complexidade do Modelo
+
+```{r}
+fit5 <- update(fit4, .~. + Pool)
+S(fit5, adj.r2 = T)
+```
+
+## Outras variáveis
+
+```{r}
+#| echo: true
+fit6 <- update(fit5, .~. + Beds + Baths + Air + Garage + Style + Highway)
+S(fit6)
+```
+
+## Modelo final
+
+```{r}
+#| echo: true
+fit6 <- update(fit5, .~. + Style)
+S(fit6, adj.r2 = T)
+```
+
+
+# Métricas
+
+## Métricas
+
+- Os MQO minimizam o erro médio quadrático, também conhecido como **MSE**.
+  - $$\text{MSE} = \frac{1}{n}\sum_{i = 1}^n (y_i - \hat y_i)^2$${#eq-MSE}
+  
+- Para ficar na mesma escala dos dados, é melhor:
+  - $$\text{RMSE} = \sqrt{\frac{1}{n}\sum_{i = 1}^n (y_i - \hat y_i)^2}$${#eq-RMSE}
+  
+- Há ainda o **MAE** (*Mean Absolute Error*):
+  - $$\text{MAE} = \frac{1}{n}\sum_{i=1}^n|y_i - \hat y_i|$${#eq-MAE}
+  
+- Problemas com essas métricas é que elas são sensíveis à presença de *outliers*
+  
+## Métricas Robustas
+  
+- Não há nada que justifique a adoção das métricas do slide anterior
+
+- Poderíamos optar por minimizar **MAD** (*Median Absolute Deviation*), por 
+exemplo, que é uma medida robusta:
+  - $$\text{MAD} = \text{Mediana} |y_i - \hat y_i|$${#eq-MAD}
+  - $$\text{MAD}_n = b\cdot \text{Mediana} |y_i - \hat y_i|$${#eq-MADn}
+    - $\text{MAD}_n$, com $b = 1,4826$, é um estimador não-viesado de $\sigma$ da
+    distribuição normal!
+  
+- Ou **MAPE** (*Mean Absolute Percentage Errors*):
+  - $$\text{MAPE} = 100\frac{1}{n}\sum_{i = 1}^n \left|\frac{y_i - \hat y_i}{y_i}\right|$${#eq-MAPE}
+  
+## Exemplo
+
+```{r}
+fit6 |>
+  tidy() |>
+  kable(booktabs = TRUE, format.args = list(big.mark = ".", decimal.mark = ","), 
+        digits = 2,
+        col.names = c("Termo", "Est.", "Erro", "t", "p valor")) |>
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 20) |>
+  footnote(general = paste("Erro-padrão dos resíduos: ", 
+                             brf(sigma(fit6), digits = 2), 
+                             " em ", df.residual(fit6), " graus de liberdade."),
+           alphabet = c(paste("RMSE: ", 
+                              brf(RMSE(fit6), digits = 2)),
+                        paste("MAE: ", 
+                              brf(MAE(fit6), digits = 2)),
+                        paste("MADn: ", 
+                              brf(MADn(fit6), digits = 2)),
+                        paste("R2: ", 
+                              brf(R2(fit6), digits = 2)),
+                        paste("R2ajust: ", 
+                              brf(adjR2(fit6), digits = 2)),
+                        paste("R2pred: ",
+                              brf(predR2(fit6), digits = 2)),
+                        paste("MAPE: ", 
+                              brf(MAPE(fit6), digits = 2))
+                        ),
+           escape = F) 
+```
+
+- $\text{RMSE}$ é muito próximo de $\hat\sigma$! $MADn$ mais baixo que 
+$\hat\sigma$ preocupa!
+
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+library(ggResidpanel)
+resid_panel(fit6, type = "standardized")
+```
+
+- Falta de normalidade e homoscedasticidade! Resíduos Padronizados de grande
+magnitude!
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+y <- rstudent(fit6)
+x <- fitted(fit6)
+plot(y ~ x, ylab = "Resíduos Studentizados", xlab = "Valores Ajustados")
+abline(h = 3, col = "red", lty = 2)
+abline(h = -3, col = "red", lty = 2)
+```
+
+
+## Consequências da falta de normalidade e homoscedasticidade
+
+- O modelo continua prevendo valores de tendência central como qualquer outro
+modelo.
+  - No entanto, ele não é mais **BLUE**!
+  - Não é possível realizar inferência clássica com ele!
+    - Os testes dos coeficientes estão prejudicados
+    - Não podemos formar intervalos de confiança com a distribuição t 
+  - É preciso jogar o modelo fora?
+    - NÃO!
+  
+# Hipóteses sobre os erros
+
+## Teoria
+
+- Para um modelo de regressão linear qualquer:
+  - $$\mathbf y = \pmb{X\beta} + \pmb\epsilon$$
+    - $$\hat\beta = (\mathbf{X'X})^{-1}\mathbf{X'y}$$
+      - Independentemente da distribuição dos erros [@matloff2009, p. 400]!
+      
+- A variância de $\pmb{\beta}$ é:
+  - $\widehat{\text{Cov}}(\pmb{\hat\beta}) = \text{Cov}((\mathbf{X'X})^{-1}\mathbf{X'y})$
+  - Vamos chamar $\mathbf B = (\mathbf{X'X})^{-1}\mathbf X'$. 
+    - Então: $\widehat{\text{Cov}}(\pmb{\hat\beta}) = \text{Cov}(\mathbf{By})$
+  - Vamos usar a propriedade $\text{Cov}(\mathbf{Au}) = \mathbf A\text{Cov}(\mathbf u) \mathbf A'$: 
+    - $\widehat{\text{Cov}}(\pmb{\hat\beta}) = \mathbf B\cdot \text{Cov}(\mathbf y | \mathbf X)\cdot \mathbf B'$
+  
+## Hipótese dos erros *i.i.d*
+
+- $\widehat{\text{Cov}}(\pmb{\hat\beta}) = \mathbf B\cdot \text{Cov}(\mathbf y | \mathbf X)\cdot \mathbf B'$
+  - $\mathbf B = (\mathbf{X'X})^{-1}\mathbf{X'}$
+  - Então:
+    - $\widehat{\text{Cov}}(\pmb{\hat\beta}) =  (\mathbf{X'X})^{-1}\mathbf X'\cdot \text{Cov}(\mathbf y | \mathbf X)  \cdot \mathbf X (\mathbf{X'X})^{-1}$
+    - $\widehat{\text{Cov}}(\pmb{\hat\beta}) = (\mathbf{X'X})^{-1}\mathbf X'\cdot \pmb \Omega \cdot \mathbf X (\mathbf{X'X})^{-1}$
+
+- Se os erros são *i.i.d.*, com distribuição normal ($\pmb{\epsilon} \overset{\underset{\mathrm{i.i.d.}}{}}{\sim} \mathcal N(0, \sigma^2\mathbf I)$), então [@matloff2009, 402]:
+  - $$\mathbf \Omega_{\text{MQO}} = \text{Cov}(\mathbf y|\mathbf X) = \sigma^2 \mathbf I$$
+  - $$\widehat{\text{Cov}}(\pmb{\hat\beta}) = \hat\sigma^2 (\mathbf{X'X})^{-1}$$
+
+- Os cálculdos dos erros-padrões dos $\beta_i$ ficam extremamente facilitados!
+
+## Matriz de Variância-Covariância
+
+- $$\pmb \Omega_{\text{MQO}} = \hat \sigma^2 \mathbf I =  
+ \begin{pmatrix}
+  \hat \sigma^2 & 0 & \cdots & 0 \\
+   0 & \hat \sigma^2 & \cdots & 0 \\
+  \vdots  & \vdots  & \ddots & \vdots \\
+   0  & 0 &  \cdots & \hat \sigma^2
+ \end{pmatrix}$$
+
+## E se erros não são *i.i.d.*?
+
+- E se os erros não forem *i.i.d.*?
+  - Então:
+    - $\widehat{\text{Cov}}(\pmb{\hat\beta}) = (\mathbf{X'X})^{-1}\mathbf X'\cdot \pmb \Omega \cdot \mathbf X (\mathbf{X'X})^{-1}$
+
+    - Com: 
+      - $$\pmb \Omega = \text{Cov}(\mathbf y | \mathbf X) =  
+ \begin{pmatrix}
+  \text{var}(\varepsilon_1) & \text{cov}(\varepsilon_1\varepsilon_2) & \cdots & \text{cov}(\varepsilon_1\varepsilon_n) \\
+   \text{cov}(\varepsilon_2\varepsilon_1) & \text{var}(\varepsilon_2) & \cdots & \text{cov}(\varepsilon_2\varepsilon_n) \\
+  \vdots  & \vdots  & \ddots & \vdots  \\
+   \text{cov}(\varepsilon_n\varepsilon_1)  & \text{cov}(\varepsilon_n\varepsilon_2) &  \cdots & \text{var}(\varepsilon_n) 
+ \end{pmatrix}$$
+ 
+# Estimador Sanduíche
+
+## Teoria
+
+- É possível estimar a matriz Variância-Covariância através dos resíduos do 
+MQO!
+
+- @LongErvin avaliam as matrizes $HC_0$, $HC_1$, $HC_2$ e $HC_3$ propostas por
+@MacKinnon e @White1980.
+  - $HC_0 = (\mathbf{X'X})^{-1}\mathbf X'\cdot  \text{diag}(e_i^2) \cdot \mathbf X (\mathbf{X'X})^{-1}$
+  - $HC_1 = \frac{n}{n-k}(\mathbf{X'X})^{-1}\mathbf X'\cdot  \text{diag}(e_i^2) \cdot \mathbf X (\mathbf{X'X})^{-1} = \frac{n}{n-k}HC_0$
+  - $HC_2 = (\mathbf{X'X})^{-1}\mathbf X'\cdot  \text{diag}\left (\frac{e_i^2}{1-h_{ii}} \right ) \cdot \mathbf X (\mathbf{X'X})^{-1}$
+  - $HC_3 = (\mathbf{X'X})^{-1}\mathbf X'\cdot  \text{diag}\left (\frac{e_i^2}{(1-h_{ii})^2} \right ) \cdot \mathbf X (\mathbf{X'X})^{-1}$
+
+- @CRIBARINETO2004, @CRIBARINETO2007 e @CRIBARINETO2011: sugerem novas matrizes
+$HC_4$, $HC_{4m}$ e $HC_5$
+  
+- Qual utilizar?
+  - @LongErvin recomendam utilizar $HC_3$!
+  
+
+##  Na prática
+
+```{r}
+#| echo: true
+library(lmtest)
+library(sandwich)
+coeftest(fit6, vcov. = vcovHC(fit6, type = "HC3"))
+```
+
+
+```{r}
+#| echo: false
+#| eval: false
+library(sjPlot)
+tab_model(fit6, vcov.fun = "HC3", show.se = TRUE)
+```
+
+
+## Na prática
+
+```{r}
+#| echo: true
+library(dotwhisker)
+dwplot(fit6)
+```
+
+- Problema com a escala de $1/Lot$: valores muito pequenos, gera coeficiente
+grande!
+
+## Na prática
+
+```{r}
+#| echo: true
+rec <- function(x) -100000/x
+fit6 <- update(fit6, .~. - I(Lot^-1) + rec(Lot))
+summary(fit6)
+```
+
+## Na prática
+
+```{r}
+#| echo: true
+dwplot(fit6,
+       vars_order = c( "QualityTerceira", "QualitySegunda", "rec(Lot)",
+                      "Style", "Age", "SqFeet", "Pool"))
+```
+
+## Na prática
+
+- Com erros robustos:
+
+. . . 
+
+```{r}
+library(GGally)
+ggcoef(coeftest(fit6, vcov. = vcovHC(fit6, type = "HC3")), 
+       exclude_intercept = T, sort = "descending")
+```
+
+- Com a matriz $HC_3$ os intervalos de confiança são um pouco mais largos!
+
+
+# Mínimos Quadrados Ponderados
+
+## Mínimos Quadrados Ponderados (MQP)
+
+- Se for possível compreender como se comportam os erros do modelo MQO
+  - Se eles forem independentes ($\text{cov}(\varepsilon_1, \varepsilon_j)\, \forall \, i,j$)
+  - É possível estabelecer pesos contrários, de forma que a heteroscedasticidade
+  se anule
+  - Ressuscitando MQP: @ROMANO20171
+  - MQP na Engenharia de Avaliações: @wls2024
+  
+## Mínimos Quadrados Ponderados (MQP)
+
+- Se $\sigma^2$ não é constante, porém consegue-se identificar a função dos 
+erros $\sigma(X)$
+
+  - $\pmb \Omega_{\text{MQP}} = \hat \sigma^2 \cdot  
+  \begin{pmatrix}
+    w_1 & 0 & \cdots & 0 \\
+    0 & w_2 & \cdots & 0 \\
+    \vdots  & \vdots  & \ddots & \vdots \\
+    0  & 0 &  \cdots & w_n
+  \end{pmatrix}$
+
+- Problema: quais pesos aplicar?
+  - Como a intenção é contornar a heteroscedasticidade ($\sigma^2 \neq \text{cte}$),
+  então precisamos de pesos que a anulem:
+    - $w_i = 1/\sigma_i^2 = 1/\text{var}(\varepsilon_i)$
+    - O problema então é o de estimar $w_i$ de acordo com a função $\sigma^2(X)$
+    
+## Mínimos Quadrados Ponderados (MQP)
+
+- Enquanto no MQO fazemos:
+  - $\underset{\beta}{\arg\min} \sum_{i=1}^n (\varepsilon_i^2) = \underset{\beta}{\arg\min} (\mathbf y - \pmb{X\beta})^2$
+  
+- No MQP fazemos:
+  - $\underset{\beta}{\arg\min} \sum_{i=1}^n (w_i\cdot\varepsilon_i^2) = \underset{\beta}{\arg\min} \mathbf W(\mathbf y - \pmb{X\beta})^2$
+    - Com $w_i = 1/\sigma^2(X_i)$
+- O estimador MQP, portanto, é:
+  - $$\hat\beta_{MQP} = (\mathbf{X'WX})^{-1}\mathbf{X'Wy}$${#eq-MQP}
+  
+- Ao invés de calcular erros robustos, o MQP estima novamente outro vetor 
+$\pmb{\beta}_{MQP}$, que é mais eficiente que $\pmb{\beta}_{MQO}$ quando os 
+erros são heteroscedásticos, *se os pesos forem bem especificados*!
+
+## Mínimos Quadrados Ponderados (MQP)
+
+
+### Exemplo WLS Simples
+
+```{r}
+# 1. Artificial data
+set.seed(1)
+area <- seq(from = 75, to = 1000, by = 5)
+p <- 500000 + 50000*log(area) + rnorm(n=186, mean = 1000*area, sd=275*area)
+dados <- data.frame(P = p/1000, Area = area)
+
+# 1.1 OLS Fit:
+fit <- lm(P ~ Area, data = dados)
+# S(fit, brief = T)
+
+# 1.2 WLS Fit:
+
+Fitted <- fitted(fit)
+Res <- residuals(fit)
+AuxFit <- lm(abs(Res) ~ Fitted)
+
+dados$w <- 1/fitted(AuxFit)^2
+
+wfit <- lm(P ~ Area, data = dados, weights = w)
+# S(wfit, brief = T)
+
+# wfit <- wls(P ~ Area, data = dados, residuals = "abs", against = "fitted")
+# S(wfit, brief = T)
+
+library(ggplot2)
+library(ggpmisc)
+library(ggtext)
+theme_set(theme_bw())
+
+ggplot(dados, aes(x = Area, y = P)) +
+geom_point() +
+geom_smooth(method = "lm", aes(weight = w), se = FALSE) +
+geom_smooth(method = "lm", color = "red", se = FALSE) +
+stat_poly_eq(use_label(c("eq", "R2")), color = "red", size = 3.75) +
+annotate("text", y = 2300, x = 500,
+         label = paste("italic(y) ==~", format(coef(wfit)[1], digits = 2),
+                        "~+~", format(coef(wfit)[2], digits = 2, nsmall = 2),
+                        "~italic(x)~','~", "~R^2==~",
+                        format(summary(wfit)$r.squared, digits = 3), sep =""),
+         colour = "blue", parse = TRUE, size = 3.75) +
+labs(title = "Preço de lotes urbanos em função de sua área.",
+     subtitle = "<b style='color:blue'>MQP</b> melhora o ajuste
+                   em relação ao <b style='color:red'>MQO</b>.",
+     y = "Preço (em milhares de Reais)",
+     x = "Área do lote (em m2)") +
+theme(plot.subtitle = element_markdown(lineheight = 1.1),
+      legend.text = element_markdown(size = 11))
+```
+
+    
+## Mínimos Quadrados Ponderados (MQP)
+
+```{r}
+#| echo: true
+dados <- data.frame(PUAjust = fitted(fit6), 
+                    Residuals = residuals(fit6))
+auxFit <- lm(abs(Residuals) ~ PUAjust, data = dados)
+plot(abs(Residuals) ~ PUAjust, data = dados, main = "Regressão Auxiliar")
+abline(auxFit, col = "red")
+```
+
+
+```{r}
+#| eval: false
+dados <- data.frame(PUAjust = fitted(fit6), 
+                 Residuals = residuals(fit6))
+library(ggplot2)
+ggplot(dados, aes(y = abs(Residuals), x = PUAjust)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+
+## Mínimos Quadrados Ponderados (MQP)
+
+```{r}
+#| echo: true
+w <- 1/fitted(auxFit)^2
+fitMQP <- lm(PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + Style, 
+             data = homePrices[-c(86, 104), ], weights = w)
+summary(fitMQP)
+```
+
+- Aumentou substancialmente o $R^2$!
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+resid_panel(fitMQP, type = "standardized")
+```
+
+- Uma melhora substancial nos erros, apesar de alguns *outliers*! E continuamos na escala de PU!
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+library(olsrr)
+ols_plot_resid_stud_fit(fitMQP, threshold = 3)
+```
+
+## Mínimos Quadrados Ponderados (MQP)
+
+```{r}
+#| echo: true
+w <- 1/fitted(auxFit)^2
+fitMQP2 <- lm(PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + Style, 
+             data = homePrices[-c(52, 55, 86, 104), ], weights = w[-c(52, 55)])
+summary(fitMQP2)
+```
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+resid_panel(fitMQP2, type = "standardized")
+```
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+ols_plot_resid_stud_fit(fitMQP2, threshold = 3)
+```
+
+## Mínimos Quadrados Ponderados (MQP)
+
+```{r}
+#| echo: true
+w <- 1/fitted(auxFit)^2
+fitMQP3 <- lm(PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + Style, 
+             data = homePrices[-c(50, 52, 55, 86, 104), ], 
+             weights = w[-c(50, 52, 55)])
+summary(fitMQP3)
+```
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+resid_panel(fitMQP3, type = "standardized")
+```
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+ols_plot_resid_stud_fit(fitMQP3, threshold = 3)
+```
+
+## Mínimos Quadrados Ponderados (MQP)
+
+```{r}
+#| echo: true
+w <- 1/fitted(auxFit)^2
+fitMQP4 <- lm(PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + Style, 
+             data = homePrices[-c(11, 50, 52, 55, 86, 104, 134), ], 
+             weights = w[-c(11, 50, 52, 55, 127)])
+summary(fitMQP4)
+```
+
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+resid_panel(fitMQP4, type = "standardized")
+```
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+ols_plot_resid_stud_fit(fitMQP4, threshold = 3)
+```
+
+
+# *Least Squares Percentage Regression* (LSPR)
+
+## *Least Squares Percentage Regression* (LSPR)
+
+- @Tofalis2008: mostra que, aplicando-se como pesos ao MQP o vetor:
+  - $$w_i = 1/PU_i^2$$
+  - obtém-se o modelo que minimiza os erros médios percentuais absolutos (**MAPE**)
+  
+- Pode-se entender que o *LSPR* minimiza os resíduos relativos, quando estamos
+na escala de preços (totais ou unitários):
+  - $$\%R_i = \frac{y_i - \hat y_i}{y_i}$$
+
+## Exemplo
+
+```{r}
+fitLSPR <- update(fit6, weights = 1/PU^2)
+S(fitLSPR)
+```
+
+
+## Análise dos Resíduos
+
+```{r}
+resid_panel(fitLSPR, type = "standardized")
+```
+
+## Análise dos Resíduos
+
+```{r}
+ols_plot_resid_stud_fit(fitLSPR, threshold = 3)
+```
+
+## *Least Squares Percentage Regression* (LSPR)
+
+```{r}
+#| echo: true
+fitLSPR <- lm(PU ~ SqFeet + Age + Quality + Pool + Style + rec(Lot), 
+              data = homePrices, 
+              subset = -c(11, 24, 37, 52, 86, 106, 122, 127, 176),
+              weights = 1/PU^2)
+S(fitLSPR)
+```
+
+## Análise dos Resíduos
+
+```{r}
+resid_panel(fitLSPR, type = "standardized")
+```
+
+## Análise dos Resíduos
+
+```{r}
+ols_plot_resid_stud_fit(fitLSPR, threshold = 3)
+```
+
+## *Least Squares Percentage Regression* (LSPR)
+
+```{r}
+#| echo: true
+fitLSPR <- lm(PU ~ SqFeet + Age + Quality + Pool + Style + rec(Lot), 
+              data = homePrices, 
+              subset = -c(11, 24, 37, 50, 52, 86, 104, 106, 122, 127, 176, 214),
+              weights = 1/PU^2)
+S(fitLSPR)
+```
+
+## Análise dos Resíduos
+
+```{r}
+resid_panel(fitLSPR, type = "standardized")
+```
+
+## Análise dos Resíduos
+
+```{r}
+ols_plot_resid_stud_fit(fitLSPR, threshold = 3)
+```
+
+## Estatísticas
+
+```{r}
+fitLSPR |>
+  tidy() |>
+  kable(booktabs = TRUE, format.args = list(big.mark = ".", decimal.mark = ","), 
+        digits = 2,
+        col.names = c("Termo", "Est.", "Erro", "t", "p valor")) |>
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 20) |>
+  footnote(general = paste("Erro-padrão dos resíduos: ", 
+                             brf(sigma(fitLSPR), digits = 2), 
+                             " em ", df.residual(fitLSPR), " graus de liberdade."),
+           alphabet = c(paste("MADn: ", 
+                              brf(MADn(fitLSPR), digits = 2)),
+                        paste("R2: ", 
+                              brf(R2(fitLSPR), digits = 2)),
+                        paste("R2ajust: ", 
+                              brf(adjR2(fitLSPR), digits = 2)),
+                        paste("R2pred: ",
+                              brf(predR2(fitLSPR), digits = 2)),
+                        paste("MAPE: ", 
+                              brf(MAPE(fitLSPR), digits = 2))
+                        ),
+           escape = F) 
+```
+
+- É uma alternativa interessante, pois é fácil explicar como foram obtidos os
+pesos!
+
+
+# Transformações da variável dependente
+
+## Box-Cox
+
+- É possível transformar a variável dependente
+  - Isto pode ser um caminho fácil para obter normalidade e homoscedasticidade
+  - Porém, ao custo da deformação dos dados e da necessidade de retransformação
+
+- As transformações de Box-Cox consistem em encontrar um valor de um parâmetro $\lambda$ que seja o ideal, tal que:
+  - $$
+    y_i^{(\lambda)} = \begin{cases}
+    \frac{y_i^\lambda - 1}{\lambda}& \text{se}\;\lambda \neq 0 \\
+    \ln y_i & \text{se}\; \lambda = 0
+    \end{cases}
+    $${#eq-BoxCox}
+    
+- As transformações assim efetuadas tendem a ser estabilizadoras da variância e
+tornam a distribuição dos dados mais parecidos com a distribuição normal
+
+## Box-Cox
+
+```{r}
+boxCox(fit6)
+```
+
+- $\lambda \approx 0,5$
+
+## Modelo Transformado
+
+```{r}
+#| echo: true
+fit7 <- update(fit6, sqrt(PU) ~ .)
+S(fit7)
+```
+
+## Análise de Resíduos
+
+```{r}
+#| echo: true
+par(mfrow = c(2,2))
+plot(fit7)
+```
+
+## Plotagem do Modelo
+
+```{r}
+#| echo: true
+#| fig-align: "center"
+#| fig-height: 6
+#| fig-width: 9
+crPlots(fit7, layout = c(2, 3))
+```
+
+## Reanálise das transformações das var. independentes
+
+```{r}
+#| echo: true
+fit8 <- lm(sqrt(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality + Pool +
+         Style, data = homePrices, subset = -c(86, 104))
+S(fit8)
+```
+
+## Plotagem do Modelo
+
+```{r}
+#| echo: true
+#| fig-align: "center"
+#| fig-height: 6
+#| fig-width: 9
+crPlots(fit8, layout = c(2, 3))
+```
+
+
+## Análise de Resíduos do modelo transformado
+
+```{r}
+#| echo: true
+par(mfrow = c(2,2))
+plot(fit8)
+```
+
+## Outras transformações da variável dependente
+
+```{r}
+#| echo: true
+fit9 <- lm(log(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality + Pool +
+         Style, data = homePrices, subset = -c(86, 104))
+S(fit9)
+```
+
+## Anáilse de Resíduos
+
+```{r}
+#| echo: true
+par(mfrow = c(2,2))
+plot(fit9)
+```
+
+- É quase que um milagre!
+
+## Plotagem do Modelo
+
+```{r}
+#| echo: true
+#| fig-align: "center"
+#| fig-height: 6
+#| fig-width: 9
+crPlots(fit9, layout = c(2, 3))
+```
+
+## Identificação de *Outliers*
+
+```{r}
+#| echo: true
+library(olsrr)
+ols_plot_resid_stud_fit(fit9, threshold = 3)
+```
+
+## Modelo Final
+
+```{r}
+fit10 <- update(fit9, subset = -c(11, 24, 86, 104, 202, 513))
+S(fit10)
+```
+
+## Resíduos do modelo final
+
+```{r}
+par(mfrow = c(2,2))
+plot(fit10)
+```
+
+
+# Modelo Multiplicativo
+
+## Modelo Multiplicativo
+
+- Quando utilizamos a transformação $\ln$ para a variável dependente, temos:
+  - $\ln(PU) = \beta_0 + \beta_1 \mathbf{X_1} + \ldots + \beta_k \mathbf{X_k} + \pmb{\varepsilon}$
+
+- Quando retornamos para a escala original, temos:
+  - $PU = \exp(\beta_0 + \beta_1 \mathbf{X_1} + \ldots + \beta_k \mathbf{X_k} + \pmb{\varepsilon})$
+
+- Lembrando que a exponencial da soma é a multiplicação das exponenciais, temos:
+  - $PU = \exp(\beta_0)\cdot\exp(\beta_1 \mathbf{X_1})\cdot\ldots \cdot \exp(\beta_k \mathbf{X_k}) \cdot\exp(\pmb{\varepsilon})$
+  
+- Em suma, na escala original, o modelo com a variável dependente transformada
+para $\ln$ é um modelo multiplicativo
+
+## *TCL* multiplicativo
+
+- Um processo lognormal é a realização estatística do produto de muitas variáveis
+aleatórias independentes, cada qual positiva.
+  - Isto pode ser provado analisando-se o TCL no domínio log!
+  
+- A *média geométrica* ou multiplicativa de $n$ variáveis aleatórias $X_i$ 
+positivas independentes e identicamente distribuídas apresenta, quando
+$n \rightarrow \infty$, distribuição aproximadamente lognormal com parâmetros
+$\mu = \mathbb E (\ln X_i)$ e $\sigma^2 = \text{Var}(\ln Xi)/n$.
+  - Também conhecida como Lei de Gibrat!
+
+# Seleção de Variáveis
+
+## Aumentando a complexidade do modelo
+
+- Após encontrar as transformações corretas para a variável dependente, para as 
+principais variáveis explicativas, e a remoção dos *outliers*, algumas variáveis
+podem mostrar significantes, quando antes não eram
+
+- Desta forma, pode-se aumentar a complexidade do modelo, buscando um maior grau
+de ajuste
+
+## Aumentando a complexidade do modelo
+
+```{r}
+#| echo: true
+fit11 <- update(fit10, .~. + Garage + Baths + Beds + Air + Highway)
+S(fit11)
+```
+
+## Seleção de Variáveis
+
+- Para um bom modelo preditivo, pode ser conveniente a manutenção de alguma
+variável, ainda que esta não tenha apresentado significância como as outras
+
+- No entanto, muitas variáveis não acrescentam poder de explicação ao modelo
+
+- Um método para aferir quais variáveis devem permanecer ou não no modelo é o 
+método da seleção de variáveis, baseada em critérios de ajuste, como o $R^2_{ajust}$
+
+
+## Seleção de Variáveis com $R^2_{ajust}$
+
+```{r}
+#| echo: true
+library(leaps)
+a <- regsubsets(log(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality + Pool +
+         Style + Garage + Baths + Beds + Air + Highway, 
+         data = homePrices[-c(11, 24, 86, 104, 202, 513), ])
+plot(a, scale = "adjr2")
+```
+
+## Modelo Final
+
+```{r}
+#| echo: true
+fit11 <- update(fit10, .~. + Baths)
+S(fit11)
+```
+
+## Poder de predição
+
+```{r}
+powerPlot(fit11, scale = "original", system = "ggplot2", R2 = T,
+          Smooth = T)
+```
+
+- Na escala original, o poder de predição do modelo com a variável transformada 
+sempre cai um pouco!
+
+
+# Equação de Estimação
+
+## Equação de Estimação
+
+- A equação de regressão para o modelo final adotado é:
+  - $$\begin{aligned}
+  \ln(PU) = 5,43 - 0,87\ln(Lot) + 0,82\ln(SqFeet) - \\
+  0,12\ln(1 + Age) - 0,23\cdot\text{Quality2ª} - 0,29\cdot\text{Quality3ª} + \\
+  0,12\cdot\text{Pool}-0,016\cdot Style + 0,05\cdot Baths
+  \end{aligned}
+  $$
+  
+- Exponenciando ambos os lados, chegamos à equação de estimação:
+  - $$\begin{aligned}
+  PU = \exp[5,43 - 0,87\ln(Lot) + 0,82\ln(SqFeet) - \\
+  0,12\ln(1 + Age) - 0,23\cdot\text{Quality2ª} - 0,29\cdot\text{Quality3ª} + \\
+  0,12\cdot\text{Pool}-0,016\cdot Style + 0,05\cdot Baths]
+  \end{aligned}
+  $$
+  
+  - $$
+  \begin{aligned}
+  PU = \exp(5,43)\cdot\exp(-0,87\ln(Lot))\cdot\exp(0,82\ln(SqFeet)) \\
+  \exp(-0,12\ln(1 + Age))\cdot \exp(- 0,23\cdot\text{Quality2ª}) \cdot \\
+  \exp(- 0,29\cdot\text{Quality3ª}) \cdot \exp(0,12\cdot\text{Pool}) \\
+  \cdot\exp(-0,016\cdot Style) \cdot\exp(0,05\cdot Baths)
+  \end{aligned}
+  $$
+
+## Referências

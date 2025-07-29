@@ -1,0 +1,1215 @@
+---
+title: "Avaliação em Massa"
+subtitle: "*Regressão Linear Múltipla*"
+author: "Luiz Droubi"
+institute: Academia da Engenharia de Avaliações
+date: last-modified
+date-format: long
+title-slide-attributes:
+  data-background-image: img/PPT_abertura.png
+  #data-background-size: contain
+  #data-background-opacity: "0.5"
+  data-footer: "<a href='http://www.valoristica.com.br'>http://www.valoristica.com.br</a>"
+include-after-body: add-custom-footer.html
+lang: pt
+format:
+  revealjs:
+    theme: [default, style.scss]
+    logo: img/logo.png
+    # theme: beige
+    # smaller: true
+    scrollable: true
+    incremental: true
+    transition: slide
+    background-transition: fade
+fontsize: 1.8em
+bibliography: references.bib
+brand: true
+toc: true
+toc-depth: 1
+footer: "VALORÍSTICA"
+slide-number: true
+---
+
+```{r}
+#| include: false
+library(kableExtra)
+library(sf)
+library(broom)
+library(ggplot2)
+library(ggpmisc)
+library(appraiseR)
+data("zeni_2024a")
+fit <- lm(PU ~ A, data = zeni_2024a)
+```
+
+# Regressão Linear Múltipla
+
+## Regressão Linear Múltipla
+
+- Na forma escalar, a equação de regressão linear múltipla (RLM) pode ser escrita:
+  - $$\mathbf y = \beta_0 + \beta_1 \pmb X_1 + \beta_2 \pmb X_2 + \ldots + \beta_k \pmb X_k + \pmb \epsilon$$ {#eq-RLM}
+    - A solução da equação @eq-RLM leva a valores $\hat \beta_0, \hat \beta_1, \ldots , \hat \beta_k$ que minimizam a Soma do Quadrado dos Erros (SQE):
+      - $$\hat{\mathbf y} = \hat \beta_0 + \hat \beta_1 \pmb X_1 + \hat \beta_2 \pmb X_2 + \ldots + \hat \beta_k \pmb X_k$$
+      
+
+- Na forma matricial, a equação @eq-RLM pode ser reescrita:
+  - $$\mathbf y = \pmb{X \beta} + \pmb \epsilon$$ {#eq-RLM2}
+
+- E a solução que minimiza SQE é [@GCordeiro2004, 3]:
+  - $$\pmb{\hat\beta}_{OLS} = (\mathbf{X^T X})^{-1}\mathbf X^T \mathbf y$$ {#eq-betaEstimation}
+  
+## Revisão de Regressão Linear Múltipla
+
+$$\mathbf y =  \pmb{X \beta} + \pmb \epsilon$${#eq-MRLC}
+
+:::: {.columns}
+::: {.column width="20%"}
+
+$$
+\mathbf y = \begin{Bmatrix}
+y_1 \\
+y_2 \\
+\vdots  \\
+y_n
+\end{Bmatrix}
+$$
+:::
+
+::: {.column width="40%"}
+
+$$
+\mathbf X = \begin{Bmatrix}
+1      & x_{11} & x_{21} & \cdots &  x_{k1}\\
+1      & x_{12} & x_{22} & \cdots &  x_{k2}\\
+\vdots & \vdots & \vdots & \ddots &  \vdots\\
+1      & x_{1n} & x_{2n} & \cdots &  x_{kn}\\
+\end{Bmatrix}
+$$
+:::
+
+::: {.column width="40%"}
+
+$$
+\pmb{\beta} = \begin{Bmatrix}
+\beta_0 \\
+\beta_1 \\
+\vdots  \\
+\beta_k
+\end{Bmatrix}\quad
+\pmb{\epsilon} = \begin{Bmatrix}
+\epsilon_1 \\
+\epsilon_2 \\
+\vdots  \\
+\epsilon_n
+\end{Bmatrix}
+$$
+
+:::
+
+::::
+  
+## Revisão de Regressão Linear Múltipla
+
+- Geometricamente, a regressão linear é uma projeção ortogonal dos valores 
+observados no espaço das colunas de $\pmb X$:
+
+. . . 
+
+![Interpretação geométrica dos MQO.](img/OLS_geometric_interpretation.png){#fig-GeometryOLS}
+
+## Revisão de Regressão Linear Múltipla
+
+- Os resíduos são a previsão do termo de erro e são a diferença entre os valores
+observados e ajustados:
+
+  - $$\pmb{\hat\epsilon} = \mathbf y - \mathbf X \pmb{\hat\beta} = \mathbf y - \hat {\mathbf y}$$ {#eq-Residuals}
+  
+- Os valores previstos podem ser escritos assim:
+  - $$\hat{\mathbf y} = \pmb{X \hat\beta}_{OLS} = \mathbf X(\mathbf{X^T X})^{-1}\mathbf X^T \mathbf y$$
+  - $$\hat{\mathbf y} = \mathbf{Hy}, \, \text{com } \mathbf H = \mathbf X(\mathbf{X^T X})^{-1}\mathbf X^T$${#eq-HatMatrixa}
+  - $H$ é conhecida como *matriz chapéu* ou *matriz de projeção* 
+  [@GCordeiro2004, 6]!
+    
+- Substituindo a @eq-HatMatrixa na @eq-Residuals:
+  - $$\pmb{\hat\epsilon} = \mathbf y - \mathbf{Hy} = (\mathbf{I} - \mathbf{H}) \mathbf y$${#eq-ResidY}
+
+## Matriz chapéu
+
+$$
+\mathbf H = \begin{Bmatrix}
+h_{11}      & h_{21} & \cdots &  h_{n1}\\
+h_{12}      & h_{22} & \cdots &  h_{n2}\\
+\vdots & \vdots & \ddots &  \vdots\\
+h_{1n}      & h_{2n} & \cdots &  h_{nn}\\
+\end{Bmatrix}
+$$
+
+- Os elementos diagonais da matriz chapéu ($h_{ii}$) são denominadas 
+*alavancagens* dos dados!
+  - As *alavancagens* representam a contribuição de cada observação da amostra 
+  no cômputo do valor ajustado para esta mesma observação.
+  - Quanto mais distante uma observação estiver da 
+  
+##
+
+```{r}
+#| echo: true
+library(randomizeR)
+M <- model.matrix(fit)
+H <- randomizeR:::hatMatrix(M)
+```
+
+```{r}
+kable(H, digits = 2) |>
+  kable_styling(font_size = 16)
+```
+
+## Relação entre erro e resíduos
+
+- Substituindo a @eq-MRLC na @eq-ResidY, temos:
+  - $$\pmb{\hat \epsilon} = (\mathbf{I-H})\mathbf (\mathbf{X\beta} + \pmb{\epsilon})$$
+  
+- A *matriz chapéu*, $\mathbf H$, é ortogonal ao espaço vetorial das colunas de
+$X$
+  - Portanto, $(\mathbf{I-H})\mathbf (\mathbf{X\beta}) = 0$
+  - Então:
+    - $$\pmb{\hat \epsilon} = (\mathbf{I-H}) \pmb{\epsilon}$$
+- Assim, se $\pmb{\epsilon} \sim \mathcal N(0, \sigma^2\mathbf I)$, então:
+  $$\pmb{\hat\epsilon} \sim \mathcal N(0, \sigma^2(\mathbf{I-H}))$$
+  
+## Transformações dos Resíduos {.smaller}
+
+- É muito comum fazer:
+  - $$r_i = \frac{\hat\epsilon_i}{\hat\sigma}$${#eq-SemiStudRes}
+  
+- Pode-se mostrar, no entanto, que os resíduos padronizados devem ser assim 
+calculados [@GCordeiro2004, 21]:
+  - $$r_i = \frac{\hat \epsilon_i}{\hat \sigma \sqrt{1-h_{ii}}}$${#eq-StdRes}
+    - $\hat \epsilon_i$ é o resíduo calculado pelo modelo
+    - $\hat \sigma$ é o erro-padrão da regressão
+    - $h_{ii}$ é o *i-ésimo* elemento da diagonal da matriz chapéu
+
+- Os resíduos da @eq-SemiStudRes são denominados resíduos *semi-studentizados*
+- Os resíduos da @eq-StdRes são denominados de resíduos
+*internamente studentizados*, ou simplesmente resíduos padronizados!
+- Os resíduos calculados conforme a @eq-StdRes devem apresentar distribuição 
+normal padrão [@GCordeiro2004, 21]!
+
+## Exemplo
+
+```{r}
+#| echo: true
+dados <- data.frame(
+  Area = c(75, 85, 100, 125, 150, 175, 190, 210, 225),
+  Preco = 1000*c(200, 220, 260, 312.5, 375, 420, 440, 475, 550)
+  )
+dados$PU <- with(dados, Preco/Area)
+```
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| label: tbl-Exemplo
+#| tbl-cap: "Dados - Exemplo 1."
+kable(dados, digits = 2,
+      format.args = list(decimal.mark = ",", big.mark = ".")) |>
+  kable_styling(font_size = 24)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+#| fig-height: 5
+#| fig-width: 5
+#| eval: false
+plot(PU ~ Area, data = dados)
+abline(lm(PU ~ Area, data = dados), col = "red")
+```
+
+
+```{r}
+#| fig-height: 4.5
+#| fig-width: 4.5
+par(mar = c(4, 4, .5, .5))
+plot(PU ~ Area, data = dados)
+abline(lm(PU ~ Area, data = dados), col = "red")
+```
+
+
+:::
+
+::::
+
+
+## Exemplo
+
+```{r}
+#| echo: true
+fit <- lm(PU ~ Area, data = dados)
+summary(fit)
+```
+
+
+## Exemplo
+
+- Resíduos *Semi-Studentizados* *vs.* Padronizados
+
+. . . 
+
+```{r}
+options(digits = 4)
+```
+
+
+```{r}
+#| echo: true
+s <- sigma(fit)
+s
+```
+. . .
+
+```{r}
+#| echo: true
+r <- residuals(fit)
+r
+```
+
+. . . 
+
+
+```{r}
+#| echo: true
+r/s
+```
+
+. . . 
+
+
+```{r}
+#| echo: true
+rstandard(fit)
+```
+
+. . . 
+
+
+```{r}
+#| echo: true
+h <- hatvalues(fit)
+r/(s*sqrt(1-h))
+```
+
+- Pelos resíduos *semi-studentizados* não removeríamos o dado 9!
+- Com os resíduos *padronizados*, identificamos que este dado é discrepante!
+
+## Exemplo
+
+- Modelo final
+
+. . . 
+
+```{r}
+#| echo: true
+fit1 <- lm(PU ~ Area, data = dados, subset = -9)
+```
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+summary(fit1)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+#| eval: false
+plot(PU ~ Area, data = dados)
+abline(fit1, col = "red")
+```
+
+
+```{r}
+#| fig-width: 4.5
+#| fig-height: 4.5
+par(mar = c(4, 4, .5, .5))
+plot(PU ~ Area, data = dados)
+abline(fit1, col = "red")
+```
+
+:::
+
+::::
+
+
+
+
+
+
+# Pontos Influenciantes
+
+## Pontos influenciantes
+
+![](img/levdemo21.png)
+
+## Distância de Cook
+
+- A Estatística de Cook, ou distância de Cook, é uma medida da *influência* das
+observações, que pode ser escrita [@GCordeiro2004, 23]:
+  - $$
+  D_i = \frac{\sum_{j = 1}^n (\hat y_j - \hat y_{j(i)})^2}{ps^2}
+  $$ {#eq-CooksDistance}
+  
+. . . 
+
+> A distância de Cook $D_i$ pode ser vista como uma medida da distância entre 
+os coeficientes calculados com e sem a i-ésima observação [@GCordeiro2004, 24].
+
+- Felizmente, na prática,não é necessário o cômputo de $n$ modelos de regressão 
+com LOOCV, pois a @eq-CooksDistance pode ser assim reescrita [@GCordeiro2004, 24]:
+  - $$D_i = \frac{h_{ii}}{p(1-h_{ii})}r_i^2$$ {#eq-CooksDistance2}
+  
+## Distância de Cook
+
+- Um dos problemas com a distância de Cook é a falta de um critério preciso para
+a definição da máxima distância de Cook aceitável
+  - Alguns autores recomendam que a $D_i < 1,0$;
+  - Outros recomendam a utilização do seguinte critério:
+    - $D_i < 4/n$
+  - Ainda, há outro critério:
+    - $D_i < 4/(n-k-1)$
+    
+## Distância de Cook
+
+- É comum encontrar o critério $D_i \geq 1,0$ para identificar pontos 
+influenciantes!
+
+. . . 
+
+```{r}
+#| label: fig-FDist
+#| fig-cap: "Para a distribuição F (cumulativa), $F^{-1}(.50) \\approx 1,0$, para diversos $df_1$ e $df_2$."
+#| fig-keep: last
+#| out-width: "80%"
+mosaic::plotDist("f", df1=2, df2 = 19, kind= "cdf", groups = y<.5, 
+                 xlab = "x", ylab = "F(x)",
+                 panel = function(...) {
+                   panel.xyplot(...)
+                   panel.abline(v = 1, col = "red", lty = 2)
+  })
+mosaic::plotDist("f", df1=5, df2 = 99, kind= "cdf",  groups = y<.5, add = TRUE)
+mosaic::plotDist("f", df1=10, df2 = 99, kind= "cdf",  groups = y<.5, add = TRUE)
+```
+
+- Para poucos dados, o critério acima não se aplica razoavelmente!
+
+
+## Distância de Cook
+
+> As observações serão consideradas influentes quando $D_i \geq F_{p,\,n-p}(0,50)$
+[@GCordeiro2004, 24].
+
+- Exemplo:
+
+. . . 
+
+```{r}
+#| echo: true
+# Valor limite:
+qf(.50, df1 = 2, df2 = 7)
+```
+
+## Distância de Cook
+
+- Exemplo:
+
+. . . 
+
+```{r}
+#| echo: true
+cooks.distance(fit)
+```
+
+- $D_i < 0,7665$
+
+. . . 
+
+```{r}
+#| echo: true
+cooks.distance(fit) < .7665
+```
+
+# Análise Gráfica de Resíduos
+
+##  Análise Gráfica de Resíduos
+
+```{r}
+#| echo: true
+#| eval: false
+plot(fit)
+```
+
+```{r}
+#| label: fig-DiagFit
+#| fig-cap: "Análise de Resíduos do Exemplo 1."
+#| fig-height: 7
+#| fig-width: 7
+par(mfrow = c(2, 2))
+plot(fit)
+```
+
+## Análise Gráfica de Resíduos
+
+```{r}
+plot(fit, which = 5)
+```
+
+
+# Viés
+
+## Viés
+
+- Existem diversos tipos de viés na análise estatística.
+  - Um tipo de viés é o viés amostral, que tem origem na coleta de amostras de
+  maneiras não-aleatórias
+    - Exemplo: coletar dados de terrenos apenas de uma fonte de informações.
+    
+- Outros vieses importantes na engenharia de avaliações são:
+  - Viés do patrocinador: a depender de quem patrocina a avaliação (comprador
+  ou vendedor), os resultados podem ser diferentes.
+  - Viés da variável omitida: ocorre quando uma variável importante não é
+  incluída no modelo estatístico.
+    - Exemplo: a partir de uma amostra com lotes em situação de esquina e
+    meio-de-quadra, ajustar um modelo apenas com as características físicas dos
+    lotes, ignorando a sua situação em relação à quadra.
+    
+## Viés
+
+- Somente se pode combater o viés amostral através de uma amostragem mais 
+cuidadosa.
+
+- O viés do patrocinador pode ser contornado através da solicitação de 
+avaliações por partes não comprometidas com o interesse da transação.
+
+- O viés da variável omitida, no entanto, é mais complicado:
+  - Muitas são as variáveis que influem no valor de mercado
+  - Nem sempre é possível considerá-las todas ao mesmo tempo
+  
+- > With four parameters I can fit an elephant, and with five I can make him 
+  wiggle his trunk (Von Neumann)
+  
+## Qualidade de ajuste de um modelo
+
+- O que é um bom modelo de avaliação?
+  - A @NBR1465302 enfatiza, em locais diversos, a importância de **explicar** o
+  mercado
+  - No entanto, nem sempre um modelo que explica bem o funcionamento do mercado
+  será um bom modelo para *prever* novos valores de mercado
+  - Existe um *tradeoff* entre viés e variância
+  
+- O melhor modelo de avaliação é aquele que prevê valores com precisão **fora da
+amostra**!
+  
+## *Tradeoff* entre viés e variância
+
+![*Tradeoff* entre viés e variância.](Bias_and_variance_contributing_to_total_error.png){#fig-tradeoff}
+ 
+ 
+## *Tradeoff* entre viés e variância
+
+- Partindo do modelo nulo, à medida que variáveis vão sendo acrescentadas, há
+uma gradual diminuição do viés.
+
+- Existe, porém, um limite para a inserção de novas variáveis.
+
+- Muitas vezes, com poucos dados, um modelo com menos variáveis será mais
+preciso, em termos de predição, do que um modelo mais sofisticado.
+
+- É recomendável a utilização de $n/20$ a $n/10$ variáveis explicativas no
+modelo de regressão, para evitar sobreajustamento [@Harrell, 72].
+
+# Sobreajustamento
+
+## Sobreajustamento
+
+![Ilustração do sobreajustamento de um modelo.](overfitting.png){#fig-overfitting}
+
+
+## Sobreajustamento
+
+- É comum na engenharia de avaliações a consideração de diversas variáveis, 
+mesmo com poucos dados
+
+- Muitas vezes isso leva a modelos com alto grau de ajuste (alto $R^2$)
+  - Para isto, porém, costuma ser necessária a exclusão de alguns dados e a 
+  aplicação de transformações as mais diversas às variáveis do modelo.
+  
+- Um modelo sobreajustado irá prever valores para novos dados que não 
+necessariamente irão refletir os preços de mercado.
+
+- Como, então, aferir se o modelo de regressão prevê bem valores fora da amostra?
+
+# Qualidade de ajuste
+
+## Qualidade de ajuste de um modelo
+
+- É comum a utilização da estatística $R^2$ de um modelo:
+  - $$R^2 = 1 - \frac{SQR}{SQT}$$ {#eq-R2}
+    - $SQR$ é a Soma do Quadrado dos Resíduos ($\sum(y_i - \hat y_i)^2$)
+    - $SQT$ é a Soma dos Quadrados Totais ($\sum(y_i - \bar y)^2$)
+    
+- $R^2$ não é nada mais que uma estimativa para $\rho^2$ [@Karch2020, p.2]:
+  - $$\rho^2 = 1 - \frac{\sigma_\epsilon^2}{\sigma_Y^2}$$ {#eq-rho2}
+  - $\sigma_\epsilon^2$ é a variância dos erros
+  - $\sigma_Y^2$ é a variância total
+
+- Se adotamos $\hat \sigma_\epsilon^2 = SQR/n$ e $\hat \sigma_Y^2 = SQT/n$,
+obtemos a @eq-R2.
+
+## Qualidade de ajuste de um modelo 
+  
+- Se adotamos as versões não-viesadas das variâncias, obtemos a @eq-R2adj:
+  - $\hat \sigma_\epsilon^2 = SQR/\text{df}_{\text{res}} = SQR/(n-p-1);\;\hat \sigma_Y^2 = SQT/\text{df}_{\text{tot}} = SQT/(n-1)$
+    - $$R^2_{ajust} = 1 - \frac{SQR/\text{df}_{\text{res}}}{SQT/\text{df}_{\text{tot}}}= 1 - \frac{(n-1)SQR}{(n-p-1)SQT}$$ {#eq-R2adj}
+
+- Mesmo assim, $R^2_{ajust}$ ainda **não é** um estimador não-viesado de $\rho^2$
+[@Karch2020, p. 2]
+  
+- $R^2_{ajust}$ penaliza a inserção de novas variáveis no modelo.
+  - Essa penalidade, porém, nem sempre é relevante:
+    - Se $n = 10$, e $p = 1\rightarrow (n-1)/(n-p-1) = 1,125$
+    - Se $n = 10$, e $p = 2\rightarrow (n-1)/(n-p-1) = 1,286$
+    - Se $n = 100$ e $p = 6\rightarrow (n-1)/(n-p-1) = 1,065$
+    - Se $n = 100$ e $p = 7\rightarrow (n-1)/(n-p-1) = 1,076$
+
+## Seleção de modelos
+
+- O melhor modelo de regressão nem sempre será aquele com maior $R^2$ ou 
+$R^2_{ajust}$
+  - >Alguns pesquisadores se baseiam erroneamente apenas no valor de $R^2$ para 
+  escolher o melhor modelo. Entretanto, tão importante quanto termos um $R^2$ 
+  próximo de um, é que a estimativa de $\sigma^2$ seja também pequena, pois os 
+  intervalos de confiança para os parâmetros de interesse são proporcionais a 
+  $\sigma$ [@GCordeiro2004, 12].
+  - O melhor ajuste dos dados da amostra a um modelo não significa que o modelo
+  irá prever valores com precisão fora da amostra
+
+- Não estamos interessados no modelo de regressão que melhor explica a amostra,
+mas no modelo de regressão que melhor prevê os valores dos imóveis fora da
+amostra.
+
+## Validação Cruzada
+  
+- Em alguns casos, é possível particionar os dados e ajustar o modelo de 
+regressão com uma das partições, e calcular o $R^2$ em outra partição dos dados
+
+- Porém, na engenharia de avaliações é frequente que trabalhemos com conjuntos
+de dados pequenos, o que nos dificulta muito, senão impossibilita, de
+particionar os dados.
+
+- Uma alternativa, nestes casos de pequenos conjuntos de dados, é a utilização
+da técnica de reamostragem *jackknife*!
+
+# Reamostragem
+
+## Reamostragem *jackknife* 
+
+- O Método *jackknife*, de Quenouille-Tukey, é um método de reamostragem 
+não-paramétrico.
+
+- O método *jackknife* consiste em reamostrar uma amostra $n$ vezes, deixando de
+fora um dos seus dado de cada vez.
+  - O método *jackknife* também pode ser denominado de *leave-one-out*
+  *cross-validation* (LOOCV)
+  
+## Exemplo 2
+
+- Em uma amostra com 10 elementos, quais sejam:
+
+```{r}
+#| label: tbl-Exemplo2
+#| tbl-cap: "Dados - Exemplo 2."
+#| echo: true
+library(tibble)
+dados <- tribble(
+  ~Area, ~Preco, 
+     75, 200000,
+     85, 220000,
+    100, 260000,
+    125, 312500,
+    150, 375000,
+    175, 420000,
+    190, 440000,
+    210, 475000,
+  217.5, 505000,
+    230, 540000,
+)
+dados$PU <- with(dados, Preco/Area)
+```
+
+## Exemplo 2
+
+```{r}
+kable(t(dados), digits = 0, 
+      format.args = list(big.mark = ".", decimal.mark = ",")) |>
+  kable_styling(font_size = 20)
+```
+
+
+- Investigar se há algum *outlier* pelo critério do resíduo-padrão ($|r_i|<2$)
+
+. . . 
+
+>As observações cujos valores absolutos dos resíduos padronizados são maiores do
+que 2 podem ser consideradas mal-ajustadas (*pontos aberrantes*) 
+[@GCordeiro2004, 21].
+
+## Exemplo 2
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+
+```{r}
+#| echo: true
+fit <- lm(PU ~ Area, data = dados)
+summary(fit)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+#| eval: false
+plot(PU ~ Area, data = dados)
+abline(fit, col = "red")
+```
+
+
+```{r}
+#| fig-width: 4.5
+#| fig-height: 4.5
+par(mar = c(4, 4, .5, .5))
+plot(PU ~ Area, data = dados)
+abline(fit, col = "red")
+```
+
+
+:::
+
+::::
+
+## Exemplo 2
+
+- Resíduos padronizados:
+
+. . . 
+
+```{r}
+#| echo: true
+rstandard(fit)
+```
+
+- Não há dados com resíduo-padrão com magnitude igual ou maior a 2,0 em módulo!
+
+- Porém, e se o problema for que os pontos aberrantes são também influenciantes?
+  - Então, devido à influência do próprio ponto, o seu resíduo padronizado é 
+  esperado que seja baixo!
+
+. . . 
+  
+```{r}
+#| echo: true
+#| eval: false
+cooks.distance(fit)
+```
+
+```{r}
+options(digits = 3)
+cooks.distance(fit)
+```
+
+
+. . . 
+
+```{r}
+#| echo: true
+# Valor limite:
+qf(.50, df1 = 2, df2 = 8)
+```
+. . . 
+
+```{r}
+#| echo: true
+cooks.distance(fit) < .75
+```
+
+## Exemplo 2
+
+- E se aplicarmos a reamostragem *jackknife* e elaborarmos 10 modelos de 
+regressão, retirando-se um ponto de cada vez, calculando o resíduo-padrão?
+
+- Resíduos *jackknife*:
+
+. . . 
+
+```{r}
+#| echo: true
+rstudent(fit)
+```
+
+- Os resíduos assim computados também são conhecidos como resíduos 
+(externamente) *studentizados*.
+
+. . . 
+
+```{r}
+#| echo: true
+fit1 <- update(fit, subset = -10)
+```
+
+## Exemplo 2
+
+```{r}
+#| echo: true
+library(olsrr)
+ols_plot_resid_stud_fit(fit)
+```
+
+
+
+## Exemplo 2
+
+```{r}
+ggplot(dados, aes(y = PU, x = Area)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE, lty = 2) +
+  geom_smooth(data = dados[-10, ], method = "lm", se = FALSE, col = "red") +
+  stat_ellipse(level = .4, lty = 2) + 
+  stat_ellipse(data = dados[-10, ], level = .40, col = "red")
+```
+
+
+## Exemplo 2
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+
+```{r}
+#| label: fig-fit
+#| echo: true
+#| fig-cap: "Gráfico do Modelo Completo (todos os dados)."
+#| fig-height: 5
+#| fig-width: 5
+plot(PU ~ Area, data = dados)
+abline(fit, col = "red")
+```
+
+:::
+
+::: {.column width="50%"}
+
+
+```{r}
+#| label: fig-fit1
+#| echo: true
+#| fig-cap: "Gráfico do Modelo, excluído ponto aberrante (10)."
+#| fig-height: 5
+#| fig-width: 5
+plot(PU ~ Area, data = dados)
+abline(fit1, col = "red")
+```
+
+:::
+
+::::
+
+## Exemplo 2
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+
+```{r}
+#| echo: true
+summary(fit)
+```
+
+:::
+
+::: {.column width="50%"}
+
+
+```{r}
+#| echo: true
+summary(fit1)
+```
+
+:::
+
+::::
+
+## Resíduos *jackknife*
+
+- Os resíduos *jackknife* podem ser calculados conforme a equação abaixo 
+[@GCordeiro2004, 22]:
+  - $$t_i = \frac{\hat \epsilon_i}{\hat \sigma_{(i)} \sqrt{1-h_{ii}}}$$ 
+    - $\hat \sigma_{(i)}$ é o erro-padrão da regressão calculado para cada
+    subamostra
+    
+- Na prática:
+  - $$t_i = \sqrt{\frac{n-p-1}{n-p-r_i^2}}r_i$$
+  
+- Os resíduos *jackknife* ou resíduos externamente *studentizados* devem possuir
+distribuição t de Student com $n-p-1$ graus de liberdade [@GCordeiro2004, 22]!
+  
+- Ver planilha excel do material de apoio!
+
+# $R^2$ preditivo
+
+## $R^2$ preditivo
+
+- Analogamente ao que ocorre com os resíduos *studentizados* e com a distância
+de Cook, é possível aplicar o procedimento *jackknife* ao cálculo de $R^2$.
+
+- Ao $R^2$ calculado com o método da reamostragem *jackknife* é dado o nome
+$R^2_{pred}$:
+  - o resíduo de cada uma das observações é calculado com um modelo 
+  ajustado sem a contribuição desta observação para a qual o resíduo é calculado.
+  - Então é computada a estatística PRESS, a Soma do Quadrado dos Resíduos
+  calculados com a reamostragem *jackknife*.
+
+- Na prática, não é preciso ajustar $n$ modelos para calcular cada resíduo, pois
+é possível utilizar a matriz chapéu para retirar a contribuição da observação:
+  - $$R^2_{pred} = 1 - \frac{PRESS}{SQT}$$ {#eq-R2pred}
+    - $\text{PRESS} = \sum(\hat \epsilon_i/(1-h_{ii}))^2$
+    
+## Exemplo 3
+
+```{r}
+#| label: fig-Modelo
+#| fig-cap: "Modelo sem significância."
+# library(MASS)
+# 
+# sample_cov <- matrix(c(1000^2, 0,
+#                             0, 50^2),
+#                      ncol = 2, byrow = T)
+# n <- 10
+# set.seed(7)
+# dados <- mvrnorm(n = n,
+#                 mu = c(5000, 360),
+#                 Sigma = sample_cov,
+#                 empirical = T)
+# colnames(dados) <- c("PU", "Area")
+# dados <- as.data.frame(dados)
+
+data <- read.csv("data/PresidentRanking.csv")
+
+colnames(data) <- c("PU", "Area")
+
+modelo <- lm(PU ~ Area, data = data)
+
+plotModel(modelo, residuals = T)
+```
+
+## Exemplo 3 (cont.)
+
+```{r}
+modelo |>
+  tidy() |>
+  kable(booktabs = TRUE, format.args = list(big.mark = ".", decimal.mark = ","), 
+        digits = 2,
+        col.names = c("Termo", "Est.", "Erro", "t", "p valor")) |>
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 20) |>
+  footnote(general = paste("Erro-padrão dos resíduos: ", 
+                             brf(sigma(modelo), digits = 2), 
+                             " em ", df.residual(modelo), " graus de liberdade."),
+           alphabet = c(paste("MADn: ", 
+                              brf(MADn(modelo), digits = 2)),
+                        paste("R2: ", 
+                              brf(modelr::rsquare(modelo, data = data), digits = 2)),
+                        paste("R2ajust: ", 
+                              brf(summary(modelo)$adj.r.squared, digits = 2)),
+                        paste("R2pred: ",
+                              brf(predR2(modelo), digits = 2)),
+                        paste("MAPE: ", 
+                              brf(MAPE(modelo), digits = 2))
+                        ),
+           escape = F) 
+```
+
+
+## Exemplo 3 (cont.)
+
+```{r}
+#| label: fig-Modelo2
+#| fig-cap: "Modelo sobreajustado."
+modelo2 <- lm(PU ~ poly(Area, 3), data = data)
+plotModel(modelo2, vars = "Area", residuals = T)
+```
+
+## Exemplo 3 (cont.)
+
+```{r}
+modelo2 |>
+  tidy() |>
+  kable(booktabs = TRUE, format.args = list(big.mark = ".", decimal.mark = ","), 
+        digits = 2,
+        col.names = c("Termo", "Est.", "Erro", "t", "p valor")) |>
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 20) |>
+  footnote(general = paste("Erro-padrão dos resíduos: ", 
+                             brf(sigma(modelo2), digits = 2), 
+                             " em ", df.residual(modelo2), " graus de liberdade."),
+           alphabet = c(paste("MADn: ", 
+                              brf(MADn(modelo2), digits = 2)),
+                        paste("R2: ", 
+                              brf(R2(modelo2), digits = 2)),
+                        paste("R2ajust: ", 
+                              brf(adjR2(modelo2), digits = 2)),
+                        paste("R2pred: ",
+                              brf(predR2(modelo2), digits = 2)),
+                        paste("MAPE: ", 
+                              brf(MAPE(modelo2), digits = 2))
+                        ),
+           escape = F) 
+```
+
+- Com muitos preditores, $R^2$ (e também $R^2_{ajustado}$) aumenta!
+Porém $R^2_{pred}$ não!
+
+## Exemplo 2
+
+- Voltando ao exemplo 2, utilizado para demonstrar os resíduos
+*studentizados*
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+#| eval: false
+plot(PU ~ Area, data = dados)
+abline(fit, col = "red")
+```
+
+
+```{r}
+#| fig-height: 4.5
+#| fig-width: 4.5
+par(mar = c(4, 4, 2.5 ,1))
+plot(PU ~ Area, data = dados)
+abline(fit, col = "red")
+```
+
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+#| eval: false
+fitLog <- lm(PU ~ log(Area), data = dados)
+plot(PU ~ log(Area), data = dados)
+abline(fitLog, col = "red")
+```
+
+```{r}
+#| fig-height: 4.25
+#| fig-width: 4.5
+par(mar = c(4, 4, 1 ,1))
+fitLog <- lm(PU ~ log(Area), data = dados)
+plot(PU ~ log(Area), data = dados)
+abline(fitLog, col = "red")
+```
+
+:::
+
+::::
+
+## Exemplo 2
+
+```{r}
+#| echo: true
+rstudent(fitLog)
+```
+
+- Maior resíduo *studentizado* (em módulo) agora é o ponto 8!
+
+. . . 
+
+
+```{r}
+#| echo: true
+options(scipen=999)
+cooks.distance(fitLog)
+```
+
+## Exemplo 2
+
+```{r}
+#| echo: true
+ols_plot_resid_stud_fit(fitLog)
+```
+
+
+## Exemplo 2
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+fit |>
+  tidy() |>
+  kable(booktabs = TRUE, format.args = list(big.mark = ".", decimal.mark = ","), 
+        digits = 2,
+        col.names = c("Termo", "Est.", "Erro", "t", "p valor")) |>
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 20) |>
+  footnote(general = paste("Erro-padrão dos resíduos: ", 
+                             brf(sigma(fit), digits = 2), 
+                             " em ", df.residual(fit), " graus de liberdade."),
+           alphabet = c(paste("MADn: ", 
+                              brf(MADn(fit), digits = 2)),
+                        paste("R2: ", 
+                              brf(R2(fit), digits = 2)),
+                        paste("R2ajust: ", 
+                              brf(adjR2(fit), digits = 2)),
+                        paste("R2pred: ",
+                              brf(predR2(fit), digits = 2)),
+                        paste("MAPE: ", 
+                              brf(MAPE(fit), digits = 2))
+                        ),
+           escape = F) 
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+fitLog |>
+  tidy() |>
+  kable(booktabs = TRUE, format.args = list(big.mark = ".", decimal.mark = ","), 
+        digits = 2,
+        col.names = c("Termo", "Est.", "Erro", "t", "p valor")) |>
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 20) |>
+  footnote(general = paste("Erro-padrão dos resíduos: ", 
+                             brf(sigma(fitLog), digits = 2), 
+                             " em ", df.residual(fitLog), " graus de liberdade."),
+           alphabet = c(paste("MADn: ", 
+                              brf(MADn(fitLog), digits = 2)),
+                        paste("R2: ", 
+                              brf(R2(fitLog), digits = 2)),
+                        paste("R2ajust: ", 
+                              brf(adjR2(fitLog), digits = 2)),
+                        paste("R2pred: ",
+                              brf(predR2(fitLog), digits = 2)),
+                        paste("MAPE: ", 
+                              brf(MAPE(fitLog), digits = 2))
+                        ),
+           escape = F) 
+```
+
+:::
+
+::::
+
+
+
+## Modelo transformado
+
+```{r}
+# plotModel(fitLog, residuals = T)
+ggplot(dados, aes(x = log(Area), y = PU)) +
+  coord_trans(x = "exp") +
+  geom_point() +
+  geom_smooth(method = "lm",  col = "cornflowerblue") +
+  stat_poly_eq(use_label(c("eq", "R2")),
+               label.x = "right", label.y = "top", col = "cornflowerblue")
+```
+
+## Extrapolação
+
+- A @NBR1465302 permite a extrapolação de variáveis explicativas em até 100%
+acima do limite superior:
+
+. . . 
+
+```{r}
+#| echo: true
+predict(fit, newdata = list(Area = 460))
+```
+. . . 
+
+```{r}
+#| echo: true
+predict(fitLog, newdata = list(Area = 460))
+```
+
+- A diferença entra as formas funcionais se exacerba na extrapolação!
+
+## Extrapolação
+
+```{r}
+plotModel(fitLog, residuals = T, at = list(Area = 460))
+```
+
+## As agruras do avaliador
+
+1. Não há certeza sobre a forma funcional!
+2. Com poucos dados, encontrar a forma funcional "correta" é mais difícil, senão
+impossível!
+3. Com uma forma funcional, um ponto pode ser um *outlier*, mas não em outra forma!
+4. Com muitas variáveis, o problema ainda aumenta, pois mais formas funcionais
+são possíveis!
+5. Como comparar modelos com formas funcionais diferentes? Em termos de $R^2$?
+5. Ainda pode haver interações entre as variáveis!
+6. O que fazer?
+
+## Comparação de modelos
+
+```{r}
+b <- bestfit(PU ~ Area, data = dados)
+b
+```
+
+- **CUIDADO**: quando a variável dependente é transformada, $R^2$ (assim como
+$R^2_{ajust}$ e $R^2_{pred}$) valem para a escala transformada!
+
+- O que importa, no entanto, é como o modelo funciona na escala original (preços)!
+
+## Comparação de modelos
+
+```{r}
+bestfits(b)
+```
+
+- Modelos são muito parecidos na escala original.
+
+## Referências

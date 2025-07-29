@@ -1,0 +1,6 @@
+Smart-Map - Complemento QGIS para krigagem
+
+1/3 a 1/5 da distância total!
+
+Criciuma: 1600m
+lag: 

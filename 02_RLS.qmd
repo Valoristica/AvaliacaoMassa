@@ -1,0 +1,863 @@
+---
+title: "Avaliação em Massa"
+subtitle: "*Regressão Linear Simples*"
+author: "Luiz Droubi"
+institute: Academia da Engenharia de Avaliações
+date: last-modified
+date-format: long
+title-slide-attributes:
+  data-background-image: img/PPT_abertura.png
+  #data-background-size: contain
+  #data-background-opacity: "0.5"
+  data-footer: "<a href='http://www.valoristica.com.br'>http://www.valoristica.com.br</a>"
+include-after-body: add-custom-footer.html
+lang: pt
+format:
+  revealjs:
+    theme: [default, style.scss]
+    logo: img/logo.png
+    # theme: beige
+    # smaller: true
+    scrollable: true
+    incremental: true
+    transition: slide
+    background-transition: fade
+fontsize: 1.8em
+bibliography: references.bib
+brand: true
+toc: true
+toc-depth: 1
+footer: "VALORÍSTICA"
+slide-number: true
+---
+
+```{r}
+#| include: false
+library(kableExtra)
+library(appraiseR)
+library(sf)
+library(ggplot2)
+library(ggpmisc)
+```
+
+
+# Conjunto de Dados
+
+## Dados {.smaller}
+
+- Utilizaremos durente o curso alguns conjuntos de dados para exemplificar os
+métodos utilizados;
+
+- @zilli2020:
+
+. . . 
+
+```{r}
+data(zilli_2020)
+kable(head(st_drop_geometry(zilli_2020[, c("PT", "PU", "PC", "AP", "NG", "ND", "NB", "NS", 
+                          "MO", "PSN", "CH", "DPXV", "DSBM", "DSIG", "DCTC", 
+                          "DABM")]),
+           n = 10))
+fit <- lm(PU ~ DABM, data = zilli_2020)
+```
+
+
+# Média Condicional
+
+## Média Condicional {.smaller}
+
+- É importante compreender bem a *Regressão Linear Simples* (RLS) antes da 
+*Regressão Linear Múltipla* (RLM);
+- O conceito principal da regressão linear é que com ela  estimamos a chamada 
+*média condicional*;
+- Para entender:
+  - Se coletamos uma amostra de preços unitários (PU) de apartamentos, 
+  podemos calcular a *média incondicional* ($\mu$) da amostra; 
+    - Por exemplo: $\hat\mu(PU) =$ `r Reais(mean(zilli_2020$PU))`$/m^2$
+    - No entanto, os dados são heterogêneos:
+      - Diversos valores de área privativa (AP), número de garagens (NG), etc.
+  - Com a regressão linear simples, calculamos as *médias condicionais*:
+    - A média dos preços unitários dos apartamentos com 1 vaga de garagem,
+    2 vagas de garagem, etc.
+    - A média dos preços unitários dos apartamentos com padrão baixo, com 
+    padrão médio, etc.
+    - A média do preço dos apartamentos dado que a distância à beira-mar é de
+    200m
+    - Exemplos:
+      - $\hat \mu(PU|NG=1) =$ `r Reais(tapply(zilli_2020$PU, zilli_2020$NG, mean)[2])`$/m^2$
+      - $\hat \mu(PU|NG=2) =$ `r Reais(tapply(zilli_2020$PU, zilli_2020$NG, mean)[3])`$/m^2$
+      - $\hat \mu(PU|PC=Médio) =$ `r Reais(tapply(zilli_2020$PU, zilli_2020$PC, mean)[2])`$/m^2$
+      - $\hat \mu(PU|PC=Alto) =$ `r Reais(tapply(zilli_2020$PU, zilli_2020$PC, mean)[3])`$/m^2$
+      - $\hat \mu(PU|DABM = 200) =$ `r Reais(predict(fit, newdata = list(DABM = 200)))`$/m^2$
+      
+## Regressão Linear Simples
+
+- Exemplo 1:
+
+. . . 
+
+```{r}
+#| echo: true
+dados <- readRDS("data/zilli_2020.rds")
+tapply(dados$PU, dados$NG, mean)
+```
+
+. . . 
+
+```{r}
+#| echo: true
+fit <- lm(PU ~ NG, data = dados)
+predict(fit, newdata = list(NG = c(0, 1, 2, 3, 4)))
+```
+
+. . . 
+
+- Ao estimar valores médios através da RLS, obtemos médias diferentes das médias
+calculadas isoladamente!
+
+
+
+## Regressão Linear Simples
+
+. . . 
+
+```{r}
+df <- data.frame(PUm = tapply(dados$PU, dados$NG, mean),
+                 NG = 0:4)
+ggplot(zilli_2020, aes(x = NG, y = PU)) +
+  geom_point(col = "cornflowerblue") +
+  geom_smooth(method = "lm", se = FALSE) +
+  stat_poly_eq(use_label(c("eq")),
+               col = "cornflowerblue", label.y = "bottom", label.x = "right",
+               eq.x.rhs = "~NG",
+               eq.with.lhs = "PU ~~`=`~~",) +
+  geom_point(data = df, aes(x = NG, y = PUm), pch = "*", col = "red", size = 10)
+    
+# plotdf(PU ~ NG, data = zilli_2020)
+```
+
+- O que é melhor? As médias isoladas ou as médias obtidas pela RLS?
+
+# RLS vs. médias isoladas
+
+## Regressão Linear Simples
+
+- Vantagens em estimar 5 médias vs. ajustar um modelo de regressão linear:
+
+  - 5 médias isoladas:
+
+. . . 
+
+```{r}
+#| echo: true
+tapply(dados$PU, dados$NG, t.test)
+```
+
+## Regressão Linear Simples
+
+- Vantagens em estimar 5 médias vs. ajustar um modelo de regressão linear:
+
+  - Regressão Linear:
+  
+. . . 
+
+```{r}
+#| echo: true
+predict(fit, list(NG = 0:4), interval = "confidence", level = .95)
+```
+
+## Regressão Linear Simples
+
+- Graficamente:
+
+. . . 
+
+```{r}
+df <- data.frame(
+  NG = 0:4,
+  PU = tapply(dados$PU, dados$NG, mean),
+  lower = c(4034.885, 6812.229, 8660.374, 10787.15, 8628.59),
+  upper = c(5986.865, 7570.376, 9648.859, 14447.65, 18162.077)
+)
+ggplot(zilli_2020, aes(x = NG, y = PU)) +
+  geom_point(col = "cornflowerblue") +
+  geom_smooth(method = "lm", se = TRUE) +
+  geom_point(data = df, aes(x = NG, y = PU), 
+             pch = "*", col = "firebrick", size = 10) +
+  geom_errorbar(data = df, aes(ymin = lower, ymax = upper), 
+                col = "firebrick", size = 1.5, width = .5, alpha = .5) +
+  stat_poly_eq(use_label(c("eq")),
+               col = "cornflowerblue", label.y = "bottom", label.x = "right",
+               eq.x.rhs = "~NG",
+               eq.with.lhs = "PU ~~`=`~~")
+```
+
+
+## Apartado histórico {.smaller}
+
+- Galton:
+
+. . . 
+
+```{r}
+library(alr4)
+data(galtonpeas)
+ggplot(galtonpeas, aes(x = Parent, y = Progeny)) +
+  geom_point(pch = "*", size = 10, col = "red") +
+  geom_smooth(method = "lm", se = FALSE)  +
+  stat_poly_eq(use_label(c("eq")),
+               col = "blue", label.y = "bottom", label.x = "right",
+               eq.x.rhs = "~Parent",
+               eq.with.lhs = "Progeny ~~`=`~~",) 
+```
+
+
+## Regressão Linear Simples {.smaller}
+
+- Exemplo 2:
+
+. . . 
+
+
+```{r}
+#| label: fig-DABM
+#| fig.cap: "Dados de preços unitários de apartamentos em Florianópolis, em função da distância à Av. Beira-Mar (DABM) [@zilli2020]."
+# plotdf(PU ~ DABM, data = zilli_2020)
+ggplot(zilli_2020, aes(x = DABM, y = PU)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE) +
+  stat_poly_eq(use_label("eq"),
+               label.y = "top", label.x = "right",
+               eq.x.rhs = "~DABM",
+               eq.with.lhs = "PU ~~`=`~~",
+               col = "red", size = 5)
+```
+
+# Modelo de Regressão Linear Clássico
+
+## Modelo de Regressão Linear Clássico {.smaller}
+
+- Um modelo de regressão linear, em si, não exige normalidade, 
+homoscedasticidade, etc.
+- No entanto, se estas hipóteses são verificadas, podemos utilizar a inferência
+clássica.
+- Assim, definimos um *Modelo de Regressão Linear Clássico* (MRLC) como:
+  - $$y = \alpha + \beta x + \epsilon$$ {#eq-MRLC}
+    - Em que:
+      - $y$ é a variável resposta
+      - $\alpha$ e $\beta$ são parâmetros da população
+      - $x$ é a variável explicativa
+      - $\epsilon$ é um termo de erro
+        - No MRLC, $\epsilon \overset{\underset{\mathrm{i.i.d.}}{}}{\sim}  \mathcal N(0, \sigma^2\mathbf I)$
+- Não conhecemos $\alpha$, $\beta$, $\epsilon$ e $\sigma$
+  - Então estimamos $\hat \alpha$, $\hat \beta$ e $\hat \sigma$ 
+  - E prevemos $\hat \epsilon$ (os resíduos)
+  
+## Solução do MRLC {.smaller}
+
+- Pode-se demonstrar que a *média incondicional* é o valor que minimiza o 
+*erro médio quadrático* (SQE) de uma amostra [@matloff2009, 57].
+
+- Dada uma amostra $y = y_1, y_2, \ldots, y_n$, o valor $c$ que minimiza  $1/n\sum_{i=1}^{n}(y_i-c)^2$ é:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- $$
+\begin{aligned}
+S(c) &= \sum_{i=1}^n (y_i-c)^2 \\
+     &= \sum_{i=1}^n (y_i^2 - 2cy_i + c)^2 \\
+     &= \sum_{i=1}^n y_i^2  - \sum_{i=1}^n 2cy_i + \sum_{i=1}^n c^2 \\
+     &= \sum_{i=1}^n y_i^2 - 2c \sum_{i=1}^n y_i + nc^2
+\end{aligned}
+$$ {#eq-SQE}
+
+:::
+
+::: {.column width="50%"}
+
+- $$
+\begin{aligned}
+S'(c) &= -2\sum_{i=1}^n y_i + 2nc = 0 \leftrightarrow \\
+2nc &=2\sum_{i=1}^n y_i\leftrightarrow  \\
+nc &= \sum_{i=1}^n y_i\leftrightarrow \\
+c &= \frac{1}{n}\sum_{i=1}^n y_i
+\end{aligned}
+$$ {#eq-MinSQE}
+:::
+
+::::
+
+- Da mesma forma, na regressão linear, a média condicional é aquela que minimiza
+os resíduos quadráticos: $1/n\sum(\hat\epsilon_i^2)$
+
+## Solução do MRLC {.smaller}
+
+- Ver @hochheim [p. 18]:
+
+- $$
+Z = \sum_{i=1}^n \hat\epsilon_i^2 = \sum_{i=1}^n [y_i - (\alpha + \beta x_i)]^2
+$$ {#eq-Res}
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- $$
+\begin{aligned}
+\frac{\partial Z}{\partial \alpha} &= 0 \leftrightarrow \\
+\sum_{i=1}^n -2[y_i-(\alpha + \beta x_i)] &= 0 \leftrightarrow \\
+\sum_{i=1}^n y_i - \alpha - \beta x_i &= 0 \leftrightarrow \\
+\sum_{i=1}^n y_i - \sum_{i=1}^n \alpha - \sum_{i=1}^n \beta x_i  &=0 \leftrightarrow \\
+\sum_{i=1}^n y_i - \sum_{i=1}^n \beta x_i &= n\alpha \leftrightarrow \\
+\overline y - \beta \overline x &= \alpha 
+\end{aligned}
+$$ {#eq-ZAlpha}
+
+:::
+
+::: {.column width="50%"}
+
+- $$
+\begin{aligned}
+\frac{\partial Z}{\partial \beta} &= 0 \leftrightarrow \\
+\sum -2x_i(y_i - (\alpha + \beta x_i)] &= 0 \leftrightarrow \\
+\frac{\sum_{i=1}^n(x_i - \overline x)(y_i - \overline y)}{\sum_{i=1}^n(x_i - \overline x)^2} &= \beta 
+\end{aligned}
+$$ {#eq-ZBeta}
+
+:::
+
+::::
+
+## Hipóteses {.smaller}
+
+- Até agora derivamos $\hat \alpha$ e $\hat \beta$ sem fazer quaisquer hipóteses
+quanto à normalidade, homoscedasticidade, etc.
+
+- Se os erros tiverem distribuição normal e variância constante, contudo, então:
+
+. . . 
+
+![](img/MRLC.png)
+
+- $\hat\sigma = \sqrt{MSE}$
+
+# Análise de Variância
+
+## Análise de Variância
+
+- Na regressão simples:
+
+. . . 
+
+| Efeito        | SS  | GL    | MQ          | F      | p-valor |
+|--------------:|----:|------:|------------:|-------:|--------:|
+| Regressão     | SQE | 1     | SQE/1       |MQE/MQR |         |
+| Resíduos      | SQR | n - 2 | SQR/(n-2)   |   
+| Total         | SQT | n - 1 |   
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- $$SQT = \sum_{i=1}^n (y_i - \overline y)^2$$
+- $$SQR = \sum_{i=1}^n (y_i - \hat \beta x_i)^2$$
+  
+:::
+
+::: {.column width="50%"}
+
+  - $$SQE = SQT - SQR$$
+  - $$MSE = \frac{SQR}{n-2}$$
+
+:::
+
+::::
+
+
+## Exemplo
+
+```{r}
+# dados <- read.table("data/market_share.txt", header = T)
+# plotdf(MarketShare ~ Price, data = dados)
+data("zeni_2024a")
+ggplot(zeni_2024a, aes(x = A, y = PU)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = T) +
+  stat_poly_eq(use_label(c("eq", "R2")),
+               label.x = "right", col = "blue")
+```
+
+## Exemplo
+
+```{r}
+#| echo: true
+dados <- readRDS("data/Zeni2.rds")
+fit <- lm(PU ~ A, data = dados)
+anova(fit)
+```
+
+- Com a tabela da Análise de Variância podemos calcular:
+  - $MSE = \frac{SQR}{21-2} =  \frac{23.133}{19} = 1.217,53$
+  - $\hat \sigma = \sqrt{MSE} = \sqrt{1.217,53} = 34,89$
+
+## Exemplo
+
+```{r}
+#| echo: true
+summary(fit)
+```
+
+- Repare que o *p-valor* do teste t para o regressor é igual ao *p-valor* do 
+teste F do slide anterior.
+  - Este teste é válido?
+  
+# Análise de Resíduos
+  
+## Análise de Resíduos {.smaller}
+
+- Resíduos não se podem confundir com erros
+  - Resíduos são previsões para o erro, ajustadas com o modelo de regressão
+  - Os resíduos não tem, supostamente, distribuição normal
+  - São os resíduos padronizados que apresentam, supostamente, distribuição 
+  normal
+
+. . . 
+
+```{r}
+#| echo: true
+hist(rstandard(fit))
+```
+
+## Por que não obtemos normalidade?
+
+- Porque os nossos dados (variável resposta) não tem distribuição normal:
+
+. . . 
+
+```{r}
+#| echo: true
+hist(dados$PU)
+```
+
+## Formas para lidar com a falta de normalidade
+
+- Transformação da variável resposta:
+
+. . . 
+
+```{r}
+hist(sqrt(dados$PU))
+```
+
+# Testes de Hipótese de Intervalos de Confiança
+
+## Testes de Hipótese
+
+- Os testes de hipótese para os coeficientes verificam se não se pode descartar
+a hipótese do coeficiente ser nulo!
+
+- Foi estimado um intercepto e um coeficiente para o modelo *RLS*
+  - Porém, muito raramente o valor estimado para o coeficiente será zero!
+  - Mesmo que o real valor do coeficiente seja zero, é mais provável que a 
+  estimação resulte em um outro valor, simplesmente por conta de ruído!
+  - Isto não significa que a variável apresenta significância estatística
+    - Além do coeficiente, um erro-padrão é estimado para a variável explicativa
+  - Na inferência clássica:
+    - $$\hat\beta \sim \mathcal N \left (\beta, \frac{\sigma^2}{\sum_{i=1}^n(x_i - \overline x)^2} \right )$$
+    
+## Intervalos de Confiança
+
+- Um intervalo de confiança de $(1-\alpha)\cdot 100\%$ para $\hat \beta$ pode ser assim calculado:
+  - $$\hat\beta \pm t_{\alpha/2, n-2}\cdot \sqrt{\frac{MSE}{\sum_{i=1}^n(x_i - \overline x)^2}}$$
+    
+## Normalidade
+
+```{r}
+#| echo: true
+shapiro.test(rstandard(fit))
+```
+
+- Passa no teste da normalidade ($p > 10\%$)
+
+- A @NBR1465302, contudo, diz:
+  
+  - >A.3.1 O nível de significância máximo admitido nos demais testes 
+  estatísticos (aqueles não citados na Tabela 1) não deve ser superior a 10%.
+
+  
+- Portanto deveríamos querer $p < 10\%$???
+  - Não, porque no teste de Shapiro-Wilk não queremos rejeitar a hipótese nula!
+  - No teste de Shapiro-Wilk a hipótese nula é de que há normalidade!
+  - Testes de hipótese são confusos!
+
+
+## É necessário testar?
+
+- O intuito do teste é verificar a hipótese de que o coeficiente é nulo 
+($\beta = 0$)
+- Porém, ao construir um intervalo de confiança para $\beta$, pode-se verificar 
+se o valor zero está dentro do intervalo
+  - Caso zero esteja dentro do intervalo, não se pode rejeitar a hipótese de que
+  o coeficiente seja nulo, ou seja, de não haver regressão
+  
+- Os intervalos de confiança obtidos considerando-se a normalidade, devem antes
+passar pela verificação da hipótese:
+
+. . . 
+
+```{r}
+#| echo: true
+confint(fit)
+```
+
+  
+- O intervalo não contém o valor zero!
+  - O coeficiente é não-nulo!
+    - Se a hipótese da normalidade for verificada!
+
+## Formas para lidar com a falta de normalidade
+
+- Não utilizar a inferência clássica
+  - É possível criar intervalos de confiança de outras formas
+    - P. Ex.: *Bootstrap*
+
+## *Bootstrap*
+
+```{r}
+library(tidymodels)
+boots <- bootstraps(dados, times = 1000, apparent = TRUE)
+
+fit_lm_on_bootstrap <- function(split) {
+    lm(PU ~ A, analysis(split))
+}
+
+boot_models <-
+  boots |>
+  dplyr::mutate(model = map(splits, fit_lm_on_bootstrap),
+         coef_info = map(model, tidy))
+
+boot_coefs <- 
+  boot_models |> 
+  unnest(coef_info)
+
+percentile_intervals <- int_pctl(boot_models, coef_info)
+percentile_intervals
+
+ggplot(boot_coefs, aes(estimate)) +
+  geom_histogram(bins = 30) +
+  facet_wrap( ~ term, scales = "free") +
+  labs(title="Zeni (2024)", subtitle = "PU ~ A") +
+  labs(caption = "95% confidence interval parameter estimates, intercept + estimate") +
+  geom_vline(aes(xintercept = .lower), data = percentile_intervals, 
+             col = 'firebrick') +
+  geom_vline(aes(xintercept = .upper), data = percentile_intervals, 
+             col = 'firebrick')
+```
+
+- O intervalo obtido pelo *bootstrap* é um pouco mais amplo do que o IC Normal!
+
+# $R^2$ *vs.* $\hat \sigma$
+
+## $R^2$ *vs.* $\hat \sigma$
+
+- Uma estatística muito popular é o coeficiente de determinação ($R^2$);
+- O melhor modelo de regressão, porém, nem sempre será aquele com maior $R^2$ ou 
+$R^2_{ajust}$
+  - >Alguns pesquisadores se baseiam erroneamente apenas no valor de $R^2$ para 
+  escolher o melhor modelo. Entretanto, tão importante quanto termos um $R^2$ 
+  próximo de um, é que a estimativa de $\sigma^2$ seja também pequena, pois os 
+  intervalos de confiança para os parâmetros de interesse são proporcionais a 
+  $\sigma$ [@GCordeiro2004, 12].
+  - O melhor ajuste dos dados da amostra a um modelo não significa que o modelo
+  irá prever valores com precisão fora da amostra
+
+## $R^2$
+
+- A maneira mais intuitiva de escrever $R^2$ é:
+  - $$R^2 = 1 - \frac{\text{var}(\epsilon)}{\text{var}(y)}$$ {#eq-R2a}
+    - Interpretação:
+      - Se o modelo não explicada nada, então $\text{var}(\hat\epsilon) \approx \text{var}(y)$
+      e $R^2 \approx 0$;
+      - Se, por outro lado, o modelo tem um poder de explicação razoável, então
+      $\text{var}(\hat \epsilon) << \text{var}(y)$ e então $R^2$ se aproxima 
+      de 1.
+  - Outra forma de escrever $R^2$ [@GCordeiro2004, p. 12]:
+    - $$R^2 = \frac{SQE}{SQT}$$ {#eq-R2b}
+
+- Uma grande qualidade do $R^2$ está na sua escala ($0 \leq R^2 \leq 1$)
+  
+## $\hat \sigma$
+
+- É possível, com $\hat \sigma$ ter um entendimento muito interessante do modelo
+  - No caso do modelo apresentado, vimos que $\hat \sigma = 34,89$
+  - Pode-se montar um intervalo de predição aproximado fazendo-se:
+    - $IP_{95\%} = \hat \mu \pm 2\cdot \hat \sigma = \hat\mu \pm 2\cdot34,89 \approx \hat\mu \pm  70,0$
+    - $IP_{80\%} = \hat\mu \pm 1,28\cdot \hat \sigma = \hat\mu \pm 1,28\cdot 34,89 \approx \hat\mu \pm  45,0$
+    
+- Conferindo:
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+predict(fit, newdata = list(A = 10000), 
+        interval = "prediction", level = .95)
+```
+
+- $(139 - 70; \;139 + 70)$
+- $(69; 209)$
+:::
+
+::: {.column width="50%"}
+
+
+```{r}
+#| echo: true
+predict(fit, newdata = list(A = 10000), 
+        interval = "prediction", level = .80)
+```
+
+- $(139 - 45; \;139 + 45)$
+- $(94; 184)$
+
+:::
+
+::::
+
+- A grande vantagem de $\hat \sigma$ é que ela está na mesma escala da variável
+resposta.
+
+## $\hat \sigma$
+
+```{r}
+#| label: fig-OLSGeometry
+#| fig-cap: "Geometria dos Mínimos Quadrados Ordinários"
+#| fig-width: 6
+#| fig-height: 6
+library(sfsmisc)
+library(MASS)
+# source("ellipse.R")
+
+#windows(height=5, width=5)
+#par(mar=rep(2, 4))
+
+# eps(file="ellipse-demo.eps", height=6, width=6)
+
+set.seed(1234)
+data <- mvrnorm(100, c(10,20), matrix(c(4, 0.75*2*3, 0.75*2*3, 9), 2, 2), empirical=TRUE)
+colnames(data) <- c("x", "y")
+
+el.col = "blue"
+se.col = "red"
+
+eqscplot(data, type="n", axes=FALSE)
+#eqscplot(data, type="n")
+points(10, 20, pch=16, cex=1.5)
+abline(h=11.5)
+abline(v=0.5)
+
+center <- colMeans(data)
+shape <- var(data)
+el <- ellipse(center, shape, 1, col=el.col, segments=500)
+polygon(el, col=gray(.92), lwd=2)
+lines(el, col=el.col, lwd=2)
+points(data, col="gray", pch=16)
+points(data, col="black")
+
+sd <- sqrt(diag(shape))
+
+abline(h=c(20, 23), lty=3)
+abline(v=c(8, 10, 12), lty=3)
+abline(h=20 + 2*0.75*2*3/4, lty=2, col=el.col)
+
+abline(mod <- lm(y ~ x, as.data.frame(data)), lwd=2, col=el.col)
+
+b <- coef(mod)
+asize = 0.6  # arrow head size
+
+p.arrows(14, b[1] + b[2]*14, 16, b[1] + b[2]*14, fill=1, size=asize)
+p.arrows(16, b[1] + b[2]*14, 16, b[1] + b[2]*16, fill=1, size=asize)
+text(16.25, mean(b[1] + b[2]*14, b[1] + b[2]*16), 
+	expression(b == r*~over(s[y], s[x])), adj=c(0, 0), xpd=TRUE, col=el.col)
+text(15, b[1] + b[2]*14 - 0.5, "1")
+
+# annotations for standard error 
+abline(h=20 + 3*sqrt(1 - .75^2), lty=2, col=se.col)
+
+p.arrows(7, 20, 7, 20 + 3*sqrt(1 - .75^2), fill=se.col, size=asize, col=se.col)
+p.arrows(7, 20 + 3*sqrt(1 - .75^2), 7, 20, fill=se.col, size=asize, col=se.col)
+lines(c(10, 10), c(20 + 3*sqrt(1 - .75^2), 20 - 3*sqrt(1 - .75^2)), lwd=2, col=se.col)
+text(6.25, 21, expression(s[e]), col=se.col)
+
+loc <-2
+p.arrows(loc, 20, loc, 23, fill=1, size=0.6)
+p.arrows(loc, 23, loc, 20, fill=1, size=0.6)
+text(loc-0.5, 21.5, expression(s[y]))
+
+loc <- 13
+p.arrows(10, loc, 12, loc, fill=1, size=asize)
+p.arrows(12, loc, 10, loc, fill=1, size=asize)
+text(11, loc-0.5, expression(s[x]))
+
+p.arrows(14, 20, 14, 20 + 2*0.75*2*3/4, fill=el.col, size=asize, col=el.col)
+p.arrows(14, 20 + 2*0.75*2*3/4, 14, 20, fill=el.col, size=asize, col=el.col)
+text(14.75, 21, expression(r*~s[y]), col=el.col)
+
+#text(10, 10.5, expression(bar(x)), xpd=TRUE)
+#text(-0.5, 20, expression(bar(y)), xpd=TRUE)
+
+mtext(expression(bar(x)), side=1, at=10, line=0)
+mtext(expression(bar(y)), side=2, at=20, line=0.5, las=1)
+
+mtext("x", side=1, at=18, line=0)
+mtext("y", side=2, at=29, line=0.5, las=1)
+```
+
+## Plotem os seus modelos!
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+library(quartets)
+data("anscombe_quartet")
+head(anscombe_quartet, n = 11)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+library(quartets)
+data("anscombe_quartet")
+tail(anscombe_quartet, n = 11)
+```
+
+:::
+
+::::
+
+# Plotagem de Modelos
+
+## Plotem os seus modelos!
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+fit <- lm(y ~ x, data = anscombe_quartet, 
+          subset = dataset == "(1) Linear")
+S(fit)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+fit <- lm(y ~ x, data = anscombe_quartet, 
+          subset = dataset == "(2) Nonlinear")
+S(fit)
+```
+
+:::
+
+::::
+
+## Plotem os seus modelos!
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+fit <- lm(y ~ x, data = anscombe_quartet, 
+          subset = dataset == "(3) Outlier")
+S(fit)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+fit <- lm(y ~ x, data = anscombe_quartet, 
+          subset = dataset == "(4) Leverage")
+S(fit)
+```
+
+:::
+
+::::
+
+## Plotem os seus modelos!
+
+```{r}
+ggplot(anscombe_quartet, aes(x = x, y = y, color = dataset)) +
+  geom_point() + 
+  facet_wrap(vars(dataset), scales = "free") +
+  geom_smooth(method = "lm", se = FALSE) +
+  stat_poly_eq(use_label(c("eq", "R2")), 
+               label.x = "right", label.y = "bottom") +
+  theme(legend.position = "none")
+```
+
+# Elipses de Dados
+
+## Elipses de dados
+
+![](img/image_Galton.png)
+
+
+## Elipses de Dados, *outliers* e pontos influenciantes
+
+```{r}
+#| label: fig-ellipsis
+#| fig-cap: "Elipses de 40%, 68% e 95% dos dados."
+ggplot(zeni_2024a, aes(x = A, y = PU)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  stat_ellipse(level = .40) +
+  stat_ellipse(level = .68, lty = 2) +
+  stat_ellipse(level = .95, lty = 3)
+```
+
+- Na @fig-ellipsis, notar que a reta de regressão **não passa** pelo eixo das
+elipses!
+
+## Elipses e desvio-padrão
+
+- Uma elipse de dados de X% dos dados é a elipse em que estão incluídos X% dos
+dados em torno da média bivariada [@Friendly_2013].
+  - Dentro da elipse de dados de 40% situam-se os pontos que distam $\pm 1$ DP 
+  das médias (univariadas) em ambas as direções
+  - Dentro da elipse de 68% situam-se os dados que distam $\pm 1,5$DP da média 
+  bivariada em ambas direções
+  - Dentro da elipse de 95% situam-se os dados que distam $\pm 2,45$DP da média
+  bivariada em ambas as direções
+  
+## Elipses e desvio-padrão
+
+![](img/Galton_sunflower.png)
+
+## *Outliers* e Pontos influenciantes
+
+![](img/levdemo21.png)
+
+## Referências

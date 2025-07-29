@@ -1,0 +1,197 @@
+---
+title: "Avaliação em Massa"
+subtitle: "*Regressão Espacial*"
+author: "Luiz Droubi"
+institute: Academia da Engenharia de Avaliações
+date: last-modified
+date-format: long
+title-slide-attributes:
+  data-background-image: img/PPT_abertura.png
+  #data-background-size: contain
+  #data-background-opacity: "0.5"
+  data-footer: "<a href='http://www.valoristica.com.br'>http://www.valoristica.com.br</a>"
+include-after-body: add-custom-footer.html
+lang: pt
+format:
+  revealjs:
+    theme: [default, style.scss]
+    logo: img/logo.png
+    # theme: beige
+    # smaller: true
+    scrollable: true
+    incremental: true
+    transition: slide
+    background-transition: fade
+fontsize: 1.8em
+bibliography: references.bib
+brand: true
+toc: true
+toc-depth: 1
+footer: "VALORÍSTICA"
+slide-number: true
+---
+
+```{r}
+#| include: false
+library(kableExtra)
+library(appraiseR)
+library(sf)
+library(broom)
+homePrices <- readRDS("data/homePrices.rds")
+homePrices <- within(homePrices, {
+  PU <- SalePrice/Lot
+  Age <- 1998 - Year
+  Quality <- factor(Quality, levels = c(1, 2, 3),
+                  labels = c("Primeira", "Segunda",
+                                "Terceira"))
+}) 
+```
+
+## Introdução
+
+- Até agora trabalhamos com a hipótese que:
+  - $$\mathbf{y} = \pmb{X\beta} + \pmb{\epsilon};\;  \pmb{\epsilon} \overset{\underset{\mathrm{i.i.d.}}{}}{\sim} \mathcal N(0, \sigma^2\mathbf I)$$
+
+- Se os dados são distribuídos espacialmente, pode haver dependência espacial
+  - *e.g.*: $\pmb{\epsilon} \neq \mathcal N(0, \sigma^2\mathbf I)$
+  - ou: $\mathbf{y} \neq \pmb{X\beta}$
+
+## Modelos Espaciais
+
+- Existem diversos tipos de modelos espaciais, de maior ou menor complexidade
+  - Um dos muitos famosos é o modelo espacial do erro (*Spatial Error Model* - **SEM**):
+    - $$\mathbf y = \pmb{X\beta} + \mathbf{u}; \; \mathbf u = \pmb{\lambda W u} + \pmb{\epsilon}$${#eq-SEM}
+  - Outro muito conhecido é o modelo da defasagem espacial (*Spatial AutoRegressive Model* - **SAR**):
+    - $$\mathbf y = \pmb{\rho W y} + \pmb{X\beta} + \pmb{\epsilon}$${#eq-SAR}
+  - Existem também outros, como o de defasagem nas características (*Spatially Lagged X* - **SLX**)
+    - $$\mathbf y = \pmb{W X \theta} + \pmb{X\beta} + \pmb{\epsilon}$${#eq-SLX}
+
+## Modelo Espacial mais geral
+
+- Todos os modelos podem ser derivados do Modelo de Manski:
+  - $$\mathbf y = \pmb{\rho W y} + \pmb{W X \theta} + \pmb{X\beta} + \mathbf u; \; \mathbf u = \pmb{\lambda W u + \epsilon}$${#eq-Manski}
+  
+- Se $\theta = 0; \rho = 0 \rightarrow \mathbf{SEM}$
+- Se $\lambda = 0; \rho = 0 \rightarrow \mathbf{SLX}$
+- Se $\lambda = 0; \theta = 0 \rightarrow \mathbf{SAR}$
+
+- O Modelo Espacial Durbin (*Spatial Durbin Model* - **SDM**) é obtido com $\rho = 0$:
+  - $$\mathbf y = \pmb{W X \theta} + \pmb{X\beta} + \mathbf u; \; \mathbf u = \pmb{\lambda W u} + \pmb{\epsilon}$${#eq-SDM}
+  
+## Diferença entre Autocorrelação espacial e endogeneidade
+
+- Endogeneidade ocorre no **SAR**
+- Autocorrelação espacial ocorre no **SEM**
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![Autocorrelação Espacial](img/SpatialErrorModel.png)
+
+:::
+
+::: {.column width="50%"}
+
+![Endogeneidade](img/SpatialLagModel.png)
+
+:::
+::::
+
+## Criando dados espaciais no R
+
+```{r}
+#| echo: true
+dados <-
+  read.table(
+    'kO/cidade_ecologica.csv',
+    encoding = "UTF-8",
+    header = T,
+    sep = ";" ,
+    dec = ","
+  )
+colnames(dados)
+```
+
+## Criando dados espaciais no R
+
+```{r}
+library(sf)
+dadosEspaciais <- st_as_sf(dados, coords = c("E", "N"), crs = 29192)
+```
+
+
+## Plotando os dados Espaciais
+
+```{r}
+# write.csv2(dados, "./data/DadosEspaciais/Criciuma.csv")
+plot(dadosEspaciais[, "VU"])
+```
+
+## Análise Exploratória
+
+```{r}
+plotdf(VU ~ AREALOTE + TESTADA + PROFUND + PAVIM + TOPOGRAF + N_PAV, data = dados )
+```
+
+## Análise Exploratória
+
+```{r}
+plotdf(VU ~ DATA + TEMPO + RENDA, data = dados)
+```
+
+## Modelo Inicial
+
+```{r}
+#| echo: true
+dados$DATA <- as.Date()
+fit <- lm(VU ~ RENDA + N_PAV + AREALOTE + TESTADA + PAVIM, data = dados)
+summary(fit)
+```
+
+## Diagnóstico
+
+```{r}
+#| echo: true
+par(mfrow = c(2,2))
+plot(fit)
+```
+
+## Novo modelo
+
+```{r}
+#| echo: true
+fitLog <- update(fit, log(VU)~.)
+summary(fitLog)
+```
+
+## Problema entre Área e Frente
+
+```{r}
+plotdf(AREALOTE ~ TESTADA, data = dados)
+```
+
+## Novo Modelo
+
+```{r}
+fitLog <- update(fitLog, .~. - TESTADA)
+summary(fitLog)
+```
+
+
+
+
+## Testes de autocorrelação
+
+```{r}
+#| echo: true
+library(spdep)
+
+```
+
+
+  
+
+## Referências

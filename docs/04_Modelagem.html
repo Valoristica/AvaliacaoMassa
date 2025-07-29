@@ -1,0 +1,3033 @@
+<!DOCTYPE html>
+<html lang="pt"><head>
+<script src="04_Modelagem_files/libs/clipboard/clipboard.min.js"></script>
+<script src="04_Modelagem_files/libs/quarto-html/tabby.min.js"></script>
+<script src="04_Modelagem_files/libs/quarto-html/popper.min.js"></script>
+<script src="04_Modelagem_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="04_Modelagem_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="04_Modelagem_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="04_Modelagem_files/libs/quarto-html/quarto-syntax-highlighting-985aa47af68dae11cd4d235c71fb941e.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.27">
+
+  <meta name="author" content="Luiz Droubi">
+  <title>Avaliação em Massa</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="04_Modelagem_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="04_Modelagem_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="04_Modelagem_files/libs/revealjs/dist/theme/quarto-edcff130eb01ac5e239e676278bbed8d.css">
+  <link href="04_Modelagem_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="04_Modelagem_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="04_Modelagem_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="04_Modelagem_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="04_Modelagem_files/libs/kePrint-0.0.1/kePrint.js"></script>
+
+  <link href="04_Modelagem_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="img/PPT_abertura.png" data-footer="<a href='http://www.valoristica.com.br'>http://www.valoristica.com.br</a>" class="quarto-title-block center">
+  <h1 class="title">Avaliação em Massa</h1>
+  <p class="subtitle"><em>Modelagem</em></p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Luiz Droubi 
+</div>
+        <p class="quarto-title-affiliation">
+            Academia da Engenharia de Avaliações
+          </p>
+    </div>
+</div>
+
+  <p class="date">28 de julho de 2025</p>
+</section><section id="TOC">
+<nav role="doc-toc"> 
+<h2 id="toc-title">Índice</h2>
+<ul>
+<li class="fragment"><a href="#/modelo-aditivo" id="/toc-modelo-aditivo">Modelo Aditivo</a></li>
+<li class="fragment"><a href="#/teorema-central-do-limite" id="/toc-teorema-central-do-limite">Teorema Central do Limite</a></li>
+<li class="fragment"><a href="#/exemplo-de-modelo-aditivo" id="/toc-exemplo-de-modelo-aditivo">Exemplo de Modelo Aditivo</a></li>
+<li class="fragment"><a href="#/variáveis-qualitativas" id="/toc-variáveis-qualitativas">Variáveis qualitativas</a></li>
+<li class="fragment"><a href="#/métricas" id="/toc-métricas">Métricas</a></li>
+<li class="fragment"><a href="#/hipóteses-sobre-os-erros" id="/toc-hipóteses-sobre-os-erros">Hipóteses sobre os erros</a></li>
+<li class="fragment"><a href="#/estimador-sanduíche" id="/toc-estimador-sanduíche">Estimador Sanduíche</a></li>
+<li class="fragment"><a href="#/mínimos-quadrados-ponderados" id="/toc-mínimos-quadrados-ponderados">Mínimos Quadrados Ponderados</a></li>
+<li class="fragment"><a href="#/least-squares-percentage-regression-lspr" id="/toc-least-squares-percentage-regression-lspr"><em>Least Squares Percentage Regression</em> (LSPR)</a></li>
+<li class="fragment"><a href="#/transformações-da-variável-dependente" id="/toc-transformações-da-variável-dependente">Transformações da variável dependente</a></li>
+<li class="fragment"><a href="#/modelo-multiplicativo" id="/toc-modelo-multiplicativo">Modelo Multiplicativo</a></li>
+<li class="fragment"><a href="#/seleção-de-variáveis" id="/toc-seleção-de-variáveis">Seleção de Variáveis</a></li>
+<li class="fragment"><a href="#/equação-de-estimação" id="/toc-equação-de-estimação">Equação de Estimação</a></li>
+</ul>
+</nav>
+</section>
+<section>
+<section id="modelo-aditivo" class="title-slide slide level1 center">
+<h1>Modelo Aditivo</h1>
+
+</section>
+<section id="modelo-aditivo-1" class="slide level2">
+<h2>Modelo Aditivo</h2>
+<ul>
+<li class="fragment">Na <em>RLM</em> podemos adicionar outras variáveis explicativas ao modelo:
+<ul>
+<li class="fragment"><span id="eq-ModeloAditivo"><span class="math display">\[\mathbf y = \beta_0 + \beta_1 \pmb X_1 + \beta_2 \pmb X_2 + \ldots + \beta_k \pmb X_k + \pmb \epsilon \qquad(1)\]</span></span></li>
+</ul></li>
+<li class="fragment">Porém, também poderíamos acrescentar outros termos de ordem superior, ou seja, com a interação entre as variáveis
+<ul>
+<li class="fragment">Por exemplo, com duas variáveis, poderíamos ajustar um modelo com termos de segunda ordem assim:
+<ul>
+<li class="fragment"><span id="eq-SegundaOrdem"><span class="math display">\[\mathbf y = \beta_0 + \beta_1 \pmb X_1 + \beta_2 \pmb X_2 + \beta_4 X_1^2 + \beta_5 X_2^2 + \beta_3 \pmb X_1X_2 + \pmb \epsilon \qquad(2)\]</span></span></li>
+</ul></li>
+</ul></li>
+<li class="fragment">Inicialmente trataremos apenas dos termos de primeira ordem e vamos nos restringir, portanto, ao modelo aditivo</li>
+</ul>
+</section></section>
+<section>
+<section id="teorema-central-do-limite" class="title-slide slide level1 center">
+<h1>Teorema Central do Limite</h1>
+
+</section>
+<section id="teorema-central-do-limite-1" class="slide level2">
+<h2>Teorema Central do Limite</h2>
+<ul>
+<li class="fragment">O <em>Teorema Central do Limite</em> (TLC) pode ser apresentado em diversas formas
+<ul>
+<li class="fragment"><em>Central</em>, em <em>Teorema Central do Limite</em> deve ser compreendido como um sinônimo de <em>Fundamental</em>.</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<div id="thm-line" class="theorem">
+<p><span class="theorem-title"><strong>Teorema 1 (Teorema Central do Limite)</strong></span> Seja um conjunto de <span class="math inline">\(n\)</span> variáveis aleatórias independentes <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, …, <span class="math inline">\(X_n\)</span>, todas com a mesma distribuição, de valor esperado <span class="math inline">\(\mu\)</span> e variância <span class="math inline">\(\sigma^2\)</span>. A nova variável <span class="math inline">\(T = X_1 + X_2 + ... + X_n\)</span> tem distribuição assintoticamente normal com média <span class="math inline">\(\mu_T = n\mu\)</span> e variância <span class="math inline">\(\sigma_T^2=n\sigma^2\)</span> <span class="citation" data-cites="matloff2009">(<a href="#/referências" role="doc-biblioref" onclick="">Matloff 2009, 158–59</a>)</span>.</p>
+</div>
+<ul>
+<li class="fragment">Segundo <span class="citation" data-cites="Stigler244">Stigler (<a href="#/referências" role="doc-biblioref" onclick="">s.d., 5–20</a>)</span>, ainda segundo o TLC, a média das variáveis <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span>, <span class="math inline">\(\overline X = T/n = 1/n\sum_{i=1}^n X_n\)</span> apresentará, assintoticamente:</li>
+</ul>
+</div>
+<div class="fragment">
+<p><span id="eq-MeanDistribution"><span class="math display">\[
+\bar X \sim \mathcal N(\mu, \sigma^2/n)
+\qquad(3)\]</span></span></p>
+</div>
+</section>
+<section id="convergência" class="slide level2">
+<h2>Convergência</h2>
+<ul>
+<li class="fragment">Mas quantas variáveis são necessárias para convergência?
+<ul>
+<li class="fragment">Depende da distribuição delas</li>
+<li class="fragment">Para <span class="citation" data-cites="matloff2009">Matloff (<a href="#/referências" role="doc-biblioref" onclick="">2009</a>)</span>: “tipicamente <span class="math inline">\(n = 20\)</span> ou mesmo <span class="math inline">\(n = 10\)</span> é suficiente” (para atingir a normalidade da soma)</li>
+<li class="fragment">Segundo Stigler (s.d., 5–21), se as variáveis <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, …, <span class="math inline">\(X_n\)</span> tiverem distribuição normal, então a <a href="#/eq-MeanDistribution" class="quarto-xref">Equação&nbsp;3</a> é exata (e não aproximadamente normal, como diz o teorema).</li>
+<li class="fragment">Na prática utilizamos bem menos variáveis de uma vez.
+<ul>
+<li class="fragment">Contudo, se a distribuição das variáveis <span class="math inline">\(X_i\)</span> for próxima da distribuição normal, a aproximação pode ser excelente para <span class="math inline">\(n\)</span> tão baixo quanto 5 ou 10 (ver <span class="citation" data-cites="Stigler244">Stigler (<a href="#/referências" role="doc-biblioref" onclick="">s.d., 5–22</a>)</span>)</li>
+</ul></li>
+</ul></li>
+<li class="fragment">As variáveis <span class="math inline">\(X_i\)</span> devem ser <em>i.i.d</em>?
+<ul>
+<li class="fragment">o TLC de Lyapunov, por exemplo, afirma apenas que as variáveis devem ser independentes, mas não identicamente distribuídas, o que já é um grande alívio</li>
+</ul></li>
+</ul>
+</section>
+<section id="velocidade-da-convergência" class="slide level2">
+<h2>Velocidade da convergência</h2>
+<ul>
+<li class="fragment">4 variáveis com distribuição uniforme:</li>
+</ul>
+<div class="fragment">
+<div id="fig-UniformX" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-UniformX-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-UniformX" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-UniformX-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-UniformX-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="04_Modelagem_files/figure-revealjs/fig-UniformX-1.png" data-ref-parent="fig-UniformX" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-UniformX-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) A
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-UniformX" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-UniformX-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-UniformX-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="04_Modelagem_files/figure-revealjs/fig-UniformX-2.png" data-ref-parent="fig-UniformX" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-UniformX-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) B
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-UniformX" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-UniformX-3" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-UniformX-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="04_Modelagem_files/figure-revealjs/fig-UniformX-3.png" data-ref-parent="fig-UniformX" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-UniformX-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) C
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-UniformX" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-UniformX-4" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-UniformX-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="04_Modelagem_files/figure-revealjs/fig-UniformX-4.png" data-ref-parent="fig-UniformX" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-UniformX-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(d) D
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-UniformX-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Histograma de 4 variáveis independentes com distribuição uniforme.
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="velocidade-de-convergência" class="slide level2">
+<h2>Velocidade de Convergência</h2>
+<div id="fig-FastestTLC" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-FastestTLC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-FastestTLC" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-FastestTLC-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-FastestTLC-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="04_Modelagem_files/figure-revealjs/fig-FastestTLC-1.png" data-ref-parent="fig-FastestTLC" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-FastestTLC-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) (A + B)/2
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-FastestTLC" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-FastestTLC-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-FastestTLC-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="04_Modelagem_files/figure-revealjs/fig-FastestTLC-2.png" data-ref-parent="fig-FastestTLC" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-FastestTLC-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) (A + B + C)/3
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-FastestTLC" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-FastestTLC-3" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-FastestTLC-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="04_Modelagem_files/figure-revealjs/fig-FastestTLC-3.png" data-ref-parent="fig-FastestTLC" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-FastestTLC-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) (A + B + C + D)/4
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-FastestTLC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Histograma da média de duas ou mais var. independentes com dist. uniforme.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li class="fragment">Com 3 variáveis já temos distribuição praticamente normal!</li>
+</ul>
+</section></section>
+<section>
+<section id="exemplo-de-modelo-aditivo" class="title-slide slide level1 center">
+<h1>Exemplo de Modelo Aditivo</h1>
+
+</section>
+<section id="dados" class="slide level2">
+<h2>Dados</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>homePrices <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/homePrices.rds"</span>)</span>
+<span id="cb1-2"><a href=""></a>homePrices <span class="ot">&lt;-</span> <span class="fu">within</span>(homePrices, {</span>
+<span id="cb1-3"><a href=""></a>  PU <span class="ot">&lt;-</span> SalePrice<span class="sc">/</span>Lot</span>
+<span id="cb1-4"><a href=""></a>  Age <span class="ot">&lt;-</span> <span class="dv">1998</span> <span class="sc">-</span> Year</span>
+<span id="cb1-5"><a href=""></a>}) </span>
+<span id="cb1-6"><a href=""></a><span class="fu">library</span>(skimr)</span>
+<span id="cb1-7"><a href=""></a><span class="fu">skim</span>(homePrices)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="dados-1" class="slide level2">
+<h2>Dados</h2>
+<div class="cell">
+<div id="tbl-homePrices" class="cell quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-homePrices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;1: Sumário de um conjunto de dados de venda de casas nos EUA.
+</figcaption>
+<div aria-describedby="tbl-homePrices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table do-not-create-environment cell caption-top" data-quarto-postprocess="true" style="font-size: 18px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Variable</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">missing</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">%</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">mean</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">sd</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p25</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p50</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p75</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p100</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">SalePrice</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">277.412,66</td>
+<td style="text-align: right;">137.616,12</td>
+<td style="text-align: right;">84.000,00</td>
+<td style="text-align: right;">180.000,00</td>
+<td style="text-align: right;">229.900,00</td>
+<td style="text-align: right;">335.000,00</td>
+<td style="text-align: right;">920.000,0</td>
+<td style="text-align: left;">▇▃▂▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">SqFeet</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.260,88</td>
+<td style="text-align: right;">711,73</td>
+<td style="text-align: right;">980,00</td>
+<td style="text-align: right;">1.701,00</td>
+<td style="text-align: right;">2.061,00</td>
+<td style="text-align: right;">2.638,00</td>
+<td style="text-align: right;">5.032,0</td>
+<td style="text-align: left;">▆▇▅▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Beds</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3,48</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">3,00</td>
+<td style="text-align: right;">3,00</td>
+<td style="text-align: right;">4,00</td>
+<td style="text-align: right;">7,0</td>
+<td style="text-align: left;">▃▇▇▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Baths</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2,65</td>
+<td style="text-align: right;">1,06</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">2,00</td>
+<td style="text-align: right;">3,00</td>
+<td style="text-align: right;">3,00</td>
+<td style="text-align: right;">7,0</td>
+<td style="text-align: left;">▇▆▃▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Air</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0,83</td>
+<td style="text-align: right;">0,38</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">1,0</td>
+<td style="text-align: left;">▂▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Garage</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2,10</td>
+<td style="text-align: right;">0,65</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">2,00</td>
+<td style="text-align: right;">2,00</td>
+<td style="text-align: right;">2,00</td>
+<td style="text-align: right;">7,0</td>
+<td style="text-align: left;">▂▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Pool</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0,07</td>
+<td style="text-align: right;">0,25</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">1,0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.966,86</td>
+<td style="text-align: right;">17,62</td>
+<td style="text-align: right;">1.885,00</td>
+<td style="text-align: right;">1.956,00</td>
+<td style="text-align: right;">1.966,00</td>
+<td style="text-align: right;">1.981,00</td>
+<td style="text-align: right;">1.998,0</td>
+<td style="text-align: left;">▁▁▂▇▆</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Quality</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2,19</td>
+<td style="text-align: right;">0,64</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">2,00</td>
+<td style="text-align: right;">2,00</td>
+<td style="text-align: right;">3,00</td>
+<td style="text-align: right;">3,0</td>
+<td style="text-align: left;">▂▁▇▁▅</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Style</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3,35</td>
+<td style="text-align: right;">2,56</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">1,00</td>
+<td style="text-align: right;">2,00</td>
+<td style="text-align: right;">7,00</td>
+<td style="text-align: right;">11,0</td>
+<td style="text-align: left;">▇▁▃▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Lot</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">24.344,67</td>
+<td style="text-align: right;">11.681,28</td>
+<td style="text-align: right;">4.560,00</td>
+<td style="text-align: right;">17.159,00</td>
+<td style="text-align: right;">22.196,00</td>
+<td style="text-align: right;">26.777,00</td>
+<td style="text-align: right;">86.830,0</td>
+<td style="text-align: left;">▆▇▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Highway</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0,02</td>
+<td style="text-align: right;">0,14</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">1,0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">Age</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">31,14</td>
+<td style="text-align: right;">17,62</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">17,00</td>
+<td style="text-align: right;">32,00</td>
+<td style="text-align: right;">42,00</td>
+<td style="text-align: right;">113,0</td>
+<td style="text-align: left;">▆▇▂▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">PU</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12,76</td>
+<td style="text-align: right;">6,57</td>
+<td style="text-align: right;">2,51</td>
+<td style="text-align: right;">8,13</td>
+<td style="text-align: right;">11,25</td>
+<td style="text-align: right;">15,39</td>
+<td style="text-align: right;">47,5</td>
+<td style="text-align: left;">▇▅▂▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="modelo-inicial" class="slide level2">
+<h2>Modelo Inicial</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> Lot <span class="sc">+</span> SqFeet, <span class="at">data =</span> homePrices)</span>
+<span id="cb2-2"><a href=""></a><span class="fu">summary</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ Lot + SqFeet, data = homePrices)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.3217  -2.2041  -0.8209   1.3220  28.7959 
+
+Coefficients:
+               Estimate  Std. Error t value Pr(&gt;|t|)    
+(Intercept)  6.03743814  0.64596495   9.346   &lt;2e-16 ***
+Lot         -0.00030336  0.00001516 -20.017   &lt;2e-16 ***
+SqFeet       0.00623820  0.00024874  25.079   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.986 on 518 degrees of freedom
+Multiple R-squared:  0.6329,    Adjusted R-squared:  0.6315 
+F-statistic: 446.6 on 2 and 518 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="plotagem-do-modelo" class="slide level2">
+<h2>Plotagem do Modelo</h2>
+<ul>
+<li class="fragment"><p>NA <em>RLM</em> o modelo somente pode ser plotado com resíduos parciais:</p></li>
+<li class="fragment"><p>Resíduos totais são a diferença entre os valores observados e os valores previstos:</p>
+<ul>
+<li class="fragment"><span class="math inline">\(\mathbf y = \beta_0 + \beta_1 \pmb X_1 + \beta_2 \pmb X_2 + \ldots + \beta_k \pmb X_k + \pmb \epsilon\)</span></li>
+<li class="fragment"><span class="math inline">\(\mathbf{\hat y} = \hat \beta_0 + \hat \beta_1 \pmb X_1 + \hat \beta_2 \pmb X_2 + \ldots + \hat \beta_k \pmb X_k\)</span></li>
+<li class="fragment"><span class="math inline">\(\mathbf y = \mathbf{\hat y} + \pmb{\hat\epsilon}\)</span></li>
+<li class="fragment"><span class="math inline">\(\pmb{\hat \epsilon} = \mathbf y - \hat{\mathbf y}\)</span></li>
+<li class="fragment"><span class="math inline">\(\pmb{\hat \epsilon} = \mathbf y - (\hat \beta_0 + \hat \beta_1 \pmb X_1 + \hat \beta_2 \pmb X_2 + \ldots + \hat \beta_k \pmb X_k)\)</span></li>
+</ul></li>
+<li class="fragment"><p>Resíduos Parciais são obtidos ao acrescentar aos resíduos totais o efeito isolado de uma das variáveis explicativas:</p>
+<ul>
+<li class="fragment"><span id="eq-partialResiduals"><span class="math display">\[\pmb{\hat \epsilon_i} = \mathbf y - \hat{\mathbf y} + \beta_i X_i \qquad(4)\]</span></span></li>
+</ul></li>
+<li class="fragment"><p>Por exemplo:</p>
+<ul>
+<li class="fragment"><span class="math inline">\(\pmb{\hat \epsilon_1} = \mathbf y - \hat \beta_0 - \hat \beta_1 \pmb X_1 + \hat \beta_1 \pmb X_1 - \hat \beta_2 \pmb X_2  - \ldots - \hat \beta_k \pmb X_k\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="gráficos-de-resíduos-parciais" class="slide level2">
+<h2>Gráficos de Resíduos Parciais</h2>
+<ul>
+<li class="fragment">Os gráficos de resíduos parciais são obtidos fazendo:
+<ul>
+<li class="fragment"><p><span class="math inline">\(\pmb{\hat \epsilon_1} = \mathbf y - \hat \beta_0 - \hat \beta_1 \pmb X_1 + \hat \beta_1 \pmb X_1 - \hat \beta_2 \pmb X_2  - \ldots - \hat \beta_k \pmb X_k\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\pmb{\hat \epsilon_2} = \mathbf y - \hat \beta_0 - \hat \beta_1 \pmb X_1  - \hat \beta_2 \pmb X_2 + \hat \beta_2 \pmb X_2 - \ldots - \hat \beta_k \pmb X_k\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\ldots\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\pmb{\hat \epsilon_k} = \mathbf y - \hat \beta_0 - \hat \beta_1 \pmb X_1  - \hat \beta_2 \pmb X_2  - \ldots - \hat \beta_k \pmb X_k + \hat \beta_k \pmb X_k)\)</span></p></li>
+<li class="fragment"><p>E depois plotando:</p>
+<ul>
+<li class="fragment"><span class="math inline">\(\pmb{\hat \epsilon_i}\)</span> <em>vs.</em> <span class="math inline">\(X_i\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="gráficos-de-resíduos-parciais-1" class="slide level2">
+<h2>Gráficos de Resíduos Parciais</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">library</span>(car)</span>
+<span id="cb4-2"><a href=""></a><span class="fu">crPlots</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
+<section id="corrigindo-não-linearidades" class="slide level2">
+<h2>Corrigindo não-linearidades</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>fit1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> <span class="fu">I</span>(Lot<span class="sc">^-</span><span class="dv">1</span>) <span class="sc">+</span> SqFeet, <span class="at">data =</span> homePrices)</span>
+<span id="cb5-2"><a href=""></a><span class="fu">summary</span>(fit1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ I(Lot^-1) + SqFeet, data = homePrices)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15.3958  -1.7151  -0.2088   1.0839  26.6640 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -1.153e+01  6.813e-01  -16.93   &lt;2e-16 ***
+I(Lot^-1)    1.871e+05  7.113e+03   26.31   &lt;2e-16 ***
+SqFeet       6.697e-03  2.192e-04   30.56   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.473 on 518 degrees of freedom
+Multiple R-squared:  0.7214,    Adjusted R-squared:  0.7203 
+F-statistic: 670.5 on 2 and 518 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="gráficos-de-resíduos-parciais-2" class="slide level2">
+<h2>Gráficos de Resíduos Parciais</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(car)</span>
+<span id="cb7-2"><a href=""></a><span class="fu">crPlots</span>(fit1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
+<section id="aumentando-a-complexidade-do-modelo" class="slide level2">
+<h2>Aumentando a complexidade do modelo</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>fit2 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit1, .<span class="sc">~</span>. <span class="sc">+</span> Age)</span>
+<span id="cb8-2"><a href=""></a><span class="fu">summary</span>(fit2)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ I(Lot^-1) + SqFeet + Age, data = homePrices)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-14.6216  -1.6280  -0.2512   1.1262  24.5530 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -6.125e+00  8.216e-01  -7.455 3.81e-13 ***
+I(Lot^-1)    1.808e+05  6.537e+03  27.659  &lt; 2e-16 ***
+SqFeet       5.674e-03  2.246e-04  25.265  &lt; 2e-16 ***
+Age         -8.949e-02  8.858e-03 -10.103  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.177 on 517 degrees of freedom
+Multiple R-squared:  0.7673,    Adjusted R-squared:  0.766 
+F-statistic: 568.3 on 3 and 517 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">crPlots</span>(fit2)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<section id="aumentando-a-complexidade-do-modelo-1" class="slide level2">
+<h2>Aumentando a complexidade do modelo</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>fit3 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit2, .<span class="sc">~</span>. <span class="sc">+</span> Quality)</span>
+<span id="cb11-2"><a href=""></a><span class="fu">summary</span>(fit3)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality, data = homePrices)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-13.5944  -1.6660  -0.2147   1.4229  22.9421 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  5.753e-01  1.181e+00   0.487    0.626    
+I(Lot^-1)    1.863e+05  6.250e+03  29.801  &lt; 2e-16 ***
+SqFeet       4.526e-03  2.619e-04  17.284  &lt; 2e-16 ***
+Age         -5.412e-02  9.626e-03  -5.622 3.09e-08 ***
+Quality     -2.503e+00  3.311e-01  -7.560 1.85e-13 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.017 on 516 degrees of freedom
+Multiple R-squared:  0.7905,    Adjusted R-squared:  0.7889 
+F-statistic: 486.8 on 4 and 516 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="modelo-transformado" class="slide level2">
+<h2>Modelo Transformado</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">crPlots</span>(fit3)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-12-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section></section>
+<section>
+<section id="variáveis-qualitativas" class="title-slide slide level1 center">
+<h1>Variáveis qualitativas</h1>
+
+</section>
+<section id="variáveis-qualitativas-1" class="slide level2">
+<h2>Variáveis qualitativas</h2>
+<ul>
+<li class="fragment">Até agora tratamos apenas da relação entre variáveis numéricas ou quantitavas</li>
+<li class="fragment">Existem, porém, diversas variáveis qualitativas que devemos utilizar para tratar a amostra que, em geral, é heterogênea
+<ul>
+<li class="fragment">Padrão de Acabamento</li>
+<li class="fragment">Presença ou ausência de algum item em particular
+<ul>
+<li class="fragment">P. ex.: piscina, aquecimento,ar-condicionado central, etc.</li>
+</ul></li>
+</ul></li>
+<li class="fragment">As variáveis qualitativas são usualmente modeladas como variáveis dicotômicas
+<ul>
+<li class="fragment">Isoladas</li>
+<li class="fragment">Em grupo</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemplo" class="slide level2">
+<h2>Exemplo</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>homePrices <span class="ot">&lt;-</span> <span class="fu">within</span>(homePrices,</span>
+<span id="cb14-2"><a href=""></a>                     Quality <span class="ot">&lt;-</span> <span class="fu">factor</span>(Quality, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb14-3"><a href=""></a>                                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Primeira"</span>, <span class="st">"Segunda"</span>,</span>
+<span id="cb14-4"><a href=""></a>                                                     <span class="st">"Terceira"</span>))</span>
+<span id="cb14-5"><a href=""></a>                     )</span>
+<span id="cb14-6"><a href=""></a>fit3 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit2, .<span class="sc">~</span>. <span class="sc">+</span> Quality)</span>
+<span id="cb14-7"><a href=""></a><span class="fu">S</span>(fit3)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality, data = homePrices)
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      1.781e+00  9.818e-01   1.815   0.0702 .  
+I(Lot^-1)        1.829e+05  5.828e+03  31.384  &lt; 2e-16 ***
+SqFeet           4.069e-03  2.489e-04  16.348  &lt; 2e-16 ***
+Age             -5.851e-02  8.970e-03  -6.523 1.65e-10 ***
+QualitySegunda  -5.786e+00  4.774e-01 -12.119  &lt; 2e-16 ***
+QualityTerceira -6.748e+00  6.459e-01 -10.448  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 2.807 on 515 degrees of freedom
+Multiple R-squared: 0.819
+F-statistic:   466 on 5 and 515 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+2562.15 2591.94 </code></pre>
+</div>
+</div>
+</section>
+<section id="como-funcionam-as-variáveis-dicotômicas" class="slide level2">
+<h2>Como funcionam as variáveis dicotômicas?</h2>
+<ul>
+<li class="fragment">As variáveis dicotômicas isoladas usualmente recebem um código de dois números:
+<ul>
+<li class="fragment">P. Ex.:
+<ul>
+<li class="fragment">Com Piscina: 1</li>
+<li class="fragment">Sem Piscina: 0</li>
+</ul></li>
+</ul></li>
+<li class="fragment">As variáveis dicotômicas em grupo são variáveis que recebem um código 0/1, porém para isto utilizam <span class="math inline">\(g-1\)</span> variáveis para poder diferenciar os <span class="math inline">\(g\)</span> grupos.</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">head</span>(<span class="fu">model.matrix</span>(fit3), <span class="at">n =</span> <span class="dv">12</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   (Intercept)     I(Lot^-1) SqFeet Age QualitySegunda QualityTerceira
+1            1 0.00004500248   3032  26              1               0
+2            1 0.00004364525   2058  22              1               0
+3            1 0.00004684938   1780  18              1               0
+4            1 0.00005766348   1638  35              1               0
+5            1 0.00004590104   2196  30              1               0
+6            1 0.00005290445   1966  26              1               0
+7            1 0.00005365095   2216  26              1               0
+8            1 0.00004522431   1597  43              1               0
+9            1 0.00006982753   1622  23              0               1
+10           1 0.00003090426   1976  80              0               1
+11           1 0.00001765568   2812  32              0               1
+12           1 0.00003268508   2791   6              0               0</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="plotagem-do-modelo-1" class="slide level2">
+<h2>Plotagem do Modelo</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">crPlots</span>(fit3)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-15-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<section id="identificando-outliers" class="slide level2">
+<h2>Identificando <em>outliers</em></h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">crPlots</span>(fit3, <span class="at">id =</span> <span class="cn">TRUE</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-16-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<section id="removendo-outliers" class="slide level2">
+<h2>Removendo <em>outliers</em></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>fit4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> <span class="fu">I</span>(Lot<span class="sc">^-</span><span class="dv">1</span>) <span class="sc">+</span>SqFeet <span class="sc">+</span> Age <span class="sc">+</span> Quality,</span>
+<span id="cb20-2"><a href=""></a>           <span class="at">data =</span> homePrices, <span class="at">subset =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">86</span>, <span class="dv">104</span>))</span>
+<span id="cb20-3"><a href=""></a><span class="fu">S</span>(fit4, <span class="at">adj.r2 =</span> T)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality, data = homePrices,
+         subset = -c(86, 104))
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      8.626e-01  9.038e-01   0.954     0.34    
+I(Lot^-1)        1.792e+05  5.350e+03  33.497  &lt; 2e-16 ***
+SqFeet           4.357e-03  2.304e-04  18.906  &lt; 2e-16 ***
+Age             -5.680e-02  8.219e-03  -6.912 1.43e-11 ***
+QualitySegunda  -5.408e+00  4.401e-01 -12.288  &lt; 2e-16 ***
+QualityTerceira -6.195e+00  5.944e-01 -10.422  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 2.571 on 513 degrees of freedom
+Multiple R-squared: 0.8401, Adjusted R-squared: 0.8385
+F-statistic: 538.9 on 5 and 513 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+2461.08 2490.85 </code></pre>
+</div>
+</div>
+</section>
+<section id="aumentando-a-complexidade-do-modelo-2" class="slide level2">
+<h2>Aumentando a complexidade do Modelo</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool, data =
+         homePrices, subset = -c(86, 104))
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      9.507e-01  8.946e-01   1.063 0.288435    
+I(Lot^-1)        1.784e+05  5.299e+03  33.665  &lt; 2e-16 ***
+SqFeet           4.287e-03  2.289e-04  18.726  &lt; 2e-16 ***
+Age             -5.766e-02  8.136e-03  -7.088 4.54e-12 ***
+QualitySegunda  -5.390e+00  4.355e-01 -12.376  &lt; 2e-16 ***
+QualityTerceira -6.127e+00  5.884e-01 -10.413  &lt; 2e-16 ***
+Pool             1.561e+00  4.505e-01   3.464 0.000577 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 2.544 on 512 degrees of freedom
+Multiple R-squared: 0.8437, Adjusted R-squared: 0.8419
+F-statistic: 460.7 on 6 and 512 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+2451.06 2485.08 </code></pre>
+</div>
+</div>
+</section>
+<section id="outras-variáveis" class="slide level2">
+<h2>Outras variáveis</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>fit6 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit5, .<span class="sc">~</span>. <span class="sc">+</span> Beds <span class="sc">+</span> Baths <span class="sc">+</span> Air <span class="sc">+</span> Garage <span class="sc">+</span> Style <span class="sc">+</span> Highway)</span>
+<span id="cb23-2"><a href=""></a><span class="fu">S</span>(fit6)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + Beds +
+         Baths + Air + Garage + Style + Highway, data = homePrices, subset = -c(86,
+         104))
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     -2.591e-01  1.143e+00  -0.227  0.82078    
+I(Lot^-1)        1.809e+05  5.509e+03  32.839  &lt; 2e-16 ***
+SqFeet           4.624e-03  3.258e-04  14.193  &lt; 2e-16 ***
+Age             -5.473e-02  8.625e-03  -6.346 4.91e-10 ***
+QualitySegunda  -5.009e+00  4.586e-01 -10.921  &lt; 2e-16 ***
+QualityTerceira -5.576e+00  6.213e-01  -8.974  &lt; 2e-16 ***
+Pool             1.451e+00  4.521e-01   3.210  0.00141 ** 
+Beds            -1.346e-01  1.429e-01  -0.942  0.34645    
+Baths            2.930e-01  1.889e-01   1.551  0.12158    
+Air              1.791e-01  3.468e-01   0.517  0.60568    
+Garage          -1.758e-02  2.200e-01  -0.080  0.93633    
+Style           -1.630e-01  5.876e-02  -2.773  0.00575 ** 
+Highway         -8.337e-01  7.806e-01  -1.068  0.28604    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 2.531 on 506 degrees of freedom
+Multiple R-squared: 0.8471
+F-statistic: 233.6 on 12 and 506 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+2451.78 2511.31 </code></pre>
+</div>
+</div>
+</section>
+<section id="modelo-final" class="slide level2">
+<h2>Modelo final</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>fit6 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit5, .<span class="sc">~</span>. <span class="sc">+</span> Style)</span>
+<span id="cb25-2"><a href=""></a><span class="fu">S</span>(fit6, <span class="at">adj.r2 =</span> T)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + Style, data
+         = homePrices, subset = -c(86, 104))
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      9.380e-02  9.477e-01   0.099 0.921196    
+I(Lot^-1)        1.807e+05  5.339e+03  33.837  &lt; 2e-16 ***
+SqFeet           4.727e-03  2.828e-04  16.714  &lt; 2e-16 ***
+Age             -5.735e-02  8.090e-03  -7.089 4.52e-12 ***
+QualitySegunda  -5.093e+00  4.476e-01 -11.379  &lt; 2e-16 ***
+QualityTerceira -5.844e+00  5.950e-01  -9.823  &lt; 2e-16 ***
+Pool             1.530e+00  4.481e-01   3.414 0.000691 ***
+Style           -1.520e-01  5.798e-02  -2.622 0.009009 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 2.53 on 511 degrees of freedom
+Multiple R-squared: 0.8458, Adjusted R-squared: 0.8437
+F-statistic: 400.4 on 7 and 511 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+2446.13 2484.39 </code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="métricas" class="title-slide slide level1 center">
+<h1>Métricas</h1>
+
+</section>
+<section id="métricas-1" class="slide level2">
+<h2>Métricas</h2>
+<ul>
+<li class="fragment">Os MQO minimizam o erro médio quadrático, também conhecido como <strong>MSE</strong>.
+<ul>
+<li class="fragment"><span id="eq-MSE"><span class="math display">\[\text{MSE} = \frac{1}{n}\sum_{i = 1}^n (y_i - \hat y_i)^2 \qquad(5)\]</span></span></li>
+</ul></li>
+<li class="fragment">Para ficar na mesma escala dos dados, é melhor:
+<ul>
+<li class="fragment"><span id="eq-RMSE"><span class="math display">\[\text{RMSE} = \sqrt{\frac{1}{n}\sum_{i = 1}^n (y_i - \hat y_i)^2} \qquad(6)\]</span></span></li>
+</ul></li>
+<li class="fragment">Há ainda o <strong>MAE</strong> (<em>Mean Absolute Error</em>):
+<ul>
+<li class="fragment"><span id="eq-MAE"><span class="math display">\[\text{MAE} = \frac{1}{n}\sum_{i=1}^n|y_i - \hat y_i| \qquad(7)\]</span></span></li>
+</ul></li>
+<li class="fragment">Problemas com essas métricas é que elas são sensíveis à presença de <em>outliers</em></li>
+</ul>
+</section>
+<section id="métricas-robustas" class="slide level2">
+<h2>Métricas Robustas</h2>
+<ul>
+<li class="fragment"><p>Não há nada que justifique a adoção das métricas do slide anterior</p></li>
+<li class="fragment"><p>Poderíamos optar por minimizar <strong>MAD</strong> (<em>Median Absolute Deviation</em>), por exemplo, que é uma medida robusta:</p>
+<ul>
+<li class="fragment"><span id="eq-MAD"><span class="math display">\[\text{MAD} = \text{Mediana} |y_i - \hat y_i| \qquad(8)\]</span></span></li>
+<li class="fragment"><span id="eq-MADn"><span class="math display">\[\text{MAD}_n = b\cdot \text{Mediana} |y_i - \hat y_i| \qquad(9)\]</span></span>
+<ul>
+<li class="fragment"><span class="math inline">\(\text{MAD}_n\)</span>, com <span class="math inline">\(b = 1,4826\)</span>, é um estimador não-viesado de <span class="math inline">\(\sigma\)</span> da distribuição normal!</li>
+</ul></li>
+</ul></li>
+<li class="fragment"><p>Ou <strong>MAPE</strong> (<em>Mean Absolute Percentage Errors</em>):</p>
+<ul>
+<li class="fragment"><span id="eq-MAPE"><span class="math display">\[\text{MAPE} = 100\frac{1}{n}\sum_{i = 1}^n \left|\frac{y_i - \hat y_i}{y_i}\right| \qquad(10)\]</span></span></li>
+</ul></li>
+</ul>
+</section>
+<section id="exemplo-1" class="slide level2">
+<h2>Exemplo</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Termo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Est.</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Erro</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">t</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">0,09</td>
+<td style="text-align: right;">0,95</td>
+<td style="text-align: right;">0,10</td>
+<td style="text-align: right;">0,92</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">I(Lot^-1)</td>
+<td style="text-align: right;">180.652,96</td>
+<td style="text-align: right;">5.338,98</td>
+<td style="text-align: right;">33,84</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SqFeet</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">16,71</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Age</td>
+<td style="text-align: right;">-0,06</td>
+<td style="text-align: right;">0,01</td>
+<td style="text-align: right;">-7,09</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">QualitySegunda</td>
+<td style="text-align: right;">-5,09</td>
+<td style="text-align: right;">0,45</td>
+<td style="text-align: right;">-11,38</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">QualityTerceira</td>
+<td style="text-align: right;">-5,84</td>
+<td style="text-align: right;">0,59</td>
+<td style="text-align: right;">-9,82</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pool</td>
+<td style="text-align: right;">1,53</td>
+<td style="text-align: right;">0,45</td>
+<td style="text-align: right;">3,41</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Style</td>
+<td style="text-align: right;">-0,15</td>
+<td style="text-align: right;">0,06</td>
+<td style="text-align: right;">-2,62</td>
+<td style="text-align: right;">0,01</td>
+</tr>
+</tbody><tfoot>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><span style="font-style: italic;">Note: </span></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup></sup> Erro-padrão dos resíduos: 2,53 em 511 graus de liberdade.</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup>a</sup> RMSE: 2,51</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup>b</sup> MAE: 1,76</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup>c</sup> MADn: 1,80</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup>d</sup> R2: 0,85</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup>e</sup> R2ajust: 0,84</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup>f</sup> R2pred: 0,84</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup>g</sup> MAPE: 15,46%</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tfoot>
+
+</table>
+</div>
+</div>
+<ul>
+<li class="fragment"><span class="math inline">\(\text{RMSE}\)</span> é muito próximo de <span class="math inline">\(\hat\sigma\)</span>! <span class="math inline">\(MADn\)</span> mais baixo que <span class="math inline">\(\hat\sigma\)</span> preocupa!</li>
+</ul>
+</section>
+<section id="análise-de-resíduos" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="fu">library</span>(ggResidpanel)</span>
+<span id="cb27-2"><a href=""></a><span class="fu">resid_panel</span>(fit6, <span class="at">type =</span> <span class="st">"standardized"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">Falta de normalidade e homoscedasticidade! Resíduos Padronizados de grande magnitude!</li>
+</ul>
+</section>
+<section id="análise-de-resíduos-1" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>y <span class="ot">&lt;-</span> <span class="fu">rstudent</span>(fit6)</span>
+<span id="cb28-2"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">fitted</span>(fit6)</span>
+<span id="cb28-3"><a href=""></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">ylab =</span> <span class="st">"Resíduos Studentizados"</span>, <span class="at">xlab =</span> <span class="st">"Valores Ajustados"</span>)</span>
+<span id="cb28-4"><a href=""></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb28-5"><a href=""></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="sc">-</span><span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
+<section id="consequências-da-falta-de-normalidade-e-homoscedasticidade" class="slide level2">
+<h2>Consequências da falta de normalidade e homoscedasticidade</h2>
+<ul>
+<li class="fragment">O modelo continua prevendo valores de tendência central como qualquer outro modelo.
+<ul>
+<li class="fragment">No entanto, ele não é mais <strong>BLUE</strong>!</li>
+<li class="fragment">Não é possível realizar inferência clássica com ele!
+<ul>
+<li class="fragment">Os testes dos coeficientes estão prejudicados</li>
+<li class="fragment">Não podemos formar intervalos de confiança com a distribuição t</li>
+</ul></li>
+<li class="fragment">É preciso jogar o modelo fora?
+<ul>
+<li class="fragment">NÃO!</li>
+</ul></li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="hipóteses-sobre-os-erros" class="title-slide slide level1 center">
+<h1>Hipóteses sobre os erros</h1>
+
+</section>
+<section id="teoria" class="slide level2">
+<h2>Teoria</h2>
+<ul>
+<li class="fragment">Para um modelo de regressão linear qualquer:
+<ul>
+<li class="fragment"><span class="math display">\[\mathbf y = \pmb{X\beta} + \pmb\epsilon\]</span>
+<ul>
+<li class="fragment"><span class="math display">\[\hat\beta = (\mathbf{X'X})^{-1}\mathbf{X'y}\]</span>
+<ul>
+<li class="fragment">Independentemente da distribuição dos erros <span class="citation" data-cites="matloff2009">(<a href="#/referências" role="doc-biblioref" onclick="">Matloff 2009, 400</a>)</span>!</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li class="fragment">A variância de <span class="math inline">\(\pmb{\beta}\)</span> é:
+<ul>
+<li class="fragment"><span class="math inline">\(\widehat{\text{Cov}}(\pmb{\hat\beta}) = \text{Cov}((\mathbf{X'X})^{-1}\mathbf{X'y})\)</span></li>
+<li class="fragment">Vamos chamar <span class="math inline">\(\mathbf B = (\mathbf{X'X})^{-1}\mathbf X'\)</span>.
+<ul>
+<li class="fragment">Então: <span class="math inline">\(\widehat{\text{Cov}}(\pmb{\hat\beta}) = \text{Cov}(\mathbf{By})\)</span></li>
+</ul></li>
+<li class="fragment">Vamos usar a propriedade <span class="math inline">\(\text{Cov}(\mathbf{Au}) = \mathbf A\text{Cov}(\mathbf u) \mathbf A'\)</span>:
+<ul>
+<li class="fragment"><span class="math inline">\(\widehat{\text{Cov}}(\pmb{\hat\beta}) = \mathbf B\cdot \text{Cov}(\mathbf y | \mathbf X)\cdot \mathbf B'\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="hipótese-dos-erros-i.i.d" class="slide level2">
+<h2>Hipótese dos erros <em>i.i.d</em></h2>
+<ul>
+<li class="fragment"><span class="math inline">\(\widehat{\text{Cov}}(\pmb{\hat\beta}) = \mathbf B\cdot \text{Cov}(\mathbf y | \mathbf X)\cdot \mathbf B'\)</span>
+<ul>
+<li class="fragment"><span class="math inline">\(\mathbf B = (\mathbf{X'X})^{-1}\mathbf{X'}\)</span></li>
+<li class="fragment">Então:
+<ul>
+<li class="fragment"><span class="math inline">\(\widehat{\text{Cov}}(\pmb{\hat\beta}) =  (\mathbf{X'X})^{-1}\mathbf X'\cdot \text{Cov}(\mathbf y | \mathbf X)  \cdot \mathbf X (\mathbf{X'X})^{-1}\)</span></li>
+<li class="fragment"><span class="math inline">\(\widehat{\text{Cov}}(\pmb{\hat\beta}) = (\mathbf{X'X})^{-1}\mathbf X'\cdot \pmb \Omega \cdot \mathbf X (\mathbf{X'X})^{-1}\)</span></li>
+</ul></li>
+</ul></li>
+<li class="fragment">Se os erros são <em>i.i.d.</em>, com distribuição normal (<span class="math inline">\(\pmb{\epsilon} \overset{\underset{\mathrm{i.i.d.}}{}}{\sim} \mathcal N(0, \sigma^2\mathbf I)\)</span>), então <span class="citation" data-cites="matloff2009">(<a href="#/referências" role="doc-biblioref" onclick="">Matloff 2009, 402</a>)</span>:
+<ul>
+<li class="fragment"><span class="math display">\[\mathbf \Omega_{\text{MQO}} = \text{Cov}(\mathbf y|\mathbf X) = \sigma^2 \mathbf I\]</span></li>
+<li class="fragment"><span class="math display">\[\widehat{\text{Cov}}(\pmb{\hat\beta}) = \hat\sigma^2 (\mathbf{X'X})^{-1}\]</span></li>
+</ul></li>
+<li class="fragment">Os cálculdos dos erros-padrões dos <span class="math inline">\(\beta_i\)</span> ficam extremamente facilitados!</li>
+</ul>
+</section>
+<section id="matriz-de-variância-covariância" class="slide level2">
+<h2>Matriz de Variância-Covariância</h2>
+<ul>
+<li class="fragment"><span class="math display">\[\pmb \Omega_{\text{MQO}} = \hat \sigma^2 \mathbf I =  
+\begin{pmatrix}
+\hat \sigma^2 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; \hat \sigma^2 &amp; \cdots &amp; 0 \\
+\vdots  &amp; \vdots  &amp; \ddots &amp; \vdots \\
+0  &amp; 0 &amp;  \cdots &amp; \hat \sigma^2
+\end{pmatrix}\]</span></li>
+</ul>
+</section>
+<section id="e-se-erros-não-são-i.i.d." class="slide level2">
+<h2>E se erros não são <em>i.i.d.</em>?</h2>
+<ul>
+<li class="fragment">E se os erros não forem <em>i.i.d.</em>?
+<ul>
+<li class="fragment">Então:
+<ul>
+<li class="fragment"><p><span class="math inline">\(\widehat{\text{Cov}}(\pmb{\hat\beta}) = (\mathbf{X'X})^{-1}\mathbf X'\cdot \pmb \Omega \cdot \mathbf X (\mathbf{X'X})^{-1}\)</span></p></li>
+<li class="fragment"><p>Com:</p>
+<ul>
+<li class="fragment"><span class="math display">\[\pmb \Omega = \text{Cov}(\mathbf y | \mathbf X) =  
+\begin{pmatrix}
+\text{var}(\varepsilon_1) &amp; \text{cov}(\varepsilon_1\varepsilon_2) &amp; \cdots &amp; \text{cov}(\varepsilon_1\varepsilon_n) \\
+\text{cov}(\varepsilon_2\varepsilon_1) &amp; \text{var}(\varepsilon_2) &amp; \cdots &amp; \text{cov}(\varepsilon_2\varepsilon_n) \\
+\vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+\text{cov}(\varepsilon_n\varepsilon_1)  &amp; \text{cov}(\varepsilon_n\varepsilon_2) &amp;  \cdots &amp; \text{var}(\varepsilon_n)
+\end{pmatrix}\]</span></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="estimador-sanduíche" class="title-slide slide level1 center">
+<h1>Estimador Sanduíche</h1>
+
+</section>
+<section id="teoria-1" class="slide level2">
+<h2>Teoria</h2>
+<ul>
+<li class="fragment"><p>É possível estimar a matriz Variância-Covariância através dos resíduos do MQO!</p></li>
+<li class="fragment"><p><span class="citation" data-cites="LongErvin">Long e Ervin (<a href="#/referências" role="doc-biblioref" onclick="">2000</a>)</span> avaliam as matrizes <span class="math inline">\(HC_0\)</span>, <span class="math inline">\(HC_1\)</span>, <span class="math inline">\(HC_2\)</span> e <span class="math inline">\(HC_3\)</span> propostas por <span class="citation" data-cites="MacKinnon">MacKinnon e White (<a href="#/referências" role="doc-biblioref" onclick="">1985</a>)</span> e <span class="citation" data-cites="White1980">White (<a href="#/referências" role="doc-biblioref" onclick="">1980</a>)</span>.</p>
+<ul>
+<li class="fragment"><span class="math inline">\(HC_0 = (\mathbf{X'X})^{-1}\mathbf X'\cdot  \text{diag}(e_i^2) \cdot \mathbf X (\mathbf{X'X})^{-1}\)</span></li>
+<li class="fragment"><span class="math inline">\(HC_1 = \frac{n}{n-k}(\mathbf{X'X})^{-1}\mathbf X'\cdot  \text{diag}(e_i^2) \cdot \mathbf X (\mathbf{X'X})^{-1} = \frac{n}{n-k}HC_0\)</span></li>
+<li class="fragment"><span class="math inline">\(HC_2 = (\mathbf{X'X})^{-1}\mathbf X'\cdot  \text{diag}\left (\frac{e_i^2}{1-h_{ii}} \right ) \cdot \mathbf X (\mathbf{X'X})^{-1}\)</span></li>
+<li class="fragment"><span class="math inline">\(HC_3 = (\mathbf{X'X})^{-1}\mathbf X'\cdot  \text{diag}\left (\frac{e_i^2}{(1-h_{ii})^2} \right ) \cdot \mathbf X (\mathbf{X'X})^{-1}\)</span></li>
+</ul></li>
+<li class="fragment"><p><span class="citation" data-cites="CRIBARINETO2004">F. Cribari-Neto (<a href="#/referências" role="doc-biblioref" onclick="">2004</a>)</span>, <span class="citation" data-cites="CRIBARINETO2007">F. Cribari-Neto, Souza, e Vasconcellos (<a href="#/referências" role="doc-biblioref" onclick="">2007</a>)</span> e <span class="citation" data-cites="CRIBARINETO2011">da S. Cribari-Neto F. (<a href="#/referências" role="doc-biblioref" onclick="">2011</a>)</span>: sugerem novas matrizes <span class="math inline">\(HC_4\)</span>, <span class="math inline">\(HC_{4m}\)</span> e <span class="math inline">\(HC_5\)</span></p></li>
+<li class="fragment"><p>Qual utilizar?</p>
+<ul>
+<li class="fragment"><span class="citation" data-cites="LongErvin">Long e Ervin (<a href="#/referências" role="doc-biblioref" onclick="">2000</a>)</span> recomendam utilizar <span class="math inline">\(HC_3\)</span>!</li>
+</ul></li>
+</ul>
+</section>
+<section id="na-prática" class="slide level2">
+<h2>Na prática</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb29-2"><a href=""></a><span class="fu">library</span>(sandwich)</span>
+<span id="cb29-3"><a href=""></a><span class="fu">coeftest</span>(fit6, <span class="at">vcov. =</span> <span class="fu">vcovHC</span>(fit6, <span class="at">type =</span> <span class="st">"HC3"</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+t test of coefficients:
+
+                   Estimate  Std. Error t value  Pr(&gt;|t|)    
+(Intercept)      9.3799e-02  1.2217e+00  0.0768  0.938830    
+I(Lot^-1)        1.8065e+05  7.5643e+03 23.8822 &lt; 2.2e-16 ***
+SqFeet           4.7267e-03  4.0848e-04 11.5715 &lt; 2.2e-16 ***
+Age             -5.7351e-02  9.2628e-03 -6.1916 1.225e-09 ***
+QualitySegunda  -5.0928e+00  6.3514e-01 -8.0184 7.353e-15 ***
+QualityTerceira -5.8443e+00  7.5517e-01 -7.7390 5.396e-14 ***
+Pool             1.5298e+00  4.5123e-01  3.3904  0.000752 ***
+Style           -1.5202e-01  6.9557e-02 -2.1855  0.029304 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
+<section id="na-prática-1" class="slide level2">
+<h2>Na prática</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="fu">library</span>(dotwhisker)</span>
+<span id="cb31-2"><a href=""></a><span class="fu">dwplot</span>(fit6)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">Problema com a escala de <span class="math inline">\(1/Lot\)</span>: valores muito pequenos, gera coeficiente grande!</li>
+</ul>
+</section>
+<section id="na-prática-2" class="slide level2">
+<h2>Na prática</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>rec <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="sc">-</span><span class="dv">100000</span><span class="sc">/</span>x</span>
+<span id="cb32-2"><a href=""></a>fit6 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit6, .<span class="sc">~</span>. <span class="sc">-</span> <span class="fu">I</span>(Lot<span class="sc">^-</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fu">rec</span>(Lot))</span>
+<span id="cb32-3"><a href=""></a><span class="fu">summary</span>(fit6)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ SqFeet + Age + Quality + Pool + Style + rec(Lot), 
+    data = homePrices, subset = -c(86, 104))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-9.9585 -1.3214 -0.0755  1.0420  9.3044 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      0.0937990  0.9476969   0.099 0.921196    
+SqFeet           0.0047267  0.0002828  16.714  &lt; 2e-16 ***
+Age             -0.0573513  0.0080902  -7.089 4.52e-12 ***
+QualitySegunda  -5.0928180  0.4475792 -11.379  &lt; 2e-16 ***
+QualityTerceira -5.8442927  0.5949536  -9.823  &lt; 2e-16 ***
+Pool             1.5298145  0.4480933   3.414 0.000691 ***
+Style           -0.1520176  0.0579831  -2.622 0.009009 ** 
+rec(Lot)        -1.8065296  0.0533898 -33.837  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.53 on 511 degrees of freedom
+Multiple R-squared:  0.8458,    Adjusted R-squared:  0.8437 
+F-statistic: 400.4 on 7 and 511 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="na-prática-3" class="slide level2">
+<h2>Na prática</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">dwplot</span>(fit6,</span>
+<span id="cb34-2"><a href=""></a>       <span class="at">vars_order =</span> <span class="fu">c</span>( <span class="st">"QualityTerceira"</span>, <span class="st">"QualitySegunda"</span>, <span class="st">"rec(Lot)"</span>,</span>
+<span id="cb34-3"><a href=""></a>                      <span class="st">"Style"</span>, <span class="st">"Age"</span>, <span class="st">"SqFeet"</span>, <span class="st">"Pool"</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
+<section id="na-prática-4" class="slide level2">
+<h2>Na prática</h2>
+<ul>
+<li class="fragment">Com erros robustos:</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-29-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">Com a matriz <span class="math inline">\(HC_3\)</span> os intervalos de confiança são um pouco mais largos!</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="mínimos-quadrados-ponderados" class="title-slide slide level1 center">
+<h1>Mínimos Quadrados Ponderados</h1>
+
+</section>
+<section id="mínimos-quadrados-ponderados-mqp" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<ul>
+<li class="fragment">Se for possível compreender como se comportam os erros do modelo MQO
+<ul>
+<li class="fragment">Se eles forem independentes (<span class="math inline">\(\text{cov}(\varepsilon_1, \varepsilon_j)\, \forall \, i,j\)</span>)</li>
+<li class="fragment">É possível estabelecer pesos contrários, de forma que a heteroscedasticidade se anule</li>
+<li class="fragment">Ressuscitando MQP: <span class="citation" data-cites="ROMANO20171">Romano e Wolf (<a href="#/referências" role="doc-biblioref" onclick="">2017</a>)</span></li>
+<li class="fragment">MQP na Engenharia de Avaliações: <span class="citation" data-cites="wls2024">Droubi e Florencio (<a href="#/referências" role="doc-biblioref" onclick="">2024</a>)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="mínimos-quadrados-ponderados-mqp-1" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<ul>
+<li class="fragment"><p>Se <span class="math inline">\(\sigma^2\)</span> não é constante, porém consegue-se identificar a função dos erros <span class="math inline">\(\sigma(X)\)</span></p>
+<ul>
+<li class="fragment"><span class="math inline">\(\pmb \Omega_{\text{MQP}} = \hat \sigma^2 \cdot
+\begin{pmatrix}
+w_1 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; w_2 &amp; \cdots &amp; 0 \\
+\vdots  &amp; \vdots  &amp; \ddots &amp; \vdots \\
+0  &amp; 0 &amp;  \cdots &amp; w_n
+\end{pmatrix}\)</span></li>
+</ul></li>
+<li class="fragment"><p>Problema: quais pesos aplicar?</p>
+<ul>
+<li class="fragment">Como a intenção é contornar a heteroscedasticidade (<span class="math inline">\(\sigma^2 \neq \text{cte}\)</span>), então precisamos de pesos que a anulem:
+<ul>
+<li class="fragment"><span class="math inline">\(w_i = 1/\sigma_i^2 = 1/\text{var}(\varepsilon_i)\)</span></li>
+<li class="fragment">O problema então é o de estimar <span class="math inline">\(w_i\)</span> de acordo com a função <span class="math inline">\(\sigma^2(X)\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="mínimos-quadrados-ponderados-mqp-2" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<ul>
+<li class="fragment">Enquanto no MQO fazemos:
+<ul>
+<li class="fragment"><span class="math inline">\(\underset{\beta}{\arg\min} \sum_{i=1}^n (\varepsilon_i^2) = \underset{\beta}{\arg\min} (\mathbf y - \pmb{X\beta})^2\)</span></li>
+</ul></li>
+<li class="fragment">No MQP fazemos:
+<ul>
+<li class="fragment"><span class="math inline">\(\underset{\beta}{\arg\min} \sum_{i=1}^n (w_i\cdot\varepsilon_i^2) = \underset{\beta}{\arg\min} \mathbf W(\mathbf y - \pmb{X\beta})^2\)</span>
+<ul>
+<li class="fragment">Com <span class="math inline">\(w_i = 1/\sigma^2(X_i)\)</span></li>
+</ul></li>
+</ul></li>
+<li class="fragment">O estimador MQP, portanto, é:
+<ul>
+<li class="fragment"><span id="eq-MQP"><span class="math display">\[\hat\beta_{MQP} = (\mathbf{X'WX})^{-1}\mathbf{X'Wy} \qquad(11)\]</span></span></li>
+</ul></li>
+<li class="fragment">Ao invés de calcular erros robustos, o MQP estima novamente outro vetor <span class="math inline">\(\pmb{\beta}_{MQP}\)</span>, que é mais eficiente que <span class="math inline">\(\pmb{\beta}_{MQO}\)</span> quando os erros são heteroscedásticos, <em>se os pesos forem bem especificados</em>!</li>
+</ul>
+</section>
+<section id="mínimos-quadrados-ponderados-mqp-3" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<h3 id="exemplo-wls-simples">Exemplo WLS Simples</h3>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
+<section id="mínimos-quadrados-ponderados-mqp-4" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>dados <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">PUAjust =</span> <span class="fu">fitted</span>(fit6), </span>
+<span id="cb35-2"><a href=""></a>                    <span class="at">Residuals =</span> <span class="fu">residuals</span>(fit6))</span>
+<span id="cb35-3"><a href=""></a>auxFit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">abs</span>(Residuals) <span class="sc">~</span> PUAjust, <span class="at">data =</span> dados)</span>
+<span id="cb35-4"><a href=""></a><span class="fu">plot</span>(<span class="fu">abs</span>(Residuals) <span class="sc">~</span> PUAjust, <span class="at">data =</span> dados, <span class="at">main =</span> <span class="st">"Regressão Auxiliar"</span>)</span>
+<span id="cb35-5"><a href=""></a><span class="fu">abline</span>(auxFit, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section>
+<section id="mínimos-quadrados-ponderados-mqp-5" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a>w <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">fitted</span>(auxFit)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb36-2"><a href=""></a>fitMQP <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> <span class="fu">I</span>(Lot<span class="sc">^-</span><span class="dv">1</span>) <span class="sc">+</span> SqFeet <span class="sc">+</span> Age <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span> Style, </span>
+<span id="cb36-3"><a href=""></a>             <span class="at">data =</span> homePrices[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">86</span>, <span class="dv">104</span>), ], <span class="at">weights =</span> w)</span>
+<span id="cb36-4"><a href=""></a><span class="fu">summary</span>(fitMQP)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + 
+    Style, data = homePrices[-c(86, 104), ], weights = w)
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.4454 -0.9125 -0.0099  0.8271  4.9057 
+
+Coefficients:
+                  Estimate Std. Error t value  Pr(&gt;|t|)    
+(Intercept)      3.606e+00  9.118e-01   3.955 0.0000875 ***
+I(Lot^-1)        1.729e+05  5.151e+03  33.564   &lt; 2e-16 ***
+SqFeet           3.085e-03  2.302e-04  13.401   &lt; 2e-16 ***
+Age             -6.489e-03  4.135e-03  -1.569    0.1172    
+QualitySegunda  -7.197e+00  5.720e-01 -12.581   &lt; 2e-16 ***
+QualityTerceira -8.387e+00  6.141e-01 -13.658   &lt; 2e-16 ***
+Pool             1.575e+00  5.183e-01   3.038    0.0025 ** 
+Style            4.490e-02  3.853e-02   1.165    0.2444    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.455 on 511 degrees of freedom
+Multiple R-squared:  0.8857,    Adjusted R-squared:  0.8842 
+F-statistic: 565.9 on 7 and 511 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Aumentou substancialmente o <span class="math inline">\(R^2\)</span>!</li>
+</ul>
+</section>
+<section id="análise-de-resíduos-2" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">resid_panel</span>(fitMQP, <span class="at">type =</span> <span class="st">"standardized"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-34-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">Uma melhora substancial nos erros, apesar de alguns <em>outliers</em>! E continuamos na escala de PU!</li>
+</ul>
+</section>
+<section id="análise-de-resíduos-3" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb39-2"><a href=""></a><span class="fu">ols_plot_resid_stud_fit</span>(fitMQP, <span class="at">threshold =</span> <span class="dv">3</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
+<section id="mínimos-quadrados-ponderados-mqp-6" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a>w <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">fitted</span>(auxFit)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb40-2"><a href=""></a>fitMQP2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> <span class="fu">I</span>(Lot<span class="sc">^-</span><span class="dv">1</span>) <span class="sc">+</span> SqFeet <span class="sc">+</span> Age <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span> Style, </span>
+<span id="cb40-3"><a href=""></a>             <span class="at">data =</span> homePrices[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">52</span>, <span class="dv">55</span>, <span class="dv">86</span>, <span class="dv">104</span>), ], <span class="at">weights =</span> w[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">52</span>, <span class="dv">55</span>)])</span>
+<span id="cb40-4"><a href=""></a><span class="fu">summary</span>(fitMQP2)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + 
+    Style, data = homePrices[-c(52, 55, 86, 104), ], weights = w[-c(52, 
+    55)])
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.1369 -0.8969 -0.0360  0.7779  7.2073 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      1.725e+00  9.004e-01   1.916 0.055948 .  
+I(Lot^-1)        1.747e+05  4.891e+03  35.726  &lt; 2e-16 ***
+SqFeet           3.914e-03  2.406e-04  16.269  &lt; 2e-16 ***
+Age             -1.838e-02  4.801e-03  -3.829 0.000145 ***
+QualitySegunda  -6.302e+00  5.514e-01 -11.428  &lt; 2e-16 ***
+QualityTerceira -7.149e+00  6.010e-01 -11.896  &lt; 2e-16 ***
+Pool             1.401e+00  4.896e-01   2.861 0.004391 ** 
+Style           -1.005e-01  4.166e-02  -2.414 0.016149 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.373 on 509 degrees of freedom
+Multiple R-squared:  0.8753,    Adjusted R-squared:  0.8735 
+F-statistic: 510.2 on 7 and 509 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="análise-de-resíduos-4" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a><span class="fu">resid_panel</span>(fitMQP2, <span class="at">type =</span> <span class="st">"standardized"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-37-1.png" width="960" class="r-stretch"></section>
+<section id="análise-de-resíduos-5" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a><span class="fu">ols_plot_resid_stud_fit</span>(fitMQP2, <span class="at">threshold =</span> <span class="dv">3</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-38-1.png" width="960" class="r-stretch"></section>
+<section id="mínimos-quadrados-ponderados-mqp-7" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a>w <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">fitted</span>(auxFit)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb44-2"><a href=""></a>fitMQP3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> <span class="fu">I</span>(Lot<span class="sc">^-</span><span class="dv">1</span>) <span class="sc">+</span> SqFeet <span class="sc">+</span> Age <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span> Style, </span>
+<span id="cb44-3"><a href=""></a>             <span class="at">data =</span> homePrices[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">52</span>, <span class="dv">55</span>, <span class="dv">86</span>, <span class="dv">104</span>), ], </span>
+<span id="cb44-4"><a href=""></a>             <span class="at">weights =</span> w[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">52</span>, <span class="dv">55</span>)])</span>
+<span id="cb44-5"><a href=""></a><span class="fu">summary</span>(fitMQP3)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + 
+    Style, data = homePrices[-c(50, 52, 55, 86, 104), ], weights = w[-c(50, 
+    52, 55)])
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.4412 -0.8454 -0.0647  0.7817  4.3333 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      1.023e+00  8.501e-01   1.203  0.22945    
+I(Lot^-1)        1.782e+05  4.613e+03  38.622  &lt; 2e-16 ***
+SqFeet           4.139e-03  2.276e-04  18.184  &lt; 2e-16 ***
+Age             -4.084e-02  5.261e-03  -7.764 4.58e-14 ***
+QualitySegunda  -5.661e+00  5.238e-01 -10.808  &lt; 2e-16 ***
+QualityTerceira -6.247e+00  5.749e-01 -10.865  &lt; 2e-16 ***
+Pool             1.225e+00  4.604e-01   2.660  0.00807 ** 
+Style           -4.341e-02  3.974e-02  -1.092  0.27516    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.289 on 508 degrees of freedom
+Multiple R-squared:  0.8735,    Adjusted R-squared:  0.8717 
+F-statistic:   501 on 7 and 508 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="análise-de-resíduos-6" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="fu">resid_panel</span>(fitMQP3, <span class="at">type =</span> <span class="st">"standardized"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-40-1.png" width="960" class="r-stretch"></section>
+<section id="análise-de-resíduos-7" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a><span class="fu">ols_plot_resid_stud_fit</span>(fitMQP3, <span class="at">threshold =</span> <span class="dv">3</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-41-1.png" width="960" class="r-stretch"></section>
+<section id="mínimos-quadrados-ponderados-mqp-8" class="slide level2">
+<h2>Mínimos Quadrados Ponderados (MQP)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a>w <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">fitted</span>(auxFit)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb48-2"><a href=""></a>fitMQP4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> <span class="fu">I</span>(Lot<span class="sc">^-</span><span class="dv">1</span>) <span class="sc">+</span> SqFeet <span class="sc">+</span> Age <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span> Style, </span>
+<span id="cb48-3"><a href=""></a>             <span class="at">data =</span> homePrices[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">50</span>, <span class="dv">52</span>, <span class="dv">55</span>, <span class="dv">86</span>, <span class="dv">104</span>, <span class="dv">134</span>), ], </span>
+<span id="cb48-4"><a href=""></a>             <span class="at">weights =</span> w[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">50</span>, <span class="dv">52</span>, <span class="dv">55</span>, <span class="dv">127</span>)])</span>
+<span id="cb48-5"><a href=""></a><span class="fu">summary</span>(fitMQP4)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = PU ~ I(Lot^-1) + SqFeet + Age + Quality + Pool + 
+    Style, data = homePrices[-c(11, 50, 52, 55, 86, 104, 134), 
+    ], weights = w[-c(11, 50, 52, 55, 127)])
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.4640 -0.8203 -0.0868  0.7781  3.8425 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      1.136e+00  8.361e-01   1.358 0.174925    
+I(Lot^-1)        1.765e+05  4.540e+03  38.872  &lt; 2e-16 ***
+SqFeet           4.127e-03  2.238e-04  18.442  &lt; 2e-16 ***
+Age             -4.251e-02  5.172e-03  -8.220 1.72e-15 ***
+QualitySegunda  -5.713e+00  5.124e-01 -11.148  &lt; 2e-16 ***
+QualityTerceira -6.211e+00  5.643e-01 -11.008  &lt; 2e-16 ***
+Pool             1.769e+00  4.665e-01   3.791 0.000168 ***
+Style           -2.864e-02  3.905e-02  -0.733 0.463733    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.264 on 506 degrees of freedom
+Multiple R-squared:  0.8795,    Adjusted R-squared:  0.8779 
+F-statistic: 527.8 on 7 and 506 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="análise-de-resíduos-8" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="fu">resid_panel</span>(fitMQP4, <span class="at">type =</span> <span class="st">"standardized"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-43-1.png" width="960" class="r-stretch"></section>
+<section id="análise-de-resíduos-9" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="fu">ols_plot_resid_stud_fit</span>(fitMQP4, <span class="at">threshold =</span> <span class="dv">3</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-44-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="least-squares-percentage-regression-lspr" class="title-slide slide level1 center">
+<h1><em>Least Squares Percentage Regression</em> (LSPR)</h1>
+
+</section>
+<section id="least-squares-percentage-regression-lspr-1" class="slide level2">
+<h2><em>Least Squares Percentage Regression</em> (LSPR)</h2>
+<ul>
+<li class="fragment"><span class="citation" data-cites="Tofalis2008">Tofallis (<a href="#/referências" role="doc-biblioref" onclick="">2008</a>)</span>: mostra que, aplicando-se como pesos ao MQP o vetor:
+<ul>
+<li class="fragment"><span class="math display">\[w_i = 1/PU_i^2\]</span></li>
+<li class="fragment">obtém-se o modelo que minimiza os erros médios percentuais absolutos (<strong>MAPE</strong>)</li>
+</ul></li>
+<li class="fragment">Pode-se entender que o <em>LSPR</em> minimiza os resíduos relativos, quando estamos na escala de preços (totais ou unitários):
+<ul>
+<li class="fragment"><span class="math display">\[\%R_i = \frac{y_i - \hat y_i}{y_i}\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="exemplo-2" class="slide level2">
+<h2>Exemplo</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = PU ~ SqFeet + Age + Quality + Pool + Style + rec(Lot), data
+         = homePrices, subset = -c(86, 104), weights = 1/PU^2)
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      1.6916246  0.8317349   2.034   0.0425 *  
+SqFeet           0.0030978  0.0002225  13.920  &lt; 2e-16 ***
+Age             -0.0301524  0.0049503  -6.091 2.21e-09 ***
+QualitySegunda  -5.3646876  0.5093162 -10.533  &lt; 2e-16 ***
+QualityTerceira -6.1954031  0.5625798 -11.012  &lt; 2e-16 ***
+Pool             0.2148478  0.4147080   0.518   0.6046    
+Style            0.0073997  0.0411894   0.180   0.8575    
+rec(Lot)        -1.8140101  0.0472500 -38.392  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.1956 on 511 degrees of freedom
+Multiple R-squared: 0.8364
+F-statistic: 373.1 on 7 and 511 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+2300.86 2339.13 </code></pre>
+</div>
+</div>
+</section>
+<section id="análise-dos-resíduos" class="slide level2">
+<h2>Análise dos Resíduos</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-46-1.png" width="960" class="r-stretch"></section>
+<section id="análise-dos-resíduos-1" class="slide level2">
+<h2>Análise dos Resíduos</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-47-1.png" width="960" class="r-stretch"></section>
+<section id="least-squares-percentage-regression-lspr-2" class="slide level2">
+<h2><em>Least Squares Percentage Regression</em> (LSPR)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a>fitLSPR <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> SqFeet <span class="sc">+</span> Age <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span> Style <span class="sc">+</span> <span class="fu">rec</span>(Lot), </span>
+<span id="cb53-2"><a href=""></a>              <span class="at">data =</span> homePrices, </span>
+<span id="cb53-3"><a href=""></a>              <span class="at">subset =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">24</span>, <span class="dv">37</span>, <span class="dv">52</span>, <span class="dv">86</span>, <span class="dv">106</span>, <span class="dv">122</span>, <span class="dv">127</span>, <span class="dv">176</span>),</span>
+<span id="cb53-4"><a href=""></a>              <span class="at">weights =</span> <span class="dv">1</span><span class="sc">/</span>PU<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb53-5"><a href=""></a><span class="fu">S</span>(fitLSPR)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = PU ~ SqFeet + Age + Quality + Pool + Style + rec(Lot), data
+         = homePrices, subset = -c(11, 24, 37, 52, 86, 106, 122, 127, 176), weights =
+         1/PU^2)
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      1.0753145  0.8199475   1.311   0.1903    
+SqFeet           0.0034489  0.0002181  15.810  &lt; 2e-16 ***
+Age             -0.0384080  0.0049584  -7.746 5.25e-14 ***
+QualitySegunda  -4.8132361  0.5056426  -9.519  &lt; 2e-16 ***
+QualityTerceira -5.4167369  0.5594996  -9.681  &lt; 2e-16 ***
+Pool             1.1396347  0.4601071   2.477   0.0136 *  
+Style           -0.0131934  0.0402992  -0.327   0.7435    
+rec(Lot)        -1.7423978  0.0452341 -38.520  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.1821 on 504 degrees of freedom
+Multiple R-squared: 0.853
+F-statistic: 417.8 on 7 and 504 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+2205.56 2243.70 </code></pre>
+</div>
+</div>
+</section>
+<section id="análise-dos-resíduos-2" class="slide level2">
+<h2>Análise dos Resíduos</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-49-1.png" width="960" class="r-stretch"></section>
+<section id="análise-dos-resíduos-3" class="slide level2">
+<h2>Análise dos Resíduos</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-50-1.png" width="960" class="r-stretch"></section>
+<section id="least-squares-percentage-regression-lspr-3" class="slide level2">
+<h2><em>Least Squares Percentage Regression</em> (LSPR)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a>fitLSPR <span class="ot">&lt;-</span> <span class="fu">lm</span>(PU <span class="sc">~</span> SqFeet <span class="sc">+</span> Age <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span> Style <span class="sc">+</span> <span class="fu">rec</span>(Lot), </span>
+<span id="cb55-2"><a href=""></a>              <span class="at">data =</span> homePrices, </span>
+<span id="cb55-3"><a href=""></a>              <span class="at">subset =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">24</span>, <span class="dv">37</span>, <span class="dv">50</span>, <span class="dv">52</span>, <span class="dv">86</span>, <span class="dv">104</span>, <span class="dv">106</span>, <span class="dv">122</span>, <span class="dv">127</span>, <span class="dv">176</span>, <span class="dv">214</span>),</span>
+<span id="cb55-4"><a href=""></a>              <span class="at">weights =</span> <span class="dv">1</span><span class="sc">/</span>PU<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb55-5"><a href=""></a><span class="fu">S</span>(fitLSPR)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = PU ~ SqFeet + Age + Quality + Pool + Style + rec(Lot), data
+         = homePrices, subset = -c(11, 24, 37, 50, 52, 86, 104, 106, 122, 127, 176,
+         214), weights = 1/PU^2)
+
+Coefficients:
+                  Estimate Std. Error t value  Pr(&gt;|t|)    
+(Intercept)      0.7811708  0.7590003   1.029     0.304    
+SqFeet           0.0038422  0.0002051  18.730   &lt; 2e-16 ***
+Age             -0.0448699  0.0046846  -9.578   &lt; 2e-16 ***
+QualitySegunda  -5.0850929  0.4727954 -10.755   &lt; 2e-16 ***
+QualityTerceira -5.4665513  0.5217230 -10.478   &lt; 2e-16 ***
+Pool             1.8474344  0.4343672   4.253 0.0000252 ***
+Style           -0.0168436  0.0371924  -0.453     0.651    
+rec(Lot)        -1.7270445  0.0418499 -41.268   &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.1677 on 501 degrees of freedom
+Multiple R-squared: 0.8744
+F-statistic: 498.5 on 7 and 501 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+2112.44 2150.53 </code></pre>
+</div>
+</div>
+</section>
+<section id="análise-dos-resíduos-4" class="slide level2">
+<h2>Análise dos Resíduos</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-52-1.png" width="960" class="r-stretch"></section>
+<section id="análise-dos-resíduos-5" class="slide level2">
+<h2>Análise dos Resíduos</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-53-1.png" width="960" class="r-stretch"></section>
+<section id="estatísticas" class="slide level2">
+<h2>Estatísticas</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Termo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Est.</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Erro</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">t</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">0,78</td>
+<td style="text-align: right;">0,76</td>
+<td style="text-align: right;">1,03</td>
+<td style="text-align: right;">0,30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SqFeet</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">18,73</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Age</td>
+<td style="text-align: right;">-0,04</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">-9,58</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">QualitySegunda</td>
+<td style="text-align: right;">-5,09</td>
+<td style="text-align: right;">0,47</td>
+<td style="text-align: right;">-10,76</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">QualityTerceira</td>
+<td style="text-align: right;">-5,47</td>
+<td style="text-align: right;">0,52</td>
+<td style="text-align: right;">-10,48</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pool</td>
+<td style="text-align: right;">1,85</td>
+<td style="text-align: right;">0,43</td>
+<td style="text-align: right;">4,25</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Style</td>
+<td style="text-align: right;">-0,02</td>
+<td style="text-align: right;">0,04</td>
+<td style="text-align: right;">-0,45</td>
+<td style="text-align: right;">0,65</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rec(Lot)</td>
+<td style="text-align: right;">-1,73</td>
+<td style="text-align: right;">0,04</td>
+<td style="text-align: right;">-41,27</td>
+<td style="text-align: right;">0,00</td>
+</tr>
+</tbody><tfoot>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><span style="font-style: italic;">Note: </span></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup></sup> Erro-padrão dos resíduos: 0,17 em 501 graus de liberdade.</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup>a</sup> MADn: 1,70</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup>b</sup> R2: 0,87</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup>c</sup> R2ajust: 0,87</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup>d</sup> R2pred: 0,87</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup>e</sup> MAPE: 13,26%</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tfoot>
+
+</table>
+</div>
+</div>
+<ul>
+<li class="fragment">É uma alternativa interessante, pois é fácil explicar como foram obtidos os pesos!</li>
+</ul>
+</section></section>
+<section>
+<section id="transformações-da-variável-dependente" class="title-slide slide level1 center">
+<h1>Transformações da variável dependente</h1>
+
+</section>
+<section id="box-cox" class="slide level2">
+<h2>Box-Cox</h2>
+<ul>
+<li class="fragment">É possível transformar a variável dependente
+<ul>
+<li class="fragment">Isto pode ser um caminho fácil para obter normalidade e homoscedasticidade</li>
+<li class="fragment">Porém, ao custo da deformação dos dados e da necessidade de retransformação</li>
+</ul></li>
+<li class="fragment">As transformações de Box-Cox consistem em encontrar um valor de um parâmetro <span class="math inline">\(\lambda\)</span> que seja o ideal, tal que:
+<ul>
+<li class="fragment"><span id="eq-BoxCox"><span class="math display">\[
+y_i^{(\lambda)} = \begin{cases}
+\frac{y_i^\lambda - 1}{\lambda}&amp; \text{se}\;\lambda \neq 0 \\
+\ln y_i &amp; \text{se}\; \lambda = 0
+\end{cases}
+\qquad(12)\]</span></span></li>
+</ul></li>
+<li class="fragment">As transformações assim efetuadas tendem a ser estabilizadoras da variância e tornam a distribuição dos dados mais parecidos com a distribuição normal</li>
+</ul>
+</section>
+<section id="box-cox-1" class="slide level2">
+<h2>Box-Cox</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-55-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment"><span class="math inline">\(\lambda \approx 0,5\)</span></li>
+</ul>
+</section>
+<section id="modelo-transformado-1" class="slide level2">
+<h2>Modelo Transformado</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>fit7 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit6, <span class="fu">sqrt</span>(PU) <span class="sc">~</span> .)</span>
+<span id="cb57-2"><a href=""></a><span class="fu">S</span>(fit7)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = sqrt(PU) ~ SqFeet + Age + Quality + Pool + Style + rec(Lot),
+         data = homePrices, subset = -c(86, 104))
+
+Coefficients:
+                   Estimate  Std. Error t value Pr(&gt;|t|)    
+(Intercept)      1.73132159  0.12472281  13.881  &lt; 2e-16 ***
+SqFeet           0.00061616  0.00003722  16.556  &lt; 2e-16 ***
+Age             -0.00940351  0.00106472  -8.832  &lt; 2e-16 ***
+QualitySegunda  -0.56838307  0.05890421  -9.649  &lt; 2e-16 ***
+QualityTerceira -0.70669739  0.07829959  -9.026  &lt; 2e-16 ***
+Pool             0.22917014  0.05897186   3.886 0.000115 ***
+Style           -0.01893960  0.00763094  -2.482 0.013387 *  
+rec(Lot)        -0.24952928  0.00702643 -35.513  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.3329 on 511 degrees of freedom
+Multiple R-squared: 0.8518
+F-statistic: 419.7 on 7 and 511 DF,  p-value: &lt; 2.2e-16 
+   AIC    BIC 
+341.12 379.39 </code></pre>
+</div>
+</div>
+</section>
+<section id="análise-de-resíduos-10" class="slide level2">
+<h2>Análise de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb59-2"><a href=""></a><span class="fu">plot</span>(fit7)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-57-1.png" width="960" class="r-stretch"></section>
+<section id="plotagem-do-modelo-2" class="slide level2">
+<h2>Plotagem do Modelo</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a><span class="fu">crPlots</span>(fit7, <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-58-1.png" class="quarto-figure quarto-figure-center r-stretch" width="864"></section>
+<section id="reanálise-das-transformações-das-var.-independentes" class="slide level2">
+<h2>Reanálise das transformações das var. independentes</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a>fit8 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">sqrt</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(Lot) <span class="sc">+</span> <span class="fu">log</span>(SqFeet) <span class="sc">+</span> <span class="fu">log1p</span>(Age) <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span></span>
+<span id="cb61-2"><a href=""></a>         Style, <span class="at">data =</span> homePrices, <span class="at">subset =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">86</span>, <span class="dv">104</span>))</span>
+<span id="cb61-3"><a href=""></a><span class="fu">S</span>(fit8)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = sqrt(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality +
+         Pool + Style, data = homePrices, subset = -c(86, 104))
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      6.923522   0.660396  10.484  &lt; 2e-16 ***
+log(Lot)        -1.410112   0.033698 -41.846  &lt; 2e-16 ***
+log(SqFeet)      1.553586   0.082368  18.862  &lt; 2e-16 ***
+log1p(Age)      -0.208676   0.023382  -8.924  &lt; 2e-16 ***
+QualitySegunda  -0.569539   0.052636 -10.820  &lt; 2e-16 ***
+QualityTerceira -0.663165   0.070597  -9.394  &lt; 2e-16 ***
+Pool             0.189504   0.053536   3.540 0.000437 ***
+Style           -0.023762   0.006885  -3.451 0.000604 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.2989 on 511 degrees of freedom
+Multiple R-squared: 0.8806
+F-statistic: 538.2 on 7 and 511 DF,  p-value: &lt; 2.2e-16 
+   AIC    BIC 
+229.26 267.53 </code></pre>
+</div>
+</div>
+</section>
+<section id="plotagem-do-modelo-3" class="slide level2">
+<h2>Plotagem do Modelo</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a><span class="fu">crPlots</span>(fit8, <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-60-1.png" class="quarto-figure quarto-figure-center r-stretch" width="864"></section>
+<section id="análise-de-resíduos-do-modelo-transformado" class="slide level2">
+<h2>Análise de Resíduos do modelo transformado</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb64-2"><a href=""></a><span class="fu">plot</span>(fit8)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-61-1.png" width="960" class="r-stretch"></section>
+<section id="outras-transformações-da-variável-dependente" class="slide level2">
+<h2>Outras transformações da variável dependente</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>fit9 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(Lot) <span class="sc">+</span> <span class="fu">log</span>(SqFeet) <span class="sc">+</span> <span class="fu">log1p</span>(Age) <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span></span>
+<span id="cb65-2"><a href=""></a>         Style, <span class="at">data =</span> homePrices, <span class="at">subset =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">86</span>, <span class="dv">104</span>))</span>
+<span id="cb65-3"><a href=""></a><span class="fu">S</span>(fit9)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = log(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality +
+         Pool + Style, data = homePrices, subset = -c(86, 104))
+
+Coefficients:
+                 Estimate Std. Error t value  Pr(&gt;|t|)    
+(Intercept)      4.976733   0.368000  13.524   &lt; 2e-16 ***
+log(Lot)        -0.872305   0.018778 -46.454   &lt; 2e-16 ***
+log(SqFeet)      0.895551   0.045899  19.511   &lt; 2e-16 ***
+log1p(Age)      -0.124002   0.013030  -9.517   &lt; 2e-16 ***
+QualitySegunda  -0.251374   0.029331  -8.570   &lt; 2e-16 ***
+QualityTerceira -0.341996   0.039340  -8.693   &lt; 2e-16 ***
+Pool             0.107177   0.029832   3.593  0.000359 ***
+Style           -0.015914   0.003837  -4.148 0.0000393 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.1666 on 511 degrees of freedom
+Multiple R-squared: 0.8903
+F-statistic: 592.6 on 7 and 511 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+-377.71 -339.45 </code></pre>
+</div>
+</div>
+</section>
+<section id="anáilse-de-resíduos" class="slide level2">
+<h2>Anáilse de Resíduos</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb67-2"><a href=""></a><span class="fu">plot</span>(fit9)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-63-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">É quase que um milagre!</li>
+</ul>
+</section>
+<section id="plotagem-do-modelo-4" class="slide level2">
+<h2>Plotagem do Modelo</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a><span class="fu">crPlots</span>(fit9, <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-64-1.png" class="quarto-figure quarto-figure-center r-stretch" width="864"></section>
+<section id="identificação-de-outliers" class="slide level2">
+<h2>Identificação de <em>Outliers</em></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb69-2"><a href=""></a><span class="fu">ols_plot_resid_stud_fit</span>(fit9, <span class="at">threshold =</span> <span class="dv">3</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-65-1.png" width="960" class="r-stretch"></section>
+<section id="modelo-final-1" class="slide level2">
+<h2>Modelo Final</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = log(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality +
+         Pool + Style, data = homePrices, subset = -c(11, 24, 86, 104, 202, 513))
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      4.877206   0.356413  13.684  &lt; 2e-16 ***
+log(Lot)        -0.866663   0.018372 -47.172  &lt; 2e-16 ***
+log(SqFeet)      0.902263   0.044074  20.471  &lt; 2e-16 ***
+log1p(Age)      -0.131482   0.012524 -10.498  &lt; 2e-16 ***
+QualitySegunda  -0.240278   0.028170  -8.529  &lt; 2e-16 ***
+QualityTerceira -0.321531   0.037927  -8.478 2.52e-16 ***
+Pool             0.127364   0.029038   4.386 1.40e-05 ***
+Style           -0.015355   0.003688  -4.163 3.69e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.1595 on 507 degrees of freedom
+Multiple R-squared: 0.8979
+F-statistic:   637 on 7 and 507 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+-419.41 -381.21 </code></pre>
+</div>
+</div>
+</section>
+<section id="resíduos-do-modelo-final" class="slide level2">
+<h2>Resíduos do modelo final</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-67-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="modelo-multiplicativo" class="title-slide slide level1 center">
+<h1>Modelo Multiplicativo</h1>
+
+</section>
+<section id="modelo-multiplicativo-1" class="slide level2">
+<h2>Modelo Multiplicativo</h2>
+<ul>
+<li class="fragment">Quando utilizamos a transformação <span class="math inline">\(\ln\)</span> para a variável dependente, temos:
+<ul>
+<li class="fragment"><span class="math inline">\(\ln(PU) = \beta_0 + \beta_1 \mathbf{X_1} + \ldots + \beta_k \mathbf{X_k} + \pmb{\varepsilon}\)</span></li>
+</ul></li>
+<li class="fragment">Quando retornamos para a escala original, temos:
+<ul>
+<li class="fragment"><span class="math inline">\(PU = \exp(\beta_0 + \beta_1 \mathbf{X_1} + \ldots + \beta_k \mathbf{X_k} + \pmb{\varepsilon})\)</span></li>
+</ul></li>
+<li class="fragment">Lembrando que a exponencial da soma é a multiplicação das exponenciais, temos:
+<ul>
+<li class="fragment"><span class="math inline">\(PU = \exp(\beta_0)\cdot\exp(\beta_1 \mathbf{X_1})\cdot\ldots \cdot \exp(\beta_k \mathbf{X_k}) \cdot\exp(\pmb{\varepsilon})\)</span></li>
+</ul></li>
+<li class="fragment">Em suma, na escala original, o modelo com a variável dependente transformada para <span class="math inline">\(\ln\)</span> é um modelo multiplicativo</li>
+</ul>
+</section>
+<section id="tcl-multiplicativo" class="slide level2">
+<h2><em>TCL</em> multiplicativo</h2>
+<ul>
+<li class="fragment">Um processo lognormal é a realização estatística do produto de muitas variáveis aleatórias independentes, cada qual positiva.
+<ul>
+<li class="fragment">Isto pode ser provado analisando-se o TCL no domínio log!</li>
+</ul></li>
+<li class="fragment">A <em>média geométrica</em> ou multiplicativa de <span class="math inline">\(n\)</span> variáveis aleatórias <span class="math inline">\(X_i\)</span> positivas independentes e identicamente distribuídas apresenta, quando <span class="math inline">\(n \rightarrow \infty\)</span>, distribuição aproximadamente lognormal com parâmetros <span class="math inline">\(\mu = \mathbb E (\ln X_i)\)</span> e <span class="math inline">\(\sigma^2 = \text{Var}(\ln Xi)/n\)</span>.
+<ul>
+<li class="fragment">Também conhecida como Lei de Gibrat!</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="seleção-de-variáveis" class="title-slide slide level1 center">
+<h1>Seleção de Variáveis</h1>
+
+</section>
+<section id="aumentando-a-complexidade-do-modelo-3" class="slide level2">
+<h2>Aumentando a complexidade do modelo</h2>
+<ul>
+<li class="fragment"><p>Após encontrar as transformações corretas para a variável dependente, para as principais variáveis explicativas, e a remoção dos <em>outliers</em>, algumas variáveis podem mostrar significantes, quando antes não eram</p></li>
+<li class="fragment"><p>Desta forma, pode-se aumentar a complexidade do modelo, buscando um maior grau de ajuste</p></li>
+</ul>
+</section>
+<section id="aumentando-a-complexidade-do-modelo-4" class="slide level2">
+<h2>Aumentando a complexidade do modelo</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a>fit11 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit10, .<span class="sc">~</span>. <span class="sc">+</span> Garage <span class="sc">+</span> Baths <span class="sc">+</span> Beds <span class="sc">+</span> Air <span class="sc">+</span> Highway)</span>
+<span id="cb71-2"><a href=""></a><span class="fu">S</span>(fit11)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = log(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality +
+         Pool + Style + Garage + Baths + Beds + Air + Highway, data = homePrices, subset
+         = -c(11, 24, 86, 104, 202, 513))
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      5.526817   0.384582  14.371  &lt; 2e-16 ***
+log(Lot)        -0.869107   0.018350 -47.364  &lt; 2e-16 ***
+log(SqFeet)      0.786353   0.049632  15.844  &lt; 2e-16 ***
+log1p(Age)      -0.121218   0.012913  -9.387  &lt; 2e-16 ***
+QualitySegunda  -0.232166   0.027937  -8.310 8.98e-16 ***
+QualityTerceira -0.275057   0.038463  -7.151 3.06e-12 ***
+Pool             0.110014   0.028544   3.854 0.000131 ***
+Style           -0.016260   0.003645  -4.461 1.01e-05 ***
+Garage           0.017600   0.013490   1.305 0.192587    
+Baths            0.042502   0.011747   3.618 0.000327 ***
+Beds             0.011990   0.009002   1.332 0.183509    
+Air              0.033614   0.021384   1.572 0.116599    
+Highway         -0.107283   0.048185  -2.227 0.026424 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.1555 on 502 degrees of freedom
+Multiple R-squared: 0.9039
+F-statistic: 393.5 on 12 and 502 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+-440.63 -381.22 </code></pre>
+</div>
+</div>
+</section>
+<section id="seleção-de-variáveis-1" class="slide level2">
+<h2>Seleção de Variáveis</h2>
+<ul>
+<li class="fragment"><p>Para um bom modelo preditivo, pode ser conveniente a manutenção de alguma variável, ainda que esta não tenha apresentado significância como as outras</p></li>
+<li class="fragment"><p>No entanto, muitas variáveis não acrescentam poder de explicação ao modelo</p></li>
+<li class="fragment"><p>Um método para aferir quais variáveis devem permanecer ou não no modelo é o método da seleção de variáveis, baseada em critérios de ajuste, como o <span class="math inline">\(R^2_{ajust}\)</span></p></li>
+</ul>
+</section>
+<section id="seleção-de-variáveis-com-r2_ajust" class="slide level2">
+<h2>Seleção de Variáveis com <span class="math inline">\(R^2_{ajust}\)</span></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a><span class="fu">library</span>(leaps)</span>
+<span id="cb73-2"><a href=""></a>a <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(Lot) <span class="sc">+</span> <span class="fu">log</span>(SqFeet) <span class="sc">+</span> <span class="fu">log1p</span>(Age) <span class="sc">+</span> Quality <span class="sc">+</span> Pool <span class="sc">+</span></span>
+<span id="cb73-3"><a href=""></a>         Style <span class="sc">+</span> Garage <span class="sc">+</span> Baths <span class="sc">+</span> Beds <span class="sc">+</span> Air <span class="sc">+</span> Highway, </span>
+<span id="cb73-4"><a href=""></a>         <span class="at">data =</span> homePrices[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">24</span>, <span class="dv">86</span>, <span class="dv">104</span>, <span class="dv">202</span>, <span class="dv">513</span>), ])</span>
+<span id="cb73-5"><a href=""></a><span class="fu">plot</span>(a, <span class="at">scale =</span> <span class="st">"adjr2"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-69-1.png" width="960" class="r-stretch"></section>
+<section id="modelo-final-2" class="slide level2">
+<h2>Modelo Final</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a>fit11 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit10, .<span class="sc">~</span>. <span class="sc">+</span> Baths)</span>
+<span id="cb74-2"><a href=""></a><span class="fu">S</span>(fit11)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = log(PU) ~ log(Lot) + log(SqFeet) + log1p(Age) + Quality +
+         Pool + Style + Baths, data = homePrices, subset = -c(11, 24, 86, 104, 202,
+         513))
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      5.433029   0.373261  14.556  &lt; 2e-16 ***
+log(Lot)        -0.873500   0.018130 -48.180  &lt; 2e-16 ***
+log(SqFeet)      0.816476   0.047664  17.130  &lt; 2e-16 ***
+log1p(Age)      -0.121883   0.012511  -9.742  &lt; 2e-16 ***
+QualitySegunda  -0.233921   0.027732  -8.435 3.48e-16 ***
+QualityTerceira -0.288248   0.038072  -7.571 1.77e-13 ***
+Pool             0.115856   0.028669   4.041 6.15e-05 ***
+Style           -0.016376   0.003633  -4.507 8.17e-06 ***
+Baths            0.049265   0.011408   4.318 1.89e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.1568 on 506 degrees of freedom
+Multiple R-squared: 0.9015
+F-statistic: 579.1 on 8 and 506 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+-436.04 -393.60 </code></pre>
+</div>
+</div>
+</section>
+<section id="poder-de-predição" class="slide level2">
+<h2>Poder de predição</h2>
+
+<img data-src="04_Modelagem_files/figure-revealjs/unnamed-chunk-71-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">Na escala original, o poder de predição do modelo com a variável transformada sempre cai um pouco!</li>
+</ul>
+</section></section>
+<section>
+<section id="equação-de-estimação" class="title-slide slide level1 center">
+<h1>Equação de Estimação</h1>
+
+</section>
+<section id="equação-de-estimação-1" class="slide level2">
+<h2>Equação de Estimação</h2>
+<ul>
+<li class="fragment">A equação de regressão para o modelo final adotado é:
+<ul>
+<li class="fragment"><span class="math display">\[\begin{aligned}
+\ln(PU) = 5,43 - 0,87\ln(Lot) + 0,82\ln(SqFeet) - \\
+0,12\ln(1 + Age) - 0,23\cdot\text{Quality2ª} - 0,29\cdot\text{Quality3ª} + \\
+0,12\cdot\text{Pool}-0,016\cdot Style + 0,05\cdot Baths
+\end{aligned}
+\]</span></li>
+</ul></li>
+<li class="fragment">Exponenciando ambos os lados, chegamos à equação de estimação:
+<ul>
+<li class="fragment"><p><span class="math display">\[\begin{aligned}
+PU = \exp[5,43 - 0,87\ln(Lot) + 0,82\ln(SqFeet) - \\
+0,12\ln(1 + Age) - 0,23\cdot\text{Quality2ª} - 0,29\cdot\text{Quality3ª} + \\
+0,12\cdot\text{Pool}-0,016\cdot Style + 0,05\cdot Baths]
+\end{aligned}
+\]</span></p></li>
+<li class="fragment"><p><span class="math display">\[
+\begin{aligned}
+PU = \exp(5,43)\cdot\exp(-0,87\ln(Lot))\cdot\exp(0,82\ln(SqFeet)) \\
+\exp(-0,12\ln(1 + Age))\cdot \exp(- 0,23\cdot\text{Quality2ª}) \cdot \\
+\exp(- 0,29\cdot\text{Quality3ª}) \cdot \exp(0,12\cdot\text{Pool}) \\
+\cdot\exp(-0,016\cdot Style) \cdot\exp(0,05\cdot Baths)
+\end{aligned}
+\]</span></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="referências" class="slide level2 smaller scrollable">
+<h2>Referências</h2>
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-CRIBARINETO2011" class="csl-entry" role="listitem">
+Cribari-Neto, da Silva, F. 2011. <span>«A new heteroskedasticity-consistent covariance matrix estimator for the linear regression model»</span>. <em>AStA Adv Stat Anal</em> 95: 129–46. <a href="https://doi.org/10.1007/s10182-010-0141-2">https://doi.org/10.1007/s10182-010-0141-2</a>.
+</div>
+<div id="ref-CRIBARINETO2004" class="csl-entry" role="listitem">
+Cribari-Neto, Francisco. 2004. <span>«Asymptotic inference under heteroskedasticity of unknown form»</span>. <em>Computational Statistics &amp; Data Analysis</em> 45 (2): 215–33. https://doi.org/<a href="https://doi.org/10.1016/S0167-9473(02)00366-3">https://doi.org/10.1016/S0167-9473(02)00366-3</a>.
+</div>
+<div id="ref-CRIBARINETO2007" class="csl-entry" role="listitem">
+Cribari-Neto, Francisco, Tatiene C. Souza, e Klaus L. P. Vasconcellos. 2007. <span>«Inference Under Heteroskedasticity and Leveraged Data»</span>. <em>Communications in Statistics - Theory and Methods</em> 36 (10): 1877–88. <a href="https://doi.org/10.1080/03610920601126589">https://doi.org/10.1080/03610920601126589</a>.
+</div>
+<div id="ref-wls2024" class="csl-entry" role="listitem">
+Droubi, Luiz Fernando Palin, e Lutemberg de Araújo Florencio. 2024. <span>«Mínimos Quadrados Ponderados: vantagens e aplicação na Engenharia de Avaliações»</span>. <em>Revista Valorem</em> 1 (1): 33–41. <a href="https://revistavalorem.com/index.php/home/article/view/24">https://revistavalorem.com/index.php/home/article/view/24</a>.
+</div>
+<div id="ref-LongErvin" class="csl-entry" role="listitem">
+Long, J. Scott, e Laurie H. Ervin. 2000. <span>«Using Heteroscedasticity Consistent Standard Errors in the Linear Regression Model»</span>. <em>The American Statistician</em> 54 (3): 217–24.
+</div>
+<div id="ref-MacKinnon" class="csl-entry" role="listitem">
+MacKinnon, James, e Halbert White. 1985. <span>«Some heteroskedasticity-consistent covariance matrix estimators with improved finite sample properties»</span>. <em>Journal of Econometrics</em> 29 (3): 305–25. <a href="https://EconPapers.repec.org/RePEc:eee:econom:v:29:y:1985:i:3:p:305-325">https://EconPapers.repec.org/RePEc:eee:econom:v:29:y:1985:i:3:p:305-325</a>.
+</div>
+<div id="ref-matloff2009" class="csl-entry" role="listitem">
+Matloff, Norman Saul. 2009. <em>From <span>A</span>lgorithms to <span>Z</span>-<span>S</span>cores: Probabilistic and Statistical Modeling in Computer Science</em>. Davis, California: Orange Grove Books. <a href="http://heather.cs.ucdavis.edu/~matloff/132/PLN/probstatbook/ProbStatBook.pdf">http://heather.cs.ucdavis.edu/~matloff/132/PLN/probstatbook/ProbStatBook.pdf</a>.
+</div>
+<div id="ref-ROMANO20171" class="csl-entry" role="listitem">
+Romano, Joseph P., e Michael Wolf. 2017. <span>«Resurrecting weighted least squares»</span>. <em>Journal of Econometrics</em> 197 (1): 1–19. https://doi.org/<a href="https://doi.org/10.1016/j.jeconom.2016.10.003">https://doi.org/10.1016/j.jeconom.2016.10.003</a>.
+</div>
+<div id="ref-Stigler244" class="csl-entry" role="listitem">
+Stigler, Stephen M. s.d. <span>«Lecture Notes in Statistics 244: Statistical Theory and Methods I»</span>. University of Chicago. <a href="https://www.stat.uchicago.edu/~stigler/Courses.shtml">https://www.stat.uchicago.edu/~stigler/Courses.shtml</a>.
+</div>
+<div id="ref-Tofalis2008" class="csl-entry" role="listitem">
+Tofallis, Chris. 2008. <span>«Least Squares Percentage Regression»</span>. <em>Journal of Modern Applied Statistical Methods</em> 7 (novembro): 526–34. <a href="https://doi.org/10.22237/jmasm/1225513020">https://doi.org/10.22237/jmasm/1225513020</a>.
+</div>
+<div id="ref-White1980" class="csl-entry" role="listitem">
+White, Halbert. 1980. <span>«A Heteroskedasticity-Consistent Covariance Matrix Estimator and a Direct Test for Heteroskedasticity»</span>. <em>Econometrica</em> 48 (4): 817–38. <a href="http://www.jstor.org/stable/1912934">http://www.jstor.org/stable/1912934</a>.
+</div>
+</div>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="img/logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>VALORÍSTICA</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="04_Modelagem_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="04_Modelagem_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="04_Modelagem_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="04_Modelagem_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="04_Modelagem_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="04_Modelagem_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="04_Modelagem_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="04_Modelagem_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="04_Modelagem_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="04_Modelagem_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="text/javascript" charset="utf-8">
+
+      function add_custom_footer() {
+
+        let title_slide = document.querySelector("section#title-slide");
+
+        let title_slide_footer = title_slide.getAttribute('data-footer');
+
+        let footer = document.querySelector('div.footer p');
+
+        let global_footer_text = footer.innerHTML;
+
+    
+
+        if (title_slide.classList.contains('present')) {
+
+          footer.innerHTML = title_slide_footer;
+
+        }
+
+    
+
+        Reveal.on( 'slidechanged' , event => {
+
+            if (event.currentSlide.matches('#title-slide')) {
+
+              footer.innerHTML = title_slide_footer;
+
+            } else {
+
+              footer.innerHTML = global_footer_text;
+
+            }
+
+          });
+
+      };
+
+    
+
+      window.addEventListener("load", (event) => {
+
+        add_custom_footer();
+
+      });
+
+    </script>
+
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copiada");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copiada");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
