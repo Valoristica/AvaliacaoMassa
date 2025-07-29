@@ -1,0 +1,7 @@
+<OGRVRTDataSource>
+	<OGRVRTLayer name="2_ZM_z_Class">
+		<SrcDataSource>2_ZM_z_Class.csv</SrcDataSource>
+		<GeometryType>wkbPoint</GeometryType>
+		<GeometryField encoding="PointFromColumns" x="CoordX_SM" y="CoordY_SM" z="Classe"/>
+	</OGRVRTLayer>
+</OGRVRTDataSource>

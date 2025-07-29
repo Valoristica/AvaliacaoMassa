@@ -67,7 +67,7 @@ plot(lotes[, "iq"])
 # ==============================================================================
 df <-
   read.table(
-    'kO/cidade_ecologica.csv',
+    'KO/cidade_ecologica.csv',
     encoding = "UTF-8",
     header = T,
     sep = ";" ,
@@ -78,6 +78,11 @@ df <-
 ## Transformar os dados em um objeto espacial sf
 # ==============================================================================
 df_sf <- st_as_sf(df, coords = c("x", "y"), crs = 31984)
+
+# ==============================================================================
+## Salvar dados espaciais no disco
+# ==============================================================================
+st_write(df_sf, "./KO/Cidade_Ecologiaca_VU.gpkg")
 
 # ==============================================================================
 # Criar uma grade (grid) para a Área de contorno

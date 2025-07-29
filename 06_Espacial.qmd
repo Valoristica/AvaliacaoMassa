@@ -100,21 +100,249 @@ homePrices <- within(homePrices, {
 :::
 ::::
 
-## Criando dados espaciais no R
+-[Link](https://www.emilyburchfield.org/courses/gsa/spatial_regression_lab)
+
+# Problemas com a Regressão Espacial
+
+## Problemas
+
+- São muitas possibilidades de modelos e muitas opções em cada um deles (*tunning*)
+  - Qual tipo de modelo utilizar?
+  - Como montar a matriz de pesos?
+
+# Fluxograma
+
+## Fluxograma
+
+![Fluxograma [@valorem2024Augusto, 23]](./img/Fluxograma_Espacial.png)
+  
+
+## Artigo
+
+[Artigo @valorem2024Augusto](https://revistavalorem.com/index.php/home/article/view/23/51)
+
+# Verificação da dependência espacial
+
+## Diagrama de Moran
+
+![Diagrama de Moran](./img/Diagrama_Moran.png)
+
+## Teste I de Moran
+
+- Teste de autocorrelação dos resíduos análogo ao teste de Durbin-Watson, porém 
+em versão bidimensional:
+  - $$I = \frac{e'We}{e'e}$$
+  - Onde:
+    - $\mathbf e = \mathbf y − \pmb{\beta X}$;
+    - $\pmb{\hat \beta} = \mathbf{(X'X)^{-1}X'y}$ e;
+    - $\mathbf W$ é a matriz de pesos espaciais.
+
+- A estatística em pauta depende da escolha da matriz W
+
+## Teste do multiplicador de Lagrange
+
+- Embora o teste de Moran tenha a interessante característica de ter um alto 
+poder contra uma ampla gama de alternativas (ANSELIN *apud* @sarmiento-barbieri)
+  - o teste não dá parâmetros para a escolha de modelos alternativos.
+
+- Por outro lado, o teste do multiplicador de Lagrange especifica as hipóteses 
+alternativas de autocorrelação espacial da variável dependente e da 
+autocorrelação espacial dos resíduos, o que pode ser útil nestes casos.
+
+# Exemplo
+
+## Dados
+
+- @zilli2020:
+
+. . . 
 
 ```{r}
 #| echo: true
-dados <-
-  read.table(
-    'kO/cidade_ecologica.csv',
-    encoding = "UTF-8",
-    header = T,
-    sep = ";" ,
-    dec = ","
-  )
-colnames(dados)
+dados <- readRDS("./data/zilli_2020.rds")
+rownames(dados) <- paste('Id', 1:nrow(dados))
+head(dados)
 ```
 
-  
+## Modelo
+
+```{r}
+#| echo: true
+fit <- lm(log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB, data = dados)
+summary(fit)
+```
+
+
+## Dependência espacial
+
+## Diagrama de Moran
+
+```{r}
+#| echo: true
+library(spdep)
+## Criação da Matriz de Pesos Espaciais (W):
+# nb <- dnearneigh(st_coordinates(dados), d1= 500, d2 = 1000)
+knn <- knearneigh(st_coordinates(dados), k = 20)
+nb <- knn2nb(knn)
+W <- nb2listw(nb)
+moran.plot(residuals(fit), W)
+```
+
+
+## Teste de Moran
+
+```{r}
+#| echo: true
+library(sf)
+lm.morantest(model = fit, listw = W, alternative = "two.sided")
+```
+
+## Escore de Rao (Multiplicador de Lagrange)
+
+- Modelo Espacial do Erro:
+
+. . . 
+
+```{r}
+#| echo: true
+lm.RStests(fit, W, test = "RSerr")
+```
+
+- Modelo da Defasagem Espacial:
+
+. . . 
+
+```{r}
+#| echo: true
+lm.RStests(fit, W, test = "RSlag")
+```
+
+
+## Escore de Rao (Multiplicador de Lagrange)
+
+- Modelo Espacial do Erro:
+
+. . . 
+
+```{r}
+#| echo: true
+lm.RStests(fit, W, test = "adjRSerr")
+```
+
+- Modelo da Defasagem Espacial:
+
+. . . 
+
+```{r}
+#| echo: true
+lm.RStests(fit, W, test = "adjRSlag")
+```
+
+- Modelo Espacial do Erro!
+
+## Ajuste do modelo
+
+- Incluindo uma variável que agrupa os dados por bairro:
+
+. . . 
+
+
+```{r}
+#| echo: true
+fit1 <- update(fit, .~. + BRO)
+summary(fit1)
+```
+
+## Diagrama de Moran
+
+```{r}
+#| echo: true
+moran.plot(residuals(fit1), W)
+```
+
+## Teste de Moran
+
+```{r}
+#| echo: true
+lm.morantest(model = fit1, listw = W, alternative = "two.sided")
+```
+
+## Escore de Rao (Multiplicador de Lagrange)
+
+- Modelo Espacial do Erro:
+
+. . . 
+
+```{r}
+#| echo: true
+lm.RStests(fit1, W, test = "RSerr")
+```
+
+- Modelo da Defasagem Espacial:
+
+. . . 
+
+
+```{r}
+#| echo: true
+lm.RStests(fit1, W, test = "RSlag")
+```
+
+# Ajuste
+
+## Modelo Espacial do Erro
+
+```{r}
+#| echo: true
+library(spatialreg)
+SEM <- errorsarlm(log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB,
+                  data = dados, W)
+moran.plot(residuals(SEM), W)
+```
+
+## Comparação de Coeficientes
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| label: tbl-OLS
+#| tbl-cap: "Coeficientes do Modelo MQO."
+library(broom)
+fit |>
+  tidy() |>
+  kable(digits = 3, format.args = list(big.mark = ".", decimal.mark = ",")) |>
+  kable_styling(font_size = 20)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| label: tbl-SEM
+#| tbl-cap: "Coeficientes do Modelo Espacial do Erro."
+SEM |>
+  tidy() |>
+  kable(digits = 3, format.args = list(big.mark = ".", decimal.mark = ",")) |>
+  kable_styling(font_size = 20)
+```
+
+:::
+::::
+
+
+- Reparem como:
+  - Os coeficientes diferem, ainda que não muito
+  - Os erros-padrões dos coeficientes são, em geral, menores no modelo espacial
+
+## Conclusão
+
+- A Regressão Espacial é um tema rico, cheio de possibilidades
+- Porém, há casos em que ela pode ser até dispensada
+- A dependência espacial pode ser tratada simplesmente agrupando em diversos
+grupos os dados heterogêneos!
+  - Ver @zilli2020 [p. 114]
 
 ## Referências

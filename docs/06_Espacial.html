@@ -94,7 +94,27 @@
     code span.va { color: #111111; } /* Variable */
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="06_Espacial_files/libs/revealjs/dist/theme/quarto-edcff130eb01ac5e239e676278bbed8d.css">
   <link href="06_Espacial_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="06_Espacial_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -188,6 +208,10 @@
       margin-right: 0; 
     }
   </style>
+  <script src="06_Espacial_files/libs/kePrint-0.0.1/kePrint.js"></script>
+
+  <link href="06_Espacial_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -209,6 +233,17 @@ Luiz Droubi
 </div>
 
   <p class="date">29 de julho de 2025</p>
+</section><section id="TOC">
+<nav role="doc-toc"> 
+<h2 id="toc-title">Índice</h2>
+<ul>
+<li class="fragment"><a href="#/problemas-com-a-regressão-espacial" id="/toc-problemas-com-a-regressão-espacial">Problemas com a Regressão Espacial</a></li>
+<li class="fragment"><a href="#/fluxograma" id="/toc-fluxograma">Fluxograma</a></li>
+<li class="fragment"><a href="#/verificação-da-dependência-espacial" id="/toc-verificação-da-dependência-espacial">Verificação da dependência espacial</a></li>
+<li class="fragment"><a href="#/exemplo" id="/toc-exemplo">Exemplo</a></li>
+<li class="fragment"><a href="#/ajuste" id="/toc-ajuste">Ajuste</a></li>
+</ul>
+</nav>
 </section>
 <section id="introdução" class="slide level2">
 <h2>Introdução</h2>
@@ -283,29 +318,607 @@ Luiz Droubi
 </figure>
 </div>
 </div></div>
+<p>-<a href="https://www.emilyburchfield.org/courses/gsa/spatial_regression_lab">Link</a></p>
 </div>
 </section>
-<section id="criando-dados-espaciais-no-r" class="slide level2">
-<h2>Criando dados espaciais no R</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>dados <span class="ot">&lt;-</span></span>
-<span id="cb1-2"><a href=""></a>  <span class="fu">read.table</span>(</span>
-<span id="cb1-3"><a href=""></a>    <span class="st">'kO/cidade_ecologica.csv'</span>,</span>
-<span id="cb1-4"><a href=""></a>    <span class="at">encoding =</span> <span class="st">"UTF-8"</span>,</span>
-<span id="cb1-5"><a href=""></a>    <span class="at">header =</span> T,</span>
-<span id="cb1-6"><a href=""></a>    <span class="at">sep =</span> <span class="st">";"</span> ,</span>
-<span id="cb1-7"><a href=""></a>    <span class="at">dec =</span> <span class="st">","</span></span>
-<span id="cb1-8"><a href=""></a>  )</span>
-<span id="cb1-9"><a href=""></a><span class="fu">colnames</span>(dados)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "id" "x"  "y"  "z" </code></pre>
-</div>
-</div>
-</section>
-<section id="referências" class="slide level2">
-<h2>Referências</h2>
+<section>
+<section id="problemas-com-a-regressão-espacial" class="title-slide slide level1 center">
+<h1>Problemas com a Regressão Espacial</h1>
 
 </section>
+<section id="problemas" class="slide level2">
+<h2>Problemas</h2>
+<ul>
+<li class="fragment">São muitas possibilidades de modelos e muitas opções em cada um deles (<em>tunning</em>)
+<ul>
+<li class="fragment">Qual tipo de modelo utilizar?</li>
+<li class="fragment">Como montar a matriz de pesos?</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="fluxograma" class="title-slide slide level1 center">
+<h1>Fluxograma</h1>
+
+</section>
+<section id="fluxograma-1" class="slide level2">
+<h2>Fluxograma</h2>
+
+<img data-src="./img/Fluxograma_Espacial.png" class="r-stretch quarto-figure-center"><p class="caption">Fluxograma <span class="citation" data-cites="valorem2024Augusto">(<a href="#/referências" role="doc-biblioref" onclick="">Oliveira, Bandeira, e Távora 2024, 23</a>)</span></p></section>
+<section id="artigo" class="slide level2">
+<h2>Artigo</h2>
+<p><a href="https://revistavalorem.com/index.php/home/article/view/23/51">Artigo <span class="citation" data-cites="valorem2024Augusto">Oliveira, Bandeira, e Távora (<span>2024</span>)</span></a></p>
+</section></section>
+<section>
+<section id="verificação-da-dependência-espacial" class="title-slide slide level1 center">
+<h1>Verificação da dependência espacial</h1>
+
+</section>
+<section id="diagrama-de-moran" class="slide level2">
+<h2>Diagrama de Moran</h2>
+
+<img data-src="./img/Diagrama_Moran.png" class="r-stretch quarto-figure-center"><p class="caption">Diagrama de Moran</p></section>
+<section id="teste-i-de-moran" class="slide level2">
+<h2>Teste I de Moran</h2>
+<ul>
+<li class="fragment">Teste de autocorrelação dos resíduos análogo ao teste de Durbin-Watson, porém em versão bidimensional:
+<ul>
+<li class="fragment"><span class="math display">\[I = \frac{e'We}{e'e}\]</span></li>
+<li class="fragment">Onde:
+<ul>
+<li class="fragment"><span class="math inline">\(\mathbf e = \mathbf y − \pmb{\beta X}\)</span>;</li>
+<li class="fragment"><span class="math inline">\(\pmb{\hat \beta} = \mathbf{(X'X)^{-1}X'y}\)</span> e;</li>
+<li class="fragment"><span class="math inline">\(\mathbf W\)</span> é a matriz de pesos espaciais.</li>
+</ul></li>
+</ul></li>
+<li class="fragment">A estatística em pauta depende da escolha da matriz W</li>
+</ul>
+</section>
+<section id="teste-do-multiplicador-de-lagrange" class="slide level2">
+<h2>Teste do multiplicador de Lagrange</h2>
+<ul>
+<li class="fragment">Embora o teste de Moran tenha a interessante característica de ter um alto poder contra uma ampla gama de alternativas (ANSELIN <em>apud</em> <span class="citation" data-cites="sarmiento-barbieri">SARMIENTO-BARBIERI (<a href="#/referências" role="doc-biblioref" onclick="">2016</a>)</span>)
+<ul>
+<li class="fragment">o teste não dá parâmetros para a escolha de modelos alternativos.</li>
+</ul></li>
+<li class="fragment">Por outro lado, o teste do multiplicador de Lagrange especifica as hipóteses alternativas de autocorrelação espacial da variável dependente e da autocorrelação espacial dos resíduos, o que pode ser útil nestes casos.</li>
+</ul>
+</section></section>
+<section>
+<section id="exemplo" class="title-slide slide level1 center">
+<h1>Exemplo</h1>
+
+</section>
+<section id="dados" class="slide level2">
+<h2>Dados</h2>
+<ul>
+<li class="fragment"><span class="citation" data-cites="zilli2020">Zilli (<a href="#/referências" role="doc-biblioref" onclick="">2020</a>)</span>:</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>dados <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"./data/zilli_2020.rds"</span>)</span>
+<span id="cb1-2"><a href=""></a><span class="fu">rownames</span>(dados) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">'Id'</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(dados))</span>
+<span id="cb1-3"><a href=""></a><span class="fu">head</span>(dados)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6 features and 17 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 741383 ymin: 6945636 xmax: 742745 ymax: 6946217
+Projected CRS: SIRGAS 2000 / UTM zone 22S
+# A tibble: 6 × 18
+      PT    PU    AP  DPXV  DSBM  DSIG  DCTC  DABM    ND    NB    NS    NG MO   
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;
+1 9.20e5  9485    97  1642   876  6763  7022   367     3     3     1     1 MO   
+2 7.00e5  9589    73  2033  1266  6916  7175   807     2     3     2     2 N    
+3 7.5 e5  6250   120  1122  1324  7211  7470   803     2     4     2     2 N    
+4 1.15e6  9426   122  1612  1064  6952  7211   136     3     3     1     1 SM   
+5 7.00e5  6364   110  1532   936  6824  7083   116     3     2     1     1 MO   
+6 6.30e5  7500    84  2376  1668  7543  7802   143     2     2     0     1 N    
+# ℹ 5 more variables: PSN &lt;fct&gt;, CH &lt;fct&gt;, PC &lt;fct&gt;, BRO &lt;fct&gt;,
+#   geometry &lt;POINT [m]&gt;</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="modelo" class="slide level2">
+<h2>Modelo</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(AP) <span class="sc">+</span> <span class="fu">log</span>(DABM) <span class="sc">+</span> PC <span class="sc">+</span> NG <span class="sc">+</span> ND <span class="sc">+</span> NB, <span class="at">data =</span> dados)</span>
+<span id="cb3-2"><a href=""></a><span class="fu">summary</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB, 
+    data = dados)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.44286 -0.12126 -0.01102  0.11762  0.47236 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 10.68088    0.25580  41.755  &lt; 2e-16 ***
+log(AP)     -0.41057    0.05632  -7.289 5.73e-12 ***
+log(DABM)   -0.11244    0.01485  -7.571 1.05e-12 ***
+PCM          0.24001    0.03144   7.635 7.12e-13 ***
+PCA          0.42688    0.03397  12.566  &lt; 2e-16 ***
+NG           0.18961    0.02159   8.784 4.83e-16 ***
+ND           0.06536    0.02256   2.896  0.00416 ** 
+NB           0.05146    0.01712   3.006  0.00296 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.1663 on 217 degrees of freedom
+Multiple R-squared:  0.7547,    Adjusted R-squared:  0.7467 
+F-statistic: 95.35 on 7 and 217 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="dependência-espacial" class="slide level2">
+<h2>Dependência espacial</h2>
+</section>
+<section id="diagrama-de-moran-1" class="slide level2">
+<h2>Diagrama de Moran</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(spdep)</span>
+<span id="cb5-2"><a href=""></a><span class="do">## Criação da Matriz de Pesos Espaciais (W):</span></span>
+<span id="cb5-3"><a href=""></a><span class="co"># nb &lt;- dnearneigh(st_coordinates(dados), d1= 500, d2 = 1000)</span></span>
+<span id="cb5-4"><a href=""></a>knn <span class="ot">&lt;-</span> <span class="fu">knearneigh</span>(<span class="fu">st_coordinates</span>(dados), <span class="at">k =</span> <span class="dv">20</span>)</span>
+<span id="cb5-5"><a href=""></a>nb <span class="ot">&lt;-</span> <span class="fu">knn2nb</span>(knn)</span>
+<span id="cb5-6"><a href=""></a>W <span class="ot">&lt;-</span> <span class="fu">nb2listw</span>(nb)</span>
+<span id="cb5-7"><a href=""></a><span class="fu">moran.plot</span>(<span class="fu">residuals</span>(fit), W)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="06_Espacial_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
+<section id="teste-de-moran" class="slide level2">
+<h2>Teste de Moran</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">library</span>(sf)</span>
+<span id="cb6-2"><a href=""></a><span class="fu">lm.morantest</span>(<span class="at">model =</span> fit, <span class="at">listw =</span> W, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Global Moran I for regression residuals
+
+data:  
+model: lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB,
+data = dados)
+weights: W
+
+Moran I statistic standard deviate = 6.7898, p-value = 1.123e-11
+alternative hypothesis: two.sided
+sample estimates:
+Observed Moran I      Expectation         Variance 
+    0.1127075710    -0.0091985602     0.0003223618 </code></pre>
+</div>
+</div>
+</section>
+<section id="escore-de-rao-multiplicador-de-lagrange" class="slide level2">
+<h2>Escore de Rao (Multiplicador de Lagrange)</h2>
+<ul>
+<li class="fragment">Modelo Espacial do Erro:</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">lm.RStests</span>(fit, W, <span class="at">test =</span> <span class="st">"RSerr"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Rao's score (a.k.a Lagrange multiplier) diagnostics for spatial
+    dependence
+
+data:  
+model: lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB,
+data = dados)
+test weights: W
+
+RSerr = 31.007, df = 1, p-value = 2.571e-08</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Modelo da Defasagem Espacial:</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">lm.RStests</span>(fit, W, <span class="at">test =</span> <span class="st">"RSlag"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Rao's score (a.k.a Lagrange multiplier) diagnostics for spatial
+    dependence
+
+data:  
+model: lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB,
+data = dados)
+test weights: W
+
+RSlag = 6.3396, df = 1, p-value = 0.01181</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="escore-de-rao-multiplicador-de-lagrange-1" class="slide level2">
+<h2>Escore de Rao (Multiplicador de Lagrange)</h2>
+<ul>
+<li class="fragment">Modelo Espacial do Erro:</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">lm.RStests</span>(fit, W, <span class="at">test =</span> <span class="st">"adjRSerr"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Rao's score (a.k.a Lagrange multiplier) diagnostics for spatial
+    dependence
+
+data:  
+model: lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB,
+data = dados)
+test weights: W
+
+adjRSerr = 24.847, df = 1, p-value = 6.207e-07</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Modelo da Defasagem Espacial:</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">lm.RStests</span>(fit, W, <span class="at">test =</span> <span class="st">"adjRSlag"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Rao's score (a.k.a Lagrange multiplier) diagnostics for spatial
+    dependence
+
+data:  
+model: lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB,
+data = dados)
+test weights: W
+
+adjRSlag = 0.17934, df = 1, p-value = 0.6719</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Modelo Espacial do Erro!</li>
+</ul>
+</div>
+</section>
+<section id="ajuste-do-modelo" class="slide level2">
+<h2>Ajuste do modelo</h2>
+<ul>
+<li class="fragment">Incluindo uma variável que agrupa os dados por bairro:</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>fit1 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit, .<span class="sc">~</span>. <span class="sc">+</span> BRO)</span>
+<span id="cb16-2"><a href=""></a><span class="fu">summary</span>(fit1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB + 
+    BRO, data = dados)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.40933 -0.11117 -0.00731  0.10973  0.40254 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   10.72397    0.24735  43.355  &lt; 2e-16 ***
+log(AP)       -0.41843    0.05305  -7.888 1.54e-13 ***
+log(DABM)     -0.10199    0.01748  -5.835 1.96e-08 ***
+PCM            0.23727    0.02962   8.011 7.12e-14 ***
+PCA            0.43453    0.03212  13.529  &lt; 2e-16 ***
+NG             0.19379    0.02033   9.530  &lt; 2e-16 ***
+ND             0.06640    0.02124   3.126 0.002019 ** 
+NB             0.04251    0.01623   2.619 0.009440 ** 
+BROAgronomica -0.10388    0.03004  -3.459 0.000655 ***
+BROTrindade   -0.12706    0.02896  -4.387 1.80e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.1565 on 215 degrees of freedom
+Multiple R-squared:  0.7846,    Adjusted R-squared:  0.7756 
+F-statistic: 87.04 on 9 and 215 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="diagrama-de-moran-2" class="slide level2">
+<h2>Diagrama de Moran</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">moran.plot</span>(<span class="fu">residuals</span>(fit1), W)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="06_Espacial_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+<section id="teste-de-moran-1" class="slide level2">
+<h2>Teste de Moran</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">lm.morantest</span>(<span class="at">model =</span> fit1, <span class="at">listw =</span> W, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Global Moran I for regression residuals
+
+data:  
+model: lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB +
+BRO, data = dados)
+weights: W
+
+Moran I statistic standard deviate = 0.94228, p-value = 0.346
+alternative hypothesis: two.sided
+sample estimates:
+Observed Moran I      Expectation         Variance 
+   -0.0011730484    -0.0164227367     0.0002619137 </code></pre>
+</div>
+</div>
+</section>
+<section id="escore-de-rao-multiplicador-de-lagrange-2" class="slide level2">
+<h2>Escore de Rao (Multiplicador de Lagrange)</h2>
+<ul>
+<li class="fragment">Modelo Espacial do Erro:</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">lm.RStests</span>(fit1, W, <span class="at">test =</span> <span class="st">"RSerr"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Rao's score (a.k.a Lagrange multiplier) diagnostics for spatial
+    dependence
+
+data:  
+model: lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB +
+BRO, data = dados)
+test weights: W
+
+RSerr = 0.0033588, df = 1, p-value = 0.9538</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Modelo da Defasagem Espacial:</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">lm.RStests</span>(fit1, W, <span class="at">test =</span> <span class="st">"RSlag"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Rao's score (a.k.a Lagrange multiplier) diagnostics for spatial
+    dependence
+
+data:  
+model: lm(formula = log(PU) ~ log(AP) + log(DABM) + PC + NG + ND + NB +
+BRO, data = dados)
+test weights: W
+
+RSlag = 1.6032, df = 1, p-value = 0.2055</code></pre>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="ajuste" class="title-slide slide level1 center">
+<h1>Ajuste</h1>
+
+</section>
+<section id="modelo-espacial-do-erro" class="slide level2">
+<h2>Modelo Espacial do Erro</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">library</span>(spatialreg)</span>
+<span id="cb25-2"><a href=""></a>SEM <span class="ot">&lt;-</span> <span class="fu">errorsarlm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(AP) <span class="sc">+</span> <span class="fu">log</span>(DABM) <span class="sc">+</span> PC <span class="sc">+</span> NG <span class="sc">+</span> ND <span class="sc">+</span> NB,</span>
+<span id="cb25-3"><a href=""></a>                  <span class="at">data =</span> dados, W)</span>
+<span id="cb25-4"><a href=""></a><span class="fu">moran.plot</span>(<span class="fu">residuals</span>(SEM), W)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="06_Espacial_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
+<section id="comparação-de-coeficientes" class="slide level2">
+<h2>Comparação de Coeficientes</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div id="tbl-OLS" class="cell quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-OLS-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;1: Coeficientes do Modelo MQO.
+</figcaption>
+<div aria-describedby="tbl-OLS-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table do-not-create-environment cell caption-top" data-quarto-postprocess="true" style="font-size: 20px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">estimate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">std.error</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">10,681</td>
+<td style="text-align: right;">0,256</td>
+<td style="text-align: right;">41,755</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log(AP)</td>
+<td style="text-align: right;">-0,411</td>
+<td style="text-align: right;">0,056</td>
+<td style="text-align: right;">-7,289</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log(DABM)</td>
+<td style="text-align: right;">-0,112</td>
+<td style="text-align: right;">0,015</td>
+<td style="text-align: right;">-7,571</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCM</td>
+<td style="text-align: right;">0,240</td>
+<td style="text-align: right;">0,031</td>
+<td style="text-align: right;">7,635</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PCA</td>
+<td style="text-align: right;">0,427</td>
+<td style="text-align: right;">0,034</td>
+<td style="text-align: right;">12,566</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NG</td>
+<td style="text-align: right;">0,190</td>
+<td style="text-align: right;">0,022</td>
+<td style="text-align: right;">8,784</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ND</td>
+<td style="text-align: right;">0,065</td>
+<td style="text-align: right;">0,023</td>
+<td style="text-align: right;">2,896</td>
+<td style="text-align: right;">0,004</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NB</td>
+<td style="text-align: right;">0,051</td>
+<td style="text-align: right;">0,017</td>
+<td style="text-align: right;">3,006</td>
+<td style="text-align: right;">0,003</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div id="tbl-SEM" class="cell quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-SEM-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;2: Coeficientes do Modelo Espacial do Erro.
+</figcaption>
+<div aria-describedby="tbl-SEM-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table do-not-create-environment cell caption-top" data-quarto-postprocess="true" style="font-size: 20px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">estimate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">std.error</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">10,884</td>
+<td style="text-align: right;">0,269</td>
+<td style="text-align: right;">40,481</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log(AP)</td>
+<td style="text-align: right;">-0,445</td>
+<td style="text-align: right;">0,053</td>
+<td style="text-align: right;">-8,363</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log(DABM)</td>
+<td style="text-align: right;">-0,120</td>
+<td style="text-align: right;">0,022</td>
+<td style="text-align: right;">-5,427</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCM</td>
+<td style="text-align: right;">0,240</td>
+<td style="text-align: right;">0,029</td>
+<td style="text-align: right;">8,220</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PCA</td>
+<td style="text-align: right;">0,436</td>
+<td style="text-align: right;">0,031</td>
+<td style="text-align: right;">13,954</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NG</td>
+<td style="text-align: right;">0,205</td>
+<td style="text-align: right;">0,020</td>
+<td style="text-align: right;">10,033</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ND</td>
+<td style="text-align: right;">0,064</td>
+<td style="text-align: right;">0,021</td>
+<td style="text-align: right;">3,038</td>
+<td style="text-align: right;">0,002</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NB</td>
+<td style="text-align: right;">0,040</td>
+<td style="text-align: right;">0,016</td>
+<td style="text-align: right;">2,504</td>
+<td style="text-align: right;">0,012</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lambda</td>
+<td style="text-align: right;">0,562</td>
+<td style="text-align: right;">0,119</td>
+<td style="text-align: right;">4,726</td>
+<td style="text-align: right;">0,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div></div>
+<ul>
+<li class="fragment">Reparem como:
+<ul>
+<li class="fragment">Os coeficientes diferem, ainda que não muito</li>
+<li class="fragment">Os erros-padrões dos coeficientes são, em geral, menores no modelo espacial</li>
+</ul></li>
+</ul>
+</section>
+<section id="conclusão" class="slide level2">
+<h2>Conclusão</h2>
+<ul>
+<li class="fragment">A Regressão Espacial é um tema rico, cheio de possibilidades</li>
+<li class="fragment">Porém, há casos em que ela pode ser até dispensada</li>
+<li class="fragment">A dependência espacial pode ser tratada simplesmente agrupando em diversos grupos os dados heterogêneos!
+<ul>
+<li class="fragment">Ver <span class="citation" data-cites="zilli2020">Zilli (<a href="#/referências" role="doc-biblioref" onclick="">2020, 114</a>)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="referências" class="slide level2 smaller scrollable">
+<h2>Referências</h2>
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-valorem2024Augusto" class="csl-entry" role="listitem">
+Oliveira, Antônio Augusto Ferreira de, Sandro Ricardo Vasconcelos Bandeira, e Victor Jucá Távora. 2024. <span>«Mass appraisal of urban land with homogenization factors: a spatial models-based approach»</span>. <em>Revista Valorem</em> 1 (1): 16–32. <a href="https://revistavalorem.com/index.php/home/article/view/23">https://revistavalorem.com/index.php/home/article/view/23</a>.
+</div>
+<div id="ref-sarmiento-barbieri" class="csl-entry" role="listitem">
+SARMIENTO-BARBIERI, Ignacio. 2016. <em>An Introduction to Spatial Econometrics in R</em>. Illinois: University of Illinois. <a href="http://www.econ.uiuc.edu/~lab/workshop/Spatial_in_R.html">http://www.econ.uiuc.edu/~lab/workshop/Spatial_in_R.html</a>.
+</div>
+<div id="ref-zilli2020" class="csl-entry" role="listitem">
+Zilli, Carlos Augusto. 2020. <span>«Regressão geograficamente ponderada aplicada na avaliação em massa de imóveis urbanos.»</span> Dissertação de mestrado. Florianópolis, SC: Universidade Federal de Santa Catarina.
+</div>
+</div>
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="img/logo.png" class="slide-logo"></p>

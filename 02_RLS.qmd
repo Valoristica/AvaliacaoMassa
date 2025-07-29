@@ -497,13 +497,90 @@ shapiro.test(rstandard(fit))
   - No teste de Shapiro-Wilk a hipótese nula é de que há normalidade!
   - Testes de hipótese são confusos!
 
+## É necessário testar?
+
+```{r}
+#| echo: true
+library(lattice)
+library(latticeExtra)
+qqmath(rstandard(fit), aspect = "fill", distribution = qnorm,
+       ylab = "Resíduos Padronizados", xlab = "Quantis da Distribuição Normal",
+       prepanel = prepanel.qqmathline,
+        panel = function(x, ...) {
+          panel.qqmathline(x, ...)
+          panel.qqmath(x, ...)
+})
+```
+
+- É notório que a normalidade não está adequada!
+
+## Aparte: como funcionam os Gráficos QQ
+
+```{r}
+#| label: fig-dataTypes
+#| layout-ncol: 2
+#| fig-cap: "Visualização de distribuição por histogramas e gráficos QQ."
+#| fig-subcap: 
+#|  - "Distribuição Normal"
+#|  - "Distribuição Normal"
+#|  - "Dados concentrados no centro."
+#|  - "Dados concentrados no centro."
+#|  - "Distribuição Assimétrica"
+#|  - "Distribuição Assimétrica"
+library(appraiseR)
+library(lattice)
+library(latticeExtra)
+set.seed(3)
+x <- rnorm(1000)
+# Hist(x, NormalOverlay = TRUE)
+histogram(x, type = "density", 
+          panel = function(...){
+  panel.histogram(...)
+  panel.mathdensity(dmath = dnorm, args = list(mean=0, sd=1),
+                    col.line = "red", lwd = 2)
+})
+# qqnorm(x); qqline(x, col = 2)
+qqmath(x, col.line = "red",
+       panel = function(x, ...){
+        panel.qqmathline(x, ...)
+        panel.qqmath(x, ...)
+       })
+y <- rt(1000, df = 3)
+# Hist(y, NormalOverlay = TRUE)
+histogram(y, type = "density", 
+          panel = function(...){
+  panel.histogram(...)
+  panel.mathdensity(dmath = dnorm, args = list(mean=0, sd=3),
+                    col.line = "red", lwd = 2)
+})
+# qqnorm(y); qqline(y, col = 2)
+qqmath(y, col.line = "red",
+       panel = function(x, ...){
+        panel.qqmathline(x, ...)
+        panel.qqmath(x, ...)
+       })
+z <- rlnorm(1000, meanlog = 2, sdlog = .5)
+# Hist(z, NormalOverlay = TRUE)
+histogram(z, type = "density", 
+          panel = function(...){
+  panel.histogram(...)
+  panel.mathdensity(dmath = dnorm, args = list(mean=10, sd=4),
+                    col.line = "red", lwd = 2)
+})
+# qqnorm(z); qqline(z, col = 2)
+qqmath(z, col.line = "red",
+       panel = function(x, ...){
+        panel.qqmathline(x, ...)
+        panel.qqmath(x, ...)
+       })
+```
 
 ## É necessário testar?
 
-- O intuito do teste é verificar a hipótese de que o coeficiente é nulo 
-($\beta = 0$)
+- O intuito do teste dos coeficientes é rejeitar a hipótese:
+  - $H_0: \beta = 0$
 - Porém, ao construir um intervalo de confiança para $\beta$, pode-se verificar 
-se o valor zero está dentro do intervalo
+se o valor zero está ou não dentro do intervalo
   - Caso zero esteja dentro do intervalo, não se pode rejeitar a hipótese de que
   o coeficiente seja nulo, ou seja, de não haver regressão
   
@@ -519,8 +596,7 @@ confint(fit)
 
   
 - O intervalo não contém o valor zero!
-  - O coeficiente é não-nulo!
-    - Se a hipótese da normalidade for verificada!
+  - O coeficiente é não-nulo (se a hipótese da normalidade for verificada!)!
 
 ## Formas para lidar com a falta de normalidade
 

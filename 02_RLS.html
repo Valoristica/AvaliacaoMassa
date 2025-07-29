@@ -228,7 +228,7 @@ Luiz Droubi
     </div>
 </div>
 
-  <p class="date">28 de julho de 2025</p>
+  <p class="date">29 de julho de 2025</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Índice</h2>
@@ -1106,9 +1106,120 @@ W = 0.92523, p-value = 0.1104</code></pre>
 </section>
 <section id="é-necessário-testar" class="slide level2">
 <h2>É necessário testar?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">library</span>(lattice)</span>
+<span id="cb17-2"><a href=""></a><span class="fu">library</span>(latticeExtra)</span>
+<span id="cb17-3"><a href=""></a><span class="fu">qqmath</span>(<span class="fu">rstandard</span>(fit), <span class="at">aspect =</span> <span class="st">"fill"</span>, <span class="at">distribution =</span> qnorm,</span>
+<span id="cb17-4"><a href=""></a>       <span class="at">ylab =</span> <span class="st">"Resíduos Padronizados"</span>, <span class="at">xlab =</span> <span class="st">"Quantis da Distribuição Normal"</span>,</span>
+<span id="cb17-5"><a href=""></a>       <span class="at">prepanel =</span> prepanel.qqmathline,</span>
+<span id="cb17-6"><a href=""></a>        <span class="at">panel =</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb17-7"><a href=""></a>          <span class="fu">panel.qqmathline</span>(x, ...)</span>
+<span id="cb17-8"><a href=""></a>          <span class="fu">panel.qqmath</span>(x, ...)</span>
+<span id="cb17-9"><a href=""></a>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="02_RLS_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">É notório que a normalidade não está adequada!</li>
+</ul>
+</section>
+<section id="aparte-como-funcionam-os-gráficos-qq" class="slide level2">
+<h2>Aparte: como funcionam os Gráficos QQ</h2>
+<div id="fig-dataTypes" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-dataTypes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dataTypes" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-dataTypes-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-dataTypes-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="02_RLS_files/figure-revealjs/fig-dataTypes-1.png" data-ref-parent="fig-dataTypes" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dataTypes-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Distribuição Normal
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dataTypes" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-dataTypes-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-dataTypes-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="02_RLS_files/figure-revealjs/fig-dataTypes-2.png" data-ref-parent="fig-dataTypes" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dataTypes-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Distribuição Normal
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dataTypes" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-dataTypes-3" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-dataTypes-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="02_RLS_files/figure-revealjs/fig-dataTypes-3.png" data-ref-parent="fig-dataTypes" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dataTypes-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) Dados concentrados no centro.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dataTypes" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-dataTypes-4" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-dataTypes-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="02_RLS_files/figure-revealjs/fig-dataTypes-4.png" data-ref-parent="fig-dataTypes" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dataTypes-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(d) Dados concentrados no centro.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dataTypes" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-dataTypes-5" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-dataTypes-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="02_RLS_files/figure-revealjs/fig-dataTypes-5.png" data-ref-parent="fig-dataTypes" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dataTypes-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(e) Distribuição Assimétrica
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dataTypes" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-dataTypes-6" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-dataTypes-6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="02_RLS_files/figure-revealjs/fig-dataTypes-6.png" data-ref-parent="fig-dataTypes" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dataTypes-6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(f) Distribuição Assimétrica
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dataTypes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Visualização de distribuição por histogramas e gráficos QQ.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="é-necessário-testar-1" class="slide level2">
+<h2>É necessário testar?</h2>
 <ul>
-<li class="fragment">O intuito do teste é verificar a hipótese de que o coeficiente é nulo (<span class="math inline">\(\beta = 0\)</span>)</li>
-<li class="fragment">Porém, ao construir um intervalo de confiança para <span class="math inline">\(\beta\)</span>, pode-se verificar se o valor zero está dentro do intervalo
+<li class="fragment">O intuito do teste dos coeficientes é rejeitar a hipótese:
+<ul>
+<li class="fragment"><span class="math inline">\(H_0: \beta = 0\)</span></li>
+</ul></li>
+<li class="fragment">Porém, ao construir um intervalo de confiança para <span class="math inline">\(\beta\)</span>, pode-se verificar se o valor zero está ou não dentro do intervalo
 <ul>
 <li class="fragment">Caso zero esteja dentro do intervalo, não se pode rejeitar a hipótese de que o coeficiente seja nulo, ou seja, de não haver regressão</li>
 </ul></li>
@@ -1116,7 +1227,7 @@ W = 0.92523, p-value = 0.1104</code></pre>
 </ul>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">confint</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">confint</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   2.5 %       97.5 %
 (Intercept) 163.78703179 241.52420053
@@ -1126,10 +1237,7 @@ A            -0.00977259  -0.00294693</code></pre>
 <ul>
 <li class="fragment">O intervalo não contém o valor zero!
 <ul>
-<li class="fragment">O coeficiente é não-nulo!
-<ul>
-<li class="fragment">Se a hipótese da normalidade for verificada!</li>
-</ul></li>
+<li class="fragment">O coeficiente é não-nulo (se a hipótese da normalidade for verificada!)!</li>
 </ul></li>
 </ul>
 </div>
@@ -1153,12 +1261,12 @@ A            -0.00977259  -0.00294693</code></pre>
 <pre><code># A tibble: 2 × 6
   term           .lower .estimate    .upper .alpha .method   
   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     
-1 (Intercept) 157.      201.      243.        0.05 percentile
-2 A            -0.00957  -0.00620  -0.00278   0.05 percentile</code></pre>
+1 (Intercept) 156.      202.      247.        0.05 percentile
+2 A            -0.00986  -0.00629  -0.00229   0.05 percentile</code></pre>
 </div>
 
 </div>
-<img data-src="02_RLS_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"><ul>
+<img data-src="02_RLS_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"><ul>
 <li class="fragment">O intervalo obtido pelo <em>bootstrap</em> é um pouco mais amplo do que o IC Normal!</li>
 </ul>
 </section></section>
@@ -1219,8 +1327,8 @@ A            -0.00977259  -0.00294693</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">A =</span> <span class="dv">10000</span>), </span>
-<span id="cb20-2"><a href=""></a>        <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> .<span class="dv">95</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">A =</span> <span class="dv">10000</span>), </span>
+<span id="cb21-2"><a href=""></a>        <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> .<span class="dv">95</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      fit      lwr      upr
 1 139.058 64.29621 213.8198</code></pre>
@@ -1232,8 +1340,8 @@ A            -0.00977259  -0.00294693</code></pre>
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">A =</span> <span class="dv">10000</span>), </span>
-<span id="cb22-2"><a href=""></a>        <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> .<span class="dv">80</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">A =</span> <span class="dv">10000</span>), </span>
+<span id="cb23-2"><a href=""></a>        <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> .<span class="dv">80</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      fit      lwr      upr
 1 139.058 91.63221 186.4838</code></pre>
@@ -1253,16 +1361,16 @@ A            -0.00977259  -0.00294693</code></pre>
 <h2><span class="math inline">\(\hat \sigma\)</span></h2>
 
 <img data-src="02_RLS_files/figure-revealjs/fig-OLSGeometry-1.png" width="576" class="r-stretch quarto-figure-center" id="fig-OLSGeometry"><p class="caption">
-Figura&nbsp;2: Geometria dos Mínimos Quadrados Ordinários
+Figura&nbsp;3: Geometria dos Mínimos Quadrados Ordinários
 </p></section>
 <section id="plotem-os-seus-modelos" class="slide level2">
 <h2>Plotem os seus modelos!</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">library</span>(quartets)</span>
-<span id="cb24-2"><a href=""></a><span class="fu">data</span>(<span class="st">"anscombe_quartet"</span>)</span>
-<span id="cb24-3"><a href=""></a><span class="fu">head</span>(anscombe_quartet, <span class="at">n =</span> <span class="dv">11</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">library</span>(quartets)</span>
+<span id="cb25-2"><a href=""></a><span class="fu">data</span>(<span class="st">"anscombe_quartet"</span>)</span>
+<span id="cb25-3"><a href=""></a><span class="fu">head</span>(anscombe_quartet, <span class="at">n =</span> <span class="dv">11</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 11 × 3
    dataset        x     y
@@ -1282,9 +1390,9 @@ Figura&nbsp;2: Geometria dos Mínimos Quadrados Ordinários
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="fu">library</span>(quartets)</span>
-<span id="cb26-2"><a href=""></a><span class="fu">data</span>(<span class="st">"anscombe_quartet"</span>)</span>
-<span id="cb26-3"><a href=""></a><span class="fu">tail</span>(anscombe_quartet, <span class="at">n =</span> <span class="dv">11</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="fu">library</span>(quartets)</span>
+<span id="cb27-2"><a href=""></a><span class="fu">data</span>(<span class="st">"anscombe_quartet"</span>)</span>
+<span id="cb27-3"><a href=""></a><span class="fu">tail</span>(anscombe_quartet, <span class="at">n =</span> <span class="dv">11</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 11 × 3
    dataset          x     y
@@ -1402,7 +1510,7 @@ F-statistic:    18 on 1 and 9 DF,  p-value: 0.002165
 <section id="plotem-os-seus-modelos-3" class="slide level2">
 <h2>Plotem os seus modelos!</h2>
 
-<img data-src="02_RLS_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section></section>
+<img data-src="02_RLS_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section></section>
 <section>
 <section id="elipses-de-dados" class="title-slide slide level1 center">
 <h1>Elipses de Dados</h1>
@@ -1416,9 +1524,9 @@ F-statistic:    18 on 1 and 9 DF,  p-value: 0.002165
 <h2>Elipses de Dados, <em>outliers</em> e pontos influenciantes</h2>
 
 <img data-src="02_RLS_files/figure-revealjs/fig-ellipsis-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-ellipsis"><p class="caption">
-Figura&nbsp;3: Elipses de 40%, 68% e 95% dos dados.
+Figura&nbsp;4: Elipses de 40%, 68% e 95% dos dados.
 </p><ul>
-<li class="fragment">Na <a href="#/fig-ellipsis" class="quarto-xref">Figura&nbsp;3</a>, notar que a reta de regressão <strong>não passa</strong> pelo eixo das elipses!</li>
+<li class="fragment">Na <a href="#/fig-ellipsis" class="quarto-xref">Figura&nbsp;4</a>, notar que a reta de regressão <strong>não passa</strong> pelo eixo das elipses!</li>
 </ul>
 </section>
 <section id="elipses-e-desvio-padrão" class="slide level2">

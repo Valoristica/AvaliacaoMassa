@@ -1,0 +1,7 @@
+<OGRVRTDataSource>
+	<OGRVRTLayer name="1_Krig_z_Grid_Map">
+		<SrcDataSource>1_Krig_z_Grid_Map.csv</SrcDataSource>
+		<GeometryType>wkbPoint</GeometryType>
+		<GeometryField encoding="PointFromColumns" x="CoordX_SM" y="CoordY_SM" z="z"/>
+	</OGRVRTLayer>
+</OGRVRTDataSource>
