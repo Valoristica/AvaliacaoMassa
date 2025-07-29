@@ -47,6 +47,8 @@ homePrices <- within(homePrices, {
 }) 
 ```
 
+# Modelos Espaciais
+
 ## Introdução
 
 - Até agora trabalhamos com a hipótese que:
