@@ -20,7 +20,7 @@ práticas da avaliação em massa de imóveis.
 
 ## Ementa
 
-1. **Probabilidade**: 
+#### 1. Probabilidade
 
 - Definições
   - Clássica
@@ -42,7 +42,7 @@ práticas da avaliação em massa de imóveis.
   - Distribuição chi-quadrado
   - Distribuição Lognormal
     
-2. **Estatística Descritiva e Análise Exploratória**: 
+#### 2. Estatística Descritiva e Análise Exploratória
 
 - Percentis 
 - Quartis
@@ -69,7 +69,7 @@ práticas da avaliação em massa de imóveis.
   - diagrama de dispersão
   - gráfico de Tukey-Anscombe.
 
-3. **Regressão Linear Simples**:
+#### 3. Regressão Linear Simples
 
 - Valor Esperado
 - Valor esperado Condicional
@@ -91,7 +91,7 @@ práticas da avaliação em massa de imóveis.
 - Elipses de Dados
   - Outliers e Pontos Influenciantes.
 
-4. **Regressão Linear Múltipla**:
+#### 4. Regressão Linear Múltipla
 
 - formulação matricial
 - notação chapéu
@@ -112,7 +112,7 @@ práticas da avaliação em massa de imóveis.
   - R2 preditivo
 - Comparação de modelos.
 
-5. **Modelagem**: 
+#### 5. Modelagem 
 
 - Modelo Aditivo
 - Teorema Central do Limite
@@ -133,17 +133,17 @@ práticas da avaliação em massa de imóveis.
 - Erros não-constantes
 - Estimador Sanduíche
 - Estimador MQP
-  - Least Squares Percentage Regression;
+  - _Least Squares Percentage Regression_;
 - Transformações da variável dependente:
   - Box-Cox
 - Modelo Multiplicativo
  - TCL multiplicativo
 - Seleção de Variáveis com R2 ajustado
--Poder de Predição
+- Poder de Predição
 - Equação de Regressão
 - Equação de Estimação.
 
-6. **Fatores**: 
+#### 6. Fatores 
 
 - Derivação racional
 - Utilização de Fatores
@@ -151,7 +151,7 @@ práticas da avaliação em massa de imóveis.
   - Previsão de valores
   - Análise de *outliers*
 
-7. **Regressão Espacial**:
+#### 7. Regressão Espacial
 
 - Modelos Espaciais
   - de Manski
@@ -167,9 +167,9 @@ práticas da avaliação em massa de imóveis.
   - Escores de Rao
 - Ajuste de modelos espaciais
 
-8. **Geoestatística**:
+#### 8. Geoestatística
 
-- Vriáveis regionalizadas
+- Variáveis regionalizadas
 - Semivariograma experimental
 - Semivariograma teórico
 - Grau de aleatoriedade
