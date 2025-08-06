@@ -232,7 +232,7 @@ Luiz Droubi
     </div>
 </div>
 
-  <p class="date">27 de julho de 2025</p>
+  <p class="date">4 de agosto de 2025</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Índice</h2>
@@ -1357,7 +1357,7 @@ Figura&nbsp;3: Análise de Resíduos do Exemplo 1.
 <section id="tradeoff-entre-viés-e-variância" class="slide level2">
 <h2><em>Tradeoff</em> entre viés e variância</h2>
 
-<img data-src="Bias_and_variance_contributing_to_total_error.png" class="r-stretch quarto-figure-center" id="fig-tradeoff"><p class="caption">
+<img data-src="./img/Bias-Variance-Trade-off-graph.jpg" class="r-stretch quarto-figure-center" id="fig-tradeoff"><p class="caption">
 Figura&nbsp;4: <em>Tradeoff</em> entre viés e variância.
 </p></section>
 <section id="tradeoff-entre-viés-e-variância-1" class="slide level2">
@@ -1377,7 +1377,7 @@ Figura&nbsp;4: <em>Tradeoff</em> entre viés e variância.
 <section id="sobreajustamento-1" class="slide level2">
 <h2>Sobreajustamento</h2>
 
-<img data-src="overfitting.png" class="r-stretch quarto-figure-center" id="fig-overfitting"><p class="caption">
+<img data-src="./img/overfitting.jpg" class="r-stretch quarto-figure-center" id="fig-overfitting"><p class="caption">
 Figura&nbsp;5: Ilustração do sobreajustamento de um modelo.
 </p></section>
 <section id="sobreajustamento-2" class="slide level2">
@@ -1456,8 +1456,21 @@ Figura&nbsp;5: Ilustração do sobreajustamento de um modelo.
 <section id="validação-cruzada" class="slide level2">
 <h2>Validação Cruzada</h2>
 <ul>
-<li class="fragment"><p>Em alguns casos, é possível particionar os dados e ajustar o modelo de regressão com uma das partições, e calcular o <span class="math inline">\(R^2\)</span> em outra partição dos dados</p></li>
-<li class="fragment"><p>Porém, na engenharia de avaliações é frequente que trabalhemos com conjuntos de dados pequenos, o que nos dificulta muito, senão impossibilita, de particionar os dados.</p></li>
+<li class="fragment">Em alguns casos, é possível particionar os dados e ajustar o modelo de regressão com uma das partições, e calcular o <span class="math inline">\(R^2\)</span> em outra partição dos dados</li>
+</ul>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="./img/K-Fold-Cross-Validation.png"></p>
+<figcaption>Validação Cruzada</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="validação-cruzada-1" class="slide level2">
+<h2>Validação Cruzada</h2>
+<ul>
+<li class="fragment"><p>Na engenharia de avaliações, infelizmente, é frequente que trabalhemos com conjuntos de dados pequenos, o que dificulta muito, senão impossibilita, o particionamento dos dados entre partições de treinamento e validação;</p></li>
 <li class="fragment"><p>Uma alternativa, nestes casos de pequenos conjuntos de dados, é a utilização da técnica de reamostragem <em>jackknife</em>!</p></li>
 </ul>
 </section></section>
@@ -1476,11 +1489,16 @@ Figura&nbsp;5: Ilustração do sobreajustamento de um modelo.
 </ul></li>
 </ul>
 </section>
+<section id="reamostragem-jackknife-1" class="slide level2">
+<h2>Reamostragem <em>jackknife</em></h2>
+
+<img data-src="./img/Schematic_of_Jackknife_Resampling.jpg" class="r-stretch quarto-figure-center"><p class="caption">Reamostragem <em>Jackknife</em></p></section>
 <section id="exemplo-2-1" class="slide level2">
 <h2>Exemplo 2</h2>
 <ul>
 <li class="fragment">Em uma amostra com 10 elementos, quais sejam:</li>
 </ul>
+<div class="fragment">
 <div id="tbl-Exemplo2" class="cell quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-tbl">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-Exemplo2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1504,6 +1522,7 @@ Tabela&nbsp;2: Dados - Exemplo 2.
 <span id="cb27-15"><a href=""></a>dados<span class="sc">$</span>PU <span class="ot">&lt;-</span> <span class="fu">with</span>(dados, Preco<span class="sc">/</span>Area)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </figure>
+</div>
 </div>
 </section>
 <section id="exemplo-2-2" class="slide level2">
@@ -2337,49 +2356,197 @@ Figura&nbsp;9: Modelo sobreajustado.
 </section>
 <section id="comparação-de-modelos" class="slide level2">
 <h2>Comparação de modelos</h2>
+<ul>
+<li class="fragment">Todas as combinações de modelos, ordenados por <span class="math inline">\(R^2_{pred}\)</span>:</li>
+</ul>
+<div class="fragment">
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Call:
-bestfit(formula = PU ~ Area, data = dados)
-
-Best 10 fits:
-   id       PU     Area    R2 adj_R2 pred_R2     LL   AIC  AICc   BIC
-2   2 identity      log 0.915  0.904   0.872 -50.75 107.5 111.5 108.4
-5   5 identity     sqrt 0.918  0.907   0.870 -50.59 107.2 111.2 108.1
-12 12     sqrt      log 0.912  0.900   0.867  -4.98  16.0  20.0  16.9
-15 15     sqrt     sqrt 0.915  0.904   0.867  -4.78  15.6  19.6  16.5
-10 10      log     sqrt 0.912  0.901   0.863  27.16 -48.3 -44.3 -47.4
-7   7      log      log 0.908  0.896   0.862  26.91 -47.8 -43.8 -46.9
-4   4 identity    rsqrt 0.903  0.890   0.856 -51.43 108.9 112.9 109.8
-1   1 identity identity 0.910  0.899   0.851 -51.01 108.0 112.0 108.9
-14 14     sqrt    rsqrt 0.898  0.885   0.850  -5.68  17.4  21.4  18.3
-11 11     sqrt identity 0.909  0.897   0.849  -5.13  16.3  20.3  17.2
-...</code></pre>
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 22px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">PU</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Area</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">R2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">adj_R2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">pred_R2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">LL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AICc</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">BIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">identity</td>
+<td style="text-align: left;">log</td>
+<td style="text-align: right;">0,915</td>
+<td style="text-align: right;">0,904</td>
+<td style="text-align: right;">0,872</td>
+<td style="text-align: right;">-50,75</td>
+<td style="text-align: right;">107,5</td>
+<td style="text-align: right;">111,5</td>
+<td style="text-align: right;">108,4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">identity</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: right;">0,918</td>
+<td style="text-align: right;">0,907</td>
+<td style="text-align: right;">0,870</td>
+<td style="text-align: right;">-50,59</td>
+<td style="text-align: right;">107,2</td>
+<td style="text-align: right;">111,2</td>
+<td style="text-align: right;">108,1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">12</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: left;">log</td>
+<td style="text-align: right;">0,912</td>
+<td style="text-align: right;">0,900</td>
+<td style="text-align: right;">0,867</td>
+<td style="text-align: right;">-4,98</td>
+<td style="text-align: right;">16,0</td>
+<td style="text-align: right;">20,0</td>
+<td style="text-align: right;">16,9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">15</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: right;">0,915</td>
+<td style="text-align: right;">0,904</td>
+<td style="text-align: right;">0,867</td>
+<td style="text-align: right;">-4,78</td>
+<td style="text-align: right;">15,6</td>
+<td style="text-align: right;">19,6</td>
+<td style="text-align: right;">16,5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">10</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">log</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: right;">0,912</td>
+<td style="text-align: right;">0,901</td>
+<td style="text-align: right;">0,863</td>
+<td style="text-align: right;">27,16</td>
+<td style="text-align: right;">-48,3</td>
+<td style="text-align: right;">-44,3</td>
+<td style="text-align: right;">-47,4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">log</td>
+<td style="text-align: left;">log</td>
+<td style="text-align: right;">0,908</td>
+<td style="text-align: right;">0,896</td>
+<td style="text-align: right;">0,862</td>
+<td style="text-align: right;">26,91</td>
+<td style="text-align: right;">-47,8</td>
+<td style="text-align: right;">-43,8</td>
+<td style="text-align: right;">-46,9</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <ul>
 <li class="fragment"><p><strong>CUIDADO</strong>: quando a variável dependente é transformada, <span class="math inline">\(R^2\)</span> (assim como <span class="math inline">\(R^2_{ajust}\)</span> e <span class="math inline">\(R^2_{pred}\)</span>) valem para a escala transformada!</p></li>
 <li class="fragment"><p>O que importa, no entanto, é como o modelo funciona na escala original (preços)!</p></li>
 </ul>
+</div>
 </section>
 <section id="comparação-de-modelos-1" class="slide level2">
 <h2>Comparação de modelos</h2>
+<ul>
+<li class="fragment">Na escala original, selecionamos três modelos, um com cada transformação:</li>
+</ul>
+<div class="fragment">
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Bestfits:
-  id       PU Area    R2 adj_R2 pred_R2 nl_R2     LL   AIC  AICc adj_AIC
-1  5 identity sqrt 0.918  0.907   0.870 0.918 -50.59 107.2 111.2     107
-3 15     sqrt sqrt 0.915  0.904   0.867 0.918  -4.78  15.6  19.6     107
-2 10      log sqrt 0.912  0.901   0.863 0.918  27.16 -48.3 -44.3     108
-  adj_AICc
-1      111
-3      111
-2      112</code></pre>
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 22px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">PU</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Area</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">R2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">adj_R2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">pred_R2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">nl_R2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">LL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AICc</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">adj_AIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">adj_AICc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">identity</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: right;">0,918</td>
+<td style="text-align: right;">0,907</td>
+<td style="text-align: right;">0,870</td>
+<td style="text-align: right;">0,918</td>
+<td style="text-align: right;">-50,59</td>
+<td style="text-align: right;">107,2</td>
+<td style="text-align: right;">111,2</td>
+<td style="text-align: right;">107</td>
+<td style="text-align: right;">111</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: right;">0,915</td>
+<td style="text-align: right;">0,904</td>
+<td style="text-align: right;">0,867</td>
+<td style="text-align: right;">0,918</td>
+<td style="text-align: right;">-4,78</td>
+<td style="text-align: right;">15,6</td>
+<td style="text-align: right;">19,6</td>
+<td style="text-align: right;">107</td>
+<td style="text-align: right;">111</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">log</td>
+<td style="text-align: left;">sqrt</td>
+<td style="text-align: right;">0,912</td>
+<td style="text-align: right;">0,901</td>
+<td style="text-align: right;">0,863</td>
+<td style="text-align: right;">0,918</td>
+<td style="text-align: right;">27,16</td>
+<td style="text-align: right;">-48,3</td>
+<td style="text-align: right;">-44,3</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">112</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <ul>
-<li class="fragment">Modelos são muito parecidos na escala original.</li>
+<li class="fragment">Nota-se que, na escala original, os modelos são muito parecidos em termos de poder de predição!</li>
 </ul>
+</div>
 </section>
 <section id="referências" class="slide level2 smaller scrollable">
 <h2>Referências</h2>

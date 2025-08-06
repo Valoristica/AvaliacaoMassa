@@ -228,7 +228,7 @@ Luiz Droubi
     </div>
 </div>
 
-  <p class="date">28 de julho de 2025</p>
+  <p class="date">4 de agosto de 2025</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Índice</h2>
@@ -379,7 +379,7 @@ Luiz Droubi
 <li class="fragment">É designada por <span class="math inline">\(\mathbb P(A|B)\)</span></li>
 <li class="fragment">É definida como o quociente entre <span class="math inline">\(\mathbb P(A \cap B)\)</span> e <span class="math inline">\(\mathbb P(B)\)</span>:
 <ul>
-<li class="fragment"><span class="math display">\[\mathbb P(A|B) = \frac{\mathbb P(A \cap B)}{\mathbb P(B)}\]</span></li>
+<li class="fragment"><span id="eq-PCond"><span class="math display">\[\mathbb P(A|B) = \frac{\mathbb P(A \cap B)}{\mathbb P(B)}\, \text{se }\mathbb P(B) &gt; 0 \qquad(1)\]</span></span></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -497,7 +497,7 @@ Luiz Droubi
 <ul>
 <li class="fragment">Distribuição de Bernoulli:
 <ul>
-<li class="fragment"><span id="eq-Bernoulli"><span class="math display">\[\mathbb P(X = k) = p^k (1-p)^{1-k} \qquad(1)\]</span></span>
+<li class="fragment"><span id="eq-Bernoulli"><span class="math display">\[\mathbb P(X = k) = p^k (1-p)^{1-k} \qquad(2)\]</span></span>
 <ul>
 <li class="fragment">Define-se:
 <ul>
@@ -531,7 +531,7 @@ q = 1 - p &amp; \text{ se } k = 0
 <ul>
 <li class="fragment">A <em>Distribuição Binomial</em> é a generalização da <em>Distribuição de Bernoulli</em> para um número qualquer de tentativas
 <ul>
-<li class="fragment"><span id="eq-Binomial"><span class="math display">\[\mathbb P(X = k) = \binom{n}{k} p^k (1-p)^{n-k} \qquad(2)\]</span></span>
+<li class="fragment"><span id="eq-Binomial"><span class="math display">\[\mathbb P(X = k) = \binom{n}{k} p^k (1-p)^{n-k} \qquad(3)\]</span></span>
 <ul>
 <li class="fragment"><span class="math inline">\(\binom{n}{k} = \frac{n!}{k!(n-k)!}\)</span></li>
 </ul></li>
@@ -650,7 +650,7 @@ Figura&nbsp;3: Distribuição Binomial (n = 100, p = 1/2).
 <ul>
 <li class="fragment">Uma variável <span class="math inline">\(Z\)</span> com Distribuição <em>Normal Padrão</em> é a var. que tem <em>função densidade de probabilidade</em> igual a:
 <ul>
-<li class="fragment"><span id="eq-NormalPadrao"><span class="math display">\[\phi(t) = f_Z(t) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}t^2} \qquad(3)\]</span></span>
+<li class="fragment"><span id="eq-NormalPadrao"><span class="math display">\[\phi(t) = f_Z(t) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}t^2} \qquad(4)\]</span></span>
 <ul>
 <li class="fragment">É a exponencial de uma parábola, multiplicada pela constante <span class="math inline">\(1/\sqrt{2\pi}\)</span></li>
 </ul></li>
@@ -707,7 +707,7 @@ Figura&nbsp;4: Distribuição Normal Padrão.
 </ul></li>
 <li class="fragment">Quando <span class="math inline">\(X\)</span> é uma var. contínua:
 <ul>
-<li class="fragment"><span id="eq-Jacobi"><span class="math display">\[f_Y(y) = f_X(g(y))\cdot \left | \frac{\mathrm d g(y)}{\mathrm d y}\right | = f_X(g(y))\cdot |g'(y)| \qquad(4)\]</span></span>
+<li class="fragment"><span id="eq-Jacobi"><span class="math display">\[f_Y(y) = f_X(g(y))\cdot \left | \frac{\mathrm d g(y)}{\mathrm d y}\right | = f_X(g(y))\cdot |g'(y)| \qquad(5)\]</span></span>
 <ul>
 <li class="fragment"><span class="math inline">\(g(Y) = h^{-1}(Y)\)</span></li>
 <li class="fragment"><span class="math inline">\(|g'(y)|\)</span> é o Jacobiano da transformação!</li>
@@ -739,8 +739,8 @@ Figura&nbsp;4: Distribuição Normal Padrão.
 <section id="distribuição-normal-1" class="slide level2">
 <h2>Distribuição Normal</h2>
 <ul>
-<li class="fragment"><p><span id="eq-Normal"><span class="math display">\[f(t) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(t-\mu)^2}{2\sigma^2}},\, \text{para }-\infty&lt;t&lt;\infty \qquad(5)\]</span></span></p></li>
-<li class="fragment"><p>Nos referiremos a uma var. aleatória <span class="math inline">\(X\)</span> com distribuição normal genérica como a da <a href="#/eq-Normal" class="quarto-xref">Equação&nbsp;5</a> assim:</p>
+<li class="fragment"><p><span id="eq-Normal"><span class="math display">\[f(t) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(t-\mu)^2}{2\sigma^2}},\, \text{para }-\infty&lt;t&lt;\infty \qquad(6)\]</span></span></p></li>
+<li class="fragment"><p>Nos referiremos a uma var. aleatória <span class="math inline">\(X\)</span> com distribuição normal genérica como a da <a href="#/eq-Normal" class="quarto-xref">Equação&nbsp;6</a> assim:</p>
 <ul>
 <li class="fragment"><span class="math inline">\(X \sim \mathcal N(\mu, \sigma^2)\)</span></li>
 </ul></li>
@@ -812,6 +812,72 @@ Figura&nbsp;4: Distribuição Normal Padrão.
 <img data-src="01_Prob_files/figure-revealjs/fig-Normal-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-Normal"><p class="caption">
 Figura&nbsp;5: Distribuição Normal <span class="math inline">\(\mathcal N(100, 10^2)\)</span> (<span class="math inline">\(\mu = 100,\, \sigma = 10\)</span>).
 </p></section>
+<section id="equivalência" class="slide level2">
+<h2>Equivalência</h2>
+<ul>
+<li class="fragment"><p>Se uma variável aleatória <span class="math inline">\(\mathbf X\)</span> que armazena as temperaturas médias diárias de uma determinada localidade, em ºF, de forma que <span class="math inline">\(\mathbf X \sim \mathcal N(95, 9^2)\)</span></p></li>
+<li class="fragment"><p>Então uma variável <span class="math inline">\(\mathbf Y\)</span> que é a transformação linear de <span class="math inline">\(\mathbf X\)</span> conforme a <a href="#/eq-Fahrenheit" class="quarto-xref">Equação&nbsp;7</a>:</p>
+<ul>
+<li class="fragment"><span id="eq-Fahrenheit"><span class="math display">\[Y = \frac{X - 32}{9/5} \qquad(7)\]</span></span></li>
+<li class="fragment">Deverá representar as mesmas probabilidades do fenômeno físico, porém numa escala diferente (no caso, a escala Celsius)!</li>
+</ul></li>
+<li class="fragment"><p>Na escala Celsius, a variável apresentará distribuição normal, porém com média 35ºC e desvio-padrão igual 5,0 ºC!</p>
+<ul>
+<li class="fragment">Ou seja, <span class="math inline">\(\mathbf Y \sim \mathcal N(35, 5^2)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="equivalência-1" class="slide level2">
+<h2>Equivalência</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li class="fragment"><p><span class="math inline">\(\mathbf X \sim \mathcal N(95, 9^2)\)</span></p></li>
+<li class="fragment"><p>A dois desvios-padrões de distância da média da variável <span class="math inline">\(\mathbf X\)</span> está a temperatura <span class="math inline">\(95 + 2\cdot9 = 113 ^{\circ}\text{F}\)</span></p></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment"><p><span class="math inline">\(\mathbf Y \sim \mathcal N(35, 5^2)\)</span></p></li>
+<li class="fragment"><p>A dois desvios-padrões de distância da média da variável <span class="math inline">\(\mathbf Y\)</span> encontra-se a temperatura <span class="math inline">\(35+2\cdot 5 = 45 ^{\circ}\text{C}\)</span></p></li>
+</ul>
+</div></div>
+<ul>
+<li class="fragment"><p><span class="math inline">\(^{\circ}\text{C} = \frac{113-32}{9/5} = 45\)</span></p></li>
+<li class="fragment"><p>A prob. de que a temp. média diária nessa localidade seja maior do que 45ºC</p>
+<ul>
+<li class="fragment">É igual à prob. de que a temp. média diária nesse local seja maior do que 113ºF!</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">113</span>, <span class="at">mean =</span> <span class="dv">95</span>, <span class="at">sd =</span> <span class="dv">9</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02275013</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">45</span>, <span class="at">mean =</span> <span class="dv">35</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02275013</code></pre>
+</div>
+</div>
+</div></div>
+<ul>
+<li class="fragment">Que é também a prob. de que a variável <span class="math inline">\(\mathbf Z \sim \mathcal N(0,1)\)</span> seja maior do que 2,0:</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">2</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02275013</code></pre>
+</div>
+</div>
+</div>
+</section>
 <section id="lei-dos-grandes-números-lgn" class="slide level2">
 <h2>Lei dos Grandes Números (LGN)</h2>
 <ul>
@@ -831,13 +897,13 @@ Figura&nbsp;5: Distribuição Normal <span class="math inline">\(\mathcal N(100,
 <ul>
 <li class="fragment">A distribuição de <em>Cauchy Padrão</em> tem <em>função densidade de probabilidade</em> (<em>fdp</em>):
 <ul>
-<li class="fragment"><span id="eq-StdCauchy"><span class="math display">\[f_X(t) = \frac{1}{\pi}\cdot \left ( \frac{1}{1+t^2}\right) \qquad(6)\]</span></span></li>
+<li class="fragment"><span id="eq-StdCauchy"><span class="math display">\[f_X(t) = \frac{1}{\pi}\cdot \left ( \frac{1}{1+t^2}\right) \qquad(8)\]</span></span></li>
 </ul></li>
 <li class="fragment">A distribuição de Cauchy genérica tem <em>fdp</em>:
 <ul>
-<li class="fragment"><span id="eq-Cauchy"><span class="math display">\[f_X(t) = \frac{1}{\pi\gamma}\left ( \frac{1}{1+\left (\frac{t-t_0}{\gamma} \right )^2}\right) \qquad(7)\]</span></span>
+<li class="fragment"><span id="eq-Cauchy"><span class="math display">\[f_X(t) = \frac{1}{\pi\gamma}\left ( \frac{1}{1+\left (\frac{t-t_0}{\gamma} \right )^2}\right) \qquad(9)\]</span></span>
 <ul>
-<li class="fragment">A <a href="#/eq-Cauchy" class="quarto-xref">Equação&nbsp;7</a> é obtida através da transformação linear da <a href="#/eq-StdCauchy" class="quarto-xref">Equação&nbsp;6</a>:
+<li class="fragment">A <a href="#/eq-Cauchy" class="quarto-xref">Equação&nbsp;9</a> é obtida através da transformação linear da <a href="#/eq-StdCauchy" class="quarto-xref">Equação&nbsp;8</a>:
 <ul>
 <li class="fragment"><span class="math inline">\(t_0\)</span> é um parâmetro de posição</li>
 <li class="fragment"><span class="math inline">\(\gamma\)</span> é um parâmetro de escala</li>
@@ -850,7 +916,7 @@ Figura&nbsp;5: Distribuição Normal <span class="math inline">\(\mathcal N(100,
 <section id="distribuição-de-cauchy" class="slide level2">
 <h2>Distribuição de Cauchy</h2>
 
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Distr. de Cauchy Padrão (em vermelho) vs.&nbsp;Distr. Normal Padrão (em azul)</p><ul>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Distr. de Cauchy Padrão (em vermelho) vs.&nbsp;Distr. Normal Padrão (em azul)</p><ul>
 <li class="fragment">A distribuição de Cauchy possui caudas mais pesadas do que a distribuição normal!</li>
 </ul>
 </section>
@@ -1021,7 +1087,7 @@ Figura&nbsp;8: Lei dos Grandes Números - média aparada (20%)
 </ul></li>
 <li class="fragment">Uma medida da <em>dispersão</em> amostral, denominada <em>variância</em> é:
 <ul>
-<li class="fragment"><span id="eq-Variance"><span class="math display">\[\mathbb V(X) = \frac{1}{n}\sum_{i = 1}^{n} (X_i - \mu)^2 \qquad(8)\]</span></span>
+<li class="fragment"><span id="eq-Variance"><span class="math display">\[\mathbb V(X) = \frac{1}{n}\sum_{i = 1}^{n} (X_i - \mu)^2 \qquad(10)\]</span></span>
 <ul>
 <li class="fragment">É fácil notar que <span class="math inline">\(Y = \mathbb V(X) \sim \chi^2_{(1)}\)</span></li>
 </ul></li>
@@ -1031,9 +1097,9 @@ Figura&nbsp;8: Lei dos Grandes Números - média aparada (20%)
 <section id="distribuição-chi2_1" class="slide level2">
 <h2>Distribuição <span class="math inline">\(\chi^2_{(1)}\)</span></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">plotDist</span>(<span class="st">'chisq'</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">df =</span> <span class="dv">1</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb8-2"><a href=""></a>         <span class="at">main =</span> <span class="fu">expression</span>(<span class="st">"Distribuição"</span> <span class="sc">~</span>chi[(<span class="dv">1</span>)]<span class="sc">^</span><span class="dv">2</span>),</span>
-<span id="cb8-3"><a href=""></a>         <span class="at">xlab =</span> <span class="st">"t"</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> Z<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">plotDist</span>(<span class="st">'chisq'</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">df =</span> <span class="dv">1</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb14-2"><a href=""></a>         <span class="at">main =</span> <span class="fu">expression</span>(<span class="st">"Distribuição"</span> <span class="sc">~</span>chi[(<span class="dv">1</span>)]<span class="sc">^</span><span class="dv">2</span>),</span>
+<span id="cb14-3"><a href=""></a>         <span class="at">xlab =</span> <span class="st">"t"</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> Z<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="01_Prob_files/figure-revealjs/fig-chiSquared-1.png" width="672" class="r-stretch quarto-figure-center" id="fig-chiSquared"><p class="caption">
@@ -1049,7 +1115,7 @@ Figura&nbsp;9: Distribuição <span class="math inline">\(\chi^2\)</span> com 1 
 <ul>
 <li class="fragment">Seja <span class="math inline">\(\mu\)</span> e <span class="math inline">\(\sigma&gt;0\)</span> dois números reais
 <ul>
-<li class="fragment">Então <span id="eq-TransfLognormal"><span class="math display">\[X = e^{\mu + \sigma Z} \qquad(9)\]</span></span>
+<li class="fragment">Então <span id="eq-TransfLognormal"><span class="math display">\[X = e^{\mu + \sigma Z} \qquad(11)\]</span></span>
 <ul>
 <li class="fragment">tem distribuição dita lognormal!</li>
 </ul></li>
@@ -1064,16 +1130,16 @@ Figura&nbsp;9: Distribuição <span class="math inline">\(\chi^2\)</span> com 1 
 </ul></li>
 <li class="fragment">A distribuição lognormal tem <em>fdp</em>:
 <ul>
-<li class="fragment"><span id="eq-Lognormal"><span class="math display">\[f_X(t) = \frac{1}{t\sigma\sqrt{2\pi}}\exp\left (-\frac{(\ln(t) - \mu)^2}{2\sigma^2} \right) \qquad(10)\]</span></span></li>
+<li class="fragment"><span id="eq-Lognormal"><span class="math display">\[f_X(t) = \frac{1}{t\sigma\sqrt{2\pi}}\exp\left (-\frac{(\ln(t) - \mu)^2}{2\sigma^2} \right) \qquad(12)\]</span></span></li>
 </ul></li>
 </ul>
 </section>
 <section id="distribuição-lognormal" class="slide level2">
 <h2>Distribuição Lognormal</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>mosaic<span class="sc">::</span><span class="fu">plotDist</span>(<span class="st">"lnorm"</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">meanlog =</span> <span class="dv">0</span>, <span class="at">sdlog =</span> <span class="fl">0.25</span>),</span>
-<span id="cb9-2"><a href=""></a>                 <span class="at">main =</span> <span class="st">"Distribuição Lognormal"</span>,</span>
-<span id="cb9-3"><a href=""></a>                 <span class="at">xlab =</span> <span class="st">"t"</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> e<span class="sc">^</span>{<span class="fl">0.25</span><span class="sc">*</span>Z}))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>mosaic<span class="sc">::</span><span class="fu">plotDist</span>(<span class="st">"lnorm"</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">meanlog =</span> <span class="dv">0</span>, <span class="at">sdlog =</span> <span class="fl">0.25</span>),</span>
+<span id="cb15-2"><a href=""></a>                 <span class="at">main =</span> <span class="st">"Distribuição Lognormal"</span>,</span>
+<span id="cb15-3"><a href=""></a>                 <span class="at">xlab =</span> <span class="st">"t"</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> e<span class="sc">^</span>{<span class="fl">0.25</span><span class="sc">*</span>Z}))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="01_Prob_files/figure-revealjs/fig-Lognormal-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-Lognormal"><p class="caption">
@@ -1082,11 +1148,11 @@ Figura&nbsp;10: Distribuição Lognormal
 <section id="distribuição-lognormal-1" class="slide level2">
 <h2>Distribuição Lognormal</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>mosaic<span class="sc">::</span><span class="fu">plotDist</span>(<span class="st">"lnorm"</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">meanlog =</span> <span class="fu">log</span>(<span class="dv">5000</span>), <span class="at">sdlog =</span> <span class="fl">0.25</span>),</span>
-<span id="cb10-2"><a href=""></a>                 <span class="at">main =</span> <span class="st">"Distribuição Lognormal"</span>,</span>
-<span id="cb10-3"><a href=""></a>                 <span class="at">xlab =</span> <span class="st">"t"</span>, </span>
-<span id="cb10-4"><a href=""></a>                 <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> e<span class="sc">^</span>{<span class="fl">0.25</span><span class="sc">*</span>Z<span class="sc">~+</span><span class="er">~</span><span class="fu">plain</span>(ln)<span class="sc">~</span><span class="dv">5000</span>})</span>
-<span id="cb10-5"><a href=""></a>                 )</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>mosaic<span class="sc">::</span><span class="fu">plotDist</span>(<span class="st">"lnorm"</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">meanlog =</span> <span class="fu">log</span>(<span class="dv">5000</span>), <span class="at">sdlog =</span> <span class="fl">0.25</span>),</span>
+<span id="cb16-2"><a href=""></a>                 <span class="at">main =</span> <span class="st">"Distribuição Lognormal"</span>,</span>
+<span id="cb16-3"><a href=""></a>                 <span class="at">xlab =</span> <span class="st">"t"</span>, </span>
+<span id="cb16-4"><a href=""></a>                 <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> e<span class="sc">^</span>{<span class="fl">0.25</span><span class="sc">*</span>Z<span class="sc">~+</span><span class="er">~</span><span class="fu">plain</span>(ln)<span class="sc">~</span><span class="dv">5000</span>})</span>
+<span id="cb16-5"><a href=""></a>                 )</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="01_Prob_files/figure-revealjs/fig-Lognormal2-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-Lognormal2"><p class="caption">
@@ -1111,9 +1177,9 @@ Figura&nbsp;11: Distribuição Lognormal (<span class="math inline">\(\mu^* = 50
 <section id="dados" class="slide level2">
 <h2>Dados</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">library</span>(wooldridge)</span>
-<span id="cb11-2"><a href=""></a><span class="fu">data</span>(hprice1)</span>
-<span id="cb11-3"><a href=""></a><span class="fu">head</span>(hprice1, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">library</span>(wooldridge)</span>
+<span id="cb17-2"><a href=""></a><span class="fu">data</span>(hprice1)</span>
+<span id="cb17-3"><a href=""></a><span class="fu">head</span>(hprice1, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     price assess bdrms lotsize sqrft colonial   lprice  lassess llotsize
 1  300.000  349.1     4    6126  2438        1 5.703783 5.855359 8.720297
@@ -1143,25 +1209,25 @@ Figura&nbsp;11: Distribuição Lognormal (<span class="math inline">\(\mu^* = 50
 <section id="stripchart" class="slide level2">
 <h2>Stripchart</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">stripchart</span>(hprice1<span class="sc">$</span>price)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">stripchart</span>(hprice1<span class="sc">$</span>price)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
 <section id="diagramas-de-caixa" class="slide level2">
 <h2>Diagramas de Caixa</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">boxplot</span>(hprice1<span class="sc">$</span>price, <span class="at">horizontal =</span> T)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">boxplot</span>(hprice1<span class="sc">$</span>price, <span class="at">horizontal =</span> T)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
 <section id="diagramas-de-caixa-1" class="slide level2">
 <h2>Diagramas de Caixa</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">boxplot</span>(hprice1<span class="sc">$</span>price, <span class="at">horizontal =</span> T)</span>
-<span id="cb15-2"><a href=""></a><span class="fu">stripchart</span>(hprice1<span class="sc">$</span>price, <span class="at">add =</span> T)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">boxplot</span>(hprice1<span class="sc">$</span>price, <span class="at">horizontal =</span> T)</span>
+<span id="cb21-2"><a href=""></a><span class="fu">stripchart</span>(hprice1<span class="sc">$</span>price, <span class="at">add =</span> T)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
 <section id="diagramas-de-caixa-2" class="slide level2">
 <h2>Diagramas de Caixa</h2>
 
@@ -1213,11 +1279,11 @@ Figura&nbsp;11: Distribuição Lognormal (<span class="math inline">\(\mu^* = 50
 <ul>
 <li class="fragment">Por exemplo, a mediana de Gastwirth:
 <ul>
-<li class="fragment"><span id="eq-GW"><span class="math display">\[GW(X) = 0,3\cdot T_1 + 0,4\cdot Q_2 + 0,3\cdot T_2 \qquad(11)\]</span></span></li>
+<li class="fragment"><span id="eq-GW"><span class="math display">\[GW(X) = 0,3\cdot T_1 + 0,4\cdot Q_2 + 0,3\cdot T_2 \qquad(13)\]</span></span></li>
 </ul></li>
 <li class="fragment"><em>Trimean</em> de Tukey:
 <ul>
-<li class="fragment"><span id="eq-Trimean"><span class="math display">\[TM(X) = \frac{Q_1 + 2Q_2 + Q_3}{4} \qquad(12)\]</span></span></li>
+<li class="fragment"><span id="eq-Trimean"><span class="math display">\[TM(X) = \frac{Q_1 + 2Q_2 + Q_3}{4} \qquad(14)\]</span></span></li>
 </ul></li>
 <li class="fragment">Estes estimadores são conhecidos como <em>L-Estimadores</em>
 <ul>
@@ -1229,40 +1295,40 @@ Figura&nbsp;11: Distribuição Lognormal (<span class="math inline">\(\mu^* = 50
 <section id="histograma" class="slide level2">
 <h2>Histograma</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">hist</span>(hprice1<span class="sc">$</span>price)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
-<section id="densidade" class="slide level2">
-<h2>Densidade</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">hist</span>(hprice1<span class="sc">$</span>price, <span class="at">freq =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb17-2"><a href=""></a><span class="fu">lines</span>(<span class="fu">density</span>(hprice1<span class="sc">$</span>price, <span class="at">bw =</span> <span class="st">"SJ"</span>), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
-<section id="densidade-1" class="slide level2">
-<h2>Densidade</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>hprice1<span class="sc">$</span>PU <span class="ot">&lt;-</span> <span class="dv">1000</span><span class="sc">*</span>hprice1<span class="sc">$</span>price<span class="sc">/</span>hprice1<span class="sc">$</span>lotsize</span>
-<span id="cb18-2"><a href=""></a><span class="fu">hist</span>(hprice1<span class="sc">$</span>PU, <span class="at">freq =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb18-3"><a href=""></a><span class="fu">lines</span>(<span class="fu">density</span>(hprice1<span class="sc">$</span>PU, <span class="at">bw =</span> <span class="st">"SJ"</span>), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
-<section id="densidade-2" class="slide level2">
-<h2>Densidade</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>hprice1<span class="sc">$</span>PU <span class="ot">&lt;-</span> <span class="dv">1000</span><span class="sc">*</span>hprice1<span class="sc">$</span>price<span class="sc">/</span>hprice1<span class="sc">$</span>lotsize</span>
-<span id="cb19-2"><a href=""></a><span class="fu">hist</span>(hprice1<span class="sc">$</span>PU[hprice1<span class="sc">$</span>PU <span class="sc">&lt;</span> <span class="dv">200</span>], <span class="at">freq =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb19-3"><a href=""></a><span class="fu">lines</span>(<span class="fu">density</span>(hprice1<span class="sc">$</span>PU, <span class="at">bw =</span> <span class="st">"SJ"</span>), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="fu">hist</span>(hprice1<span class="sc">$</span>price)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<section id="densidade" class="slide level2">
+<h2>Densidade</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">hist</span>(hprice1<span class="sc">$</span>price, <span class="at">freq =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb23-2"><a href=""></a><span class="fu">lines</span>(<span class="fu">density</span>(hprice1<span class="sc">$</span>price, <span class="at">bw =</span> <span class="st">"SJ"</span>), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<section id="densidade-1" class="slide level2">
+<h2>Densidade</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>hprice1<span class="sc">$</span>PU <span class="ot">&lt;-</span> <span class="dv">1000</span><span class="sc">*</span>hprice1<span class="sc">$</span>price<span class="sc">/</span>hprice1<span class="sc">$</span>lotsize</span>
+<span id="cb24-2"><a href=""></a><span class="fu">hist</span>(hprice1<span class="sc">$</span>PU, <span class="at">freq =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb24-3"><a href=""></a><span class="fu">lines</span>(<span class="fu">density</span>(hprice1<span class="sc">$</span>PU, <span class="at">bw =</span> <span class="st">"SJ"</span>), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
+<section id="densidade-2" class="slide level2">
+<h2>Densidade</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>hprice1<span class="sc">$</span>PU <span class="ot">&lt;-</span> <span class="dv">1000</span><span class="sc">*</span>hprice1<span class="sc">$</span>price<span class="sc">/</span>hprice1<span class="sc">$</span>lotsize</span>
+<span id="cb25-2"><a href=""></a><span class="fu">hist</span>(hprice1<span class="sc">$</span>PU[hprice1<span class="sc">$</span>PU <span class="sc">&lt;</span> <span class="dv">200</span>], <span class="at">freq =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-3"><a href=""></a><span class="fu">lines</span>(<span class="fu">density</span>(hprice1<span class="sc">$</span>PU, <span class="at">bw =</span> <span class="st">"SJ"</span>), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
 <section id="como-obter-normalidade" class="slide level2">
 <h2>Como obter normalidade</h2>
 
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section></section>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section></section>
 <section>
 <section id="medidas-de-tendência-central" class="title-slide slide level1 center">
 <h1>Medidas de Tendência Central</h1>
@@ -1300,7 +1366,7 @@ Figura&nbsp;12: Ilustração das posições de medidas de tendência central num
 <ul>
 <li class="fragment">Média Geométrica:
 <ul>
-<li class="fragment"><span id="eq-GM"><span class="math display">\[\text{GM}(X) = \hat \mu_g(X) = \sqrt[n]{X_1\cdot X_2 \ldots X_n} \qquad(13)\]</span></span></li>
+<li class="fragment"><span id="eq-GM"><span class="math display">\[\text{GM}(X) = \hat \mu_g(X) = \sqrt[n]{X_1\cdot X_2 \ldots X_n} \qquad(15)\]</span></span></li>
 </ul></li>
 <li class="fragment">Ex.: Um investimento apresenta os seguintes retornos mensais:
 <ul>
@@ -1318,9 +1384,9 @@ Figura&nbsp;12: Ilustração das posições de medidas de tendência central num
 </ul>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">library</span>(psych)</span>
-<span id="cb20-2"><a href=""></a>retornos <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fu">c</span>(<span class="fl">2.0</span>, <span class="fl">1.25</span>, <span class="fl">1.75</span>)<span class="sc">/</span><span class="dv">100</span></span>
-<span id="cb20-3"><a href=""></a><span class="fu">geometric.mean</span>(retornos)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="fu">library</span>(psych)</span>
+<span id="cb26-2"><a href=""></a>retornos <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fu">c</span>(<span class="fl">2.0</span>, <span class="fl">1.25</span>, <span class="fl">1.75</span>)<span class="sc">/</span><span class="dv">100</span></span>
+<span id="cb26-3"><a href=""></a><span class="fu">geometric.mean</span>(retornos)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.016662</code></pre>
 </div>
@@ -1365,13 +1431,13 @@ Figura&nbsp;12: Ilustração das posições de medidas de tendência central num
 <ul>
 <li class="fragment"><span id="eq-SR"><span class="math display">\[
 R = \frac{V_{t+1}}{V_t} - 1
-\qquad(14)\]</span></span></li>
+\qquad(16)\]</span></span></li>
 </ul>
 </div><div class="column" style="width:50%;">
 <ul>
 <li class="fragment"><span id="eq-SR"><span class="math display">\[
 LR = \ln \left (\frac{V_{t+1}}{V_t} \right )
-\qquad(15)\]</span></span></li>
+\qquad(17)\]</span></span></li>
 </ul>
 </div></div>
 <ul>
@@ -1399,7 +1465,7 @@ LR = \ln \left (\frac{V_{t+1}}{V_t} \right )
 <li class="fragment"><p>Na distribuição lognormal, a média geométrica é igual à mediana <span class="citation" data-cites="Vogel02012022">(<a href="#/referências" role="doc-biblioref" onclick="">Vogel 2022</a>)</span></p></li>
 <li class="fragment"><p>A moda, por sua vez, é igual à média harmônica:</p>
 <ul>
-<li class="fragment"><span id="eq-HM"><span class="math display">\[\text{HM}(X) = \frac{1}{\frac{1}{x_1} + \frac{1}{x_2} + \cdots + \frac{1}{x_n}} \qquad(16)\]</span></span></li>
+<li class="fragment"><span id="eq-HM"><span class="math display">\[\text{HM}(X) = \frac{1}{\frac{1}{x_1} + \frac{1}{x_2} + \cdots + \frac{1}{x_n}} \qquad(18)\]</span></span></li>
 </ul></li>
 <li class="fragment"><p>A média harmônica tem propriedades interessantes:</p>
 <ul>
@@ -1441,7 +1507,7 @@ LR = \ln \left (\frac{V_{t+1}}{V_t} \right )
 </ul>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="fu">harmonic.mean</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">3900</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">harmonic.mean</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">3900</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 195</code></pre>
 </div>
@@ -1480,7 +1546,7 @@ Figura&nbsp;13: Distribuição lognormal com <span class="math inline">\(\mu = 0
 </ul></li>
 <li class="fragment"><p>O desvio-padrão é uma média <em>rms</em> dos desvios:</p>
 <ul>
-<li class="fragment"><span id="eq-DesvioPadrao"><span class="math display">\[\sigma = \sqrt{\frac{1}{n}\sum_{i=1}^n (Y_i - \mu)^2} \qquad(17)\]</span></span></li>
+<li class="fragment"><span id="eq-DesvioPadrao"><span class="math display">\[\sigma = \sqrt{\frac{1}{n}\sum_{i=1}^n (Y_i - \mu)^2} \qquad(19)\]</span></span></li>
 </ul></li>
 </ul>
 </section>
@@ -1497,11 +1563,11 @@ Figura&nbsp;13: Distribuição lognormal com <span class="math inline">\(\mu = 0
 <ul>
 <li class="fragment">A definição de coeficiente de variação é:
 <ul>
-<li class="fragment"><span id="eq-CV"><span class="math display">\[CV = \frac{\sigma}{\mu} \qquad(18)\]</span></span></li>
+<li class="fragment"><span id="eq-CV"><span class="math display">\[CV = \frac{\sigma}{\mu} \qquad(20)\]</span></span></li>
 </ul></li>
 <li class="fragment">Na distribuição lognormal:
 <ul>
-<li class="fragment"><span id="eq-CVLogNormal"><span class="math display">\[CV[X] = \sqrt{e^{\sigma^2} - 1} \qquad(19)\]</span></span></li>
+<li class="fragment"><span id="eq-CVLogNormal"><span class="math display">\[CV[X] = \sqrt{e^{\sigma^2} - 1} \qquad(21)\]</span></span></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1514,37 +1580,37 @@ Figura&nbsp;13: Distribuição lognormal com <span class="math inline">\(\mu = 0
 <section id="diagrama-de-dispersão" class="slide level2">
 <h2>Diagrama de Dispersão</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">plot</span>(PU <span class="sc">~</span> lotsize, <span class="at">data =</span> hprice1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
-<section id="diagrama-de-dispersão-1" class="slide level2">
-<h2>Diagrama de Dispersão</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">plot</span>(PU <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
-<section id="diagrama-de-dispersão-2" class="slide level2">
-<h2>Diagrama de Dispersão</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
-<section id="diagrama-de-dispersão-3" class="slide level2">
-<h2>Diagrama de Dispersão</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span>
-<span id="cb27-2"><a href=""></a><span class="fu">abline</span>(<span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">plot</span>(PU <span class="sc">~</span> lotsize, <span class="at">data =</span> hprice1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section>
+<section id="diagrama-de-dispersão-1" class="slide level2">
+<h2>Diagrama de Dispersão</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="fu">plot</span>(PU <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
+<section id="diagrama-de-dispersão-2" class="slide level2">
+<h2>Diagrama de Dispersão</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
+<section id="diagrama-de-dispersão-3" class="slide level2">
+<h2>Diagrama de Dispersão</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span>
+<span id="cb33-2"><a href=""></a><span class="fu">abline</span>(<span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
 <section id="uma-primeira-regressão" class="slide level2">
 <h2>Uma primeira regressão</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span>
-<span id="cb28-2"><a href=""></a><span class="fu">summary</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span>
+<span id="cb34-2"><a href=""></a><span class="fu">summary</span>(fit)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1567,18 +1633,18 @@ F-statistic: 191.3 on 1 and 86 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
-<section id="resíduos-do-modelo" class="slide level2">
-<h2>Resíduos do Modelo</h2>
+<section id="gráfico-de-tukey-anscombe" class="slide level2">
+<h2>Gráfico de Tukey-Anscombe</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">plot</span>(fit, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">plot</span>(fit, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
 <section id="atualização-do-modelo" class="slide level2">
 <h2>Atualização do Modelo</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>fit1 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit, <span class="at">subset =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">47</span>, <span class="dv">77</span>))</span>
-<span id="cb31-2"><a href=""></a><span class="fu">summary</span>(fit1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>fit1 <span class="ot">&lt;-</span> <span class="fu">update</span>(fit, <span class="at">subset =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">47</span>, <span class="dv">77</span>))</span>
+<span id="cb37-2"><a href=""></a><span class="fu">summary</span>(fit1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1602,30 +1668,41 @@ F-statistic: 79.03 on 1 and 84 DF,  p-value: 9.884e-14</code></pre>
 </div>
 </div>
 </section>
-<section id="resíduos-do-modelo-1" class="slide level2">
-<h2>Resíduos do Modelo</h2>
+<section id="gráfico-de-tukey-anscombe-1" class="slide level2">
+<h2>Gráfico de Tukey-Anscombe</h2>
+<ul>
+<li class="fragment">O gráfico de Tukey-Anscombe mostra o comportamento dos resíduos ao longo da escala de valores ajustados <span class="citation" data-cites="TukeyAnscombe">(<a href="#/referências" role="doc-biblioref" onclick=""><span>«The Examination and Analysis of Residuals»</span> 1963</a>)</span>:</li>
+</ul>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="fu">plot</span>(fit1, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">plot</span>(fit1, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-32-1.png" width="960"></p>
+</figure>
 </div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
+</div>
+</div>
+</div>
+</section>
 <section id="gráfico-do-modelo-1" class="slide level2">
 <h2>Gráfico do Modelo 1</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span>
-<span id="cb34-2"><a href=""></a><span class="fu">abline</span>(fit1, <span class="at">col =</span> <span class="st">"purple"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span>
+<span id="cb40-2"><a href=""></a><span class="fu">abline</span>(fit1, <span class="at">col =</span> <span class="st">"purple"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-33-1.png" width="960" class="r-stretch"></section>
 <section id="gráfico-de-ambos" class="slide level2">
 <h2>Gráfico de ambos</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span>
-<span id="cb35-2"><a href=""></a><span class="fu">abline</span>(fit, <span class="at">col =</span> <span class="st">"red"</span>)</span>
-<span id="cb35-3"><a href=""></a><span class="fu">abline</span>(fit1, <span class="at">col =</span> <span class="st">"purple"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(lotsize), <span class="at">data =</span> hprice1)</span>
+<span id="cb41-2"><a href=""></a><span class="fu">abline</span>(fit, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb41-3"><a href=""></a><span class="fu">abline</span>(fit1, <span class="at">col =</span> <span class="st">"purple"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section>
+<img data-src="01_Prob_files/figure-revealjs/unnamed-chunk-34-1.png" width="960" class="r-stretch"></section>
 <section id="referências" class="slide level2 smaller scrollable">
 <h2>Referências</h2>
 
@@ -1641,6 +1718,9 @@ Kolgomorov, Andrey N. 1950. <em>Foundations of the Theory of Probability</em>. N
 </div>
 <div id="ref-matloff2009" class="csl-entry" role="listitem">
 Matloff, Norman Saul. 2009. <em>From <span>A</span>lgorithms to <span>Z</span>-<span>S</span>cores: Probabilistic and Statistical Modeling in Computer Science</em>. Davis, California: Orange Grove Books. <a href="http://heather.cs.ucdavis.edu/~matloff/132/PLN/probstatbook/ProbStatBook.pdf">http://heather.cs.ucdavis.edu/~matloff/132/PLN/probstatbook/ProbStatBook.pdf</a>.
+</div>
+<div id="ref-TukeyAnscombe" class="csl-entry" role="listitem">
+<span>«The Examination and Analysis of Residuals»</span>. 1963. <em>Technometrics</em> 5 (2): 141–60. <a href="http://www.jstor.org/stable/1266059">http://www.jstor.org/stable/1266059</a>.
 </div>
 <div id="ref-Vogel02012022" class="csl-entry" role="listitem">
 Vogel, Richard M. 2022. <span>«The geometric mean?»</span> <em>Communications in Statistics - Theory and Methods</em> 51 (1): 82–94. <a href="https://doi.org/10.1080/03610926.2020.1743313">https://doi.org/10.1080/03610926.2020.1743313</a>.

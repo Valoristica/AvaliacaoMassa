@@ -525,7 +525,7 @@ amostra**!
   
 ## *Tradeoff* entre viés e variância
 
-![*Tradeoff* entre viés e variância.](Bias_and_variance_contributing_to_total_error.png){#fig-tradeoff}
+![*Tradeoff* entre viés e variância.](./img/Bias-Variance-Trade-off-graph.jpg){#fig-tradeoff}
  
  
 ## *Tradeoff* entre viés e variância
@@ -545,7 +545,7 @@ modelo de regressão, para evitar sobreajustamento [@Harrell, 72].
 
 ## Sobreajustamento
 
-![Ilustração do sobreajustamento de um modelo.](overfitting.png){#fig-overfitting}
+![Ilustração do sobreajustamento de um modelo.](./img/overfitting.jpg){#fig-overfitting}
 
 
 ## Sobreajustamento
@@ -616,9 +616,16 @@ amostra.
 - Em alguns casos, é possível particionar os dados e ajustar o modelo de 
 regressão com uma das partições, e calcular o $R^2$ em outra partição dos dados
 
-- Porém, na engenharia de avaliações é frequente que trabalhemos com conjuntos
-de dados pequenos, o que nos dificulta muito, senão impossibilita, de
-particionar os dados.
+. . . 
+
+![Validação Cruzada](./img/K-Fold-Cross-Validation.png)
+
+
+## Validação Cruzada
+
+- Na engenharia de avaliações, infelizmente, é frequente que trabalhemos com 
+conjuntos de dados pequenos, o que dificulta muito, senão impossibilita, o 
+particionamento dos dados entre partições de treinamento e validação;
 
 - Uma alternativa, nestes casos de pequenos conjuntos de dados, é a utilização
 da técnica de reamostragem *jackknife*!
@@ -635,9 +642,17 @@ fora um dos seus dado de cada vez.
   - O método *jackknife* também pode ser denominado de *leave-one-out*
   *cross-validation* (LOOCV)
   
+## Reamostragem *jackknife* 
+
+![Reamostragem *Jackknife*](./img/Schematic_of_Jackknife_Resampling.jpg)
+
+  
 ## Exemplo 2
 
 - Em uma amostra com 10 elementos, quais sejam:
+
+. . .
+
 
 ```{r}
 #| label: tbl-Exemplo2
@@ -1150,6 +1165,9 @@ ggplot(dados, aes(x = log(Area), y = PU)) +
   coord_trans(x = "exp") +
   geom_point() +
   geom_smooth(method = "lm",  col = "cornflowerblue") +
+  scale_x_continuous(breaks = log(seq(80, 220, by = 10)), 
+                     labels = seq(80, 220, by = 10),
+                     name = "Area") +
   stat_poly_eq(use_label(c("eq", "R2")),
                label.x = "right", label.y = "top", col = "cornflowerblue")
 ```
@@ -1177,7 +1195,11 @@ predict(fitLog, newdata = list(Area = 460))
 ## Extrapolação
 
 ```{r}
-plotModel(fitLog, residuals = T, at = list(Area = 460))
+p <- plotModel(fitLog, residuals = T, at = list(Area = 460))
+p$plots[[1]] + 
+  scale_y_continuous(limits = c(1750, 2650)) +
+  geom_abline(intercept = coef(fit)[1], slope = coef(fit)[2],
+              color = "red", lty = 2)
 ```
 
 ## As agruras do avaliador
@@ -1194,9 +1216,15 @@ são possíveis!
 
 ## Comparação de modelos
 
+- Todas as combinações de modelos, ordenados por $R^2_{pred}$:
+
+. . . 
+
 ```{r}
 b <- bestfit(PU ~ Area, data = dados)
-b
+kable(head(b$tab), digits = 4,
+      format.args = list(decimal.mark = ",", big.mark = ".")) |>
+  kable_styling(font_size = 22)
 ```
 
 - **CUIDADO**: quando a variável dependente é transformada, $R^2$ (assim como
@@ -1206,10 +1234,17 @@ $R^2_{ajust}$ e $R^2_{pred}$) valem para a escala transformada!
 
 ## Comparação de modelos
 
+- Na escala original, selecionamos três modelos, um com cada transformação:
+
+. . . 
+
 ```{r}
-bestfits(b)
+kable(bestfits(b)$df, digits = 5,
+      format.args = list(decimal.mark = ",", big.mark = ".")) |>
+  kable_styling(font_size = 22)
 ```
 
-- Modelos são muito parecidos na escala original.
+- Nota-se que, na escala original, os modelos são muito parecidos em termos de
+poder de predição!
 
 ## Referências

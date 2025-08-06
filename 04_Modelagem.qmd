@@ -104,7 +104,7 @@ $${#eq-MeanDistribution}
   - o TLC de Lyapunov, por exemplo, afirma apenas que as variáveis devem ser 
   independentes, mas não identicamente distribuídas, o que já é um grande alívio
 
-## Velocidade da convergência
+## Velocidade de Convergência
 
 - 4 variáveis com distribuição uniforme:
 
@@ -178,6 +178,127 @@ p1;p2;p3
 ```
 
 - Com 3 variáveis já temos distribuição praticamente normal!
+  - É a convergência mais rápida!
+
+## Velocidade de Convergência
+
+```{r}
+#| label: fig-LognormX
+#| fig-cap: "Histograma de 5 variáveis independentes com distribuição lognormal."
+#| fig-subcap:
+#|   - "A"
+#|   - "B" 
+#|   - "C"
+#|   - "D"
+#|   - "E"
+#| layout-ncol: 2
+#| fig-height: 2
+#| fig-width: 5
+library(tibble)
+library(ggplot2)
+set.seed(1)
+n <- 1000
+min <- 0
+max <- 1
+a <- rlnorm(n, meanlog = 1, sdlog = .4)
+b <- rlnorm(n, meanlog = 1, sdlog = .4)
+c <- rlnorm(n, meanlog = 1, sdlog = .4)
+d <- rlnorm(n, meanlog = 1, sdlog = .4)
+e <- rlnorm(n, meanlog = 1, sdlog = .4)
+df <- tibble(A = a, B = b, C = c, D = d, E = e,
+             `A + B` = a+b, `A + B + C` = a+b+c,
+             `A + B + C + D` = a+b+c+d,
+             `A + B + C + D + E` = a+b+c+d+e)
+p1 <- ggplot(df, aes(x = A, y = after_stat(density))) +
+  geom_histogram(breaks = 0:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p2 <- ggplot(df, aes(x = B, y = after_stat(density))) +
+  geom_histogram(breaks = .0:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p3 <- ggplot(df, aes(x = C, y = after_stat(density))) +
+  geom_histogram(breaks = 0:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p4 <- ggplot(df, aes(x = D, y = after_stat(density))) +
+  geom_histogram(breaks = 0:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p5 <- ggplot(df, aes(x = E, y = after_stat(density))) +
+  geom_histogram(breaks = 0:10,
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p1; p2; p3; p4; p5
+```
+
+
+## Velocidade de Convergência
+
+```{r}
+#| label: fig-TCLSlow
+#| fig-cap: "Histograma da média de duas ou mais var. independentes com dist. lognormal."
+#| fig-subcap:
+#|   - "(A + B)/2"
+#|   - "(A + B + C)/3"
+#|   - "(A + B + C + D)/4" 
+#|   - "(A + B + C + D + E)/5" 
+#| layout-ncol: 2
+#| fig-height: 2
+#| fig-width: 5
+p1 <- ggplot(df, aes(x = `A + B`/2, y = after_stat(density))) +
+  geom_histogram(breaks = 0:7, 
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p2 <- ggplot(df, aes(x = `A + B + C`/3, y = after_stat(density))) +
+  geom_histogram(breaks = 0:7, 
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p3 <- ggplot(df, aes(x = `A + B + C + D`/4, y = after_stat(density))) +
+  geom_histogram(breaks = 0:7,  
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p4 <- ggplot(df, aes(x = `A + B + C + D + E`/5, y = after_stat(density))) +
+  geom_histogram(breaks = 0:7,  
+                 colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p1;p2;p3; p4
+```
+
+- Existe convergência, porém mais lenta!
+
+## Na Engenharia de Avaliações
+
+```{r}
+#| label: fig-XAval
+#| fig-cap: "Histograma das var. explicativas na Eng. de Avaliações."
+#| fig-subcap:
+#|   - "Área do Terreno (m2)"
+#|   - "Área Construída (m2)"
+#|   - "Quartos (un.)"
+#|   - "Garagens (un.)"
+#| layout-ncol: 2
+#| fig-height: 2
+#| fig-width: 5
+data(homePrices)
+homePrices <- within(homePrices, {
+  SqFeet <- 1000*SqFeet*0.09290304
+  Lot <- 1000*Lot*0.09290304
+})
+p1 <- ggplot(homePrices, aes(x = Lot, y = after_stat(density))) +
+  geom_histogram(colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p2 <- ggplot(homePrices, aes(x = SqFeet, y = after_stat(density))) +
+  geom_histogram(colour = "white", fill = "cornflowerblue", size = 0.1) +
+  geom_density(color = "red", lwd = 1)
+p3 <- ggplot(homePrices, aes(x = Beds)) +
+  geom_histogram(colour = "white", fill = "cornflowerblue", size = 0.1) 
+p4 <- ggplot(homePrices, aes(x = Garage)) +
+  geom_histogram(colour = "white", fill = "cornflowerblue", size = 0.1)
+p1; p2; p3; p4
+```
+
+- As variáveis explicativas apresentam maior ou menor assimetria!
 
 # Exemplo de Modelo Aditivo
 

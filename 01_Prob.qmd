@@ -147,7 +147,7 @@ ggvenn(list_venn, c("Alto", "Centro"))
 ocorra, dado que outro evento aconteceu
   - É designada por $\mathbb P(A|B)$
   - É definida como o quociente entre $\mathbb P(A \cap B)$ e $\mathbb P(B)$:
-    - $$\mathbb P(A|B) = \frac{\mathbb P(A \cap B)}{\mathbb P(B)}$$
+    - $$\mathbb P(A|B) = \frac{\mathbb P(A \cap B)}{\mathbb P(B)}\, \text{se }\mathbb P(B) > 0$${#eq-PCond}
     
 ## Probabilidade Condicional
     
@@ -491,6 +491,87 @@ a da @eq-Normal assim:
 mosaic::plotDist("norm", params = c(100, 10), main = "Distribuição Normal",
                  xlab = "t", ylab = expression(~f[X](t)))
 ```
+
+## Equivalência
+
+- Se uma variável aleatória $\mathbf X$ que armazena as temperaturas médias 
+diárias de uma determinada localidade, em ºF, de forma que
+$\mathbf X \sim \mathcal N(95, 9^2)$
+
+- Então uma variável $\mathbf Y$ que é a transformação linear de $\mathbf X$ 
+conforme a @eq-Fahrenheit:
+  - $$Y = \frac{X - 32}{9/5}$${#eq-Fahrenheit}
+  - Deverá representar as mesmas probabilidades do fenômeno físico, porém numa 
+  escala diferente (no caso, a escala Celsius)!
+  
+- Na escala Celsius, a variável apresentará distribuição normal, porém com média
+35ºC e desvio-padrão igual 5,0 ºC!
+  - Ou seja, $\mathbf Y \sim \mathcal N(35, 5^2)$
+  
+## Equivalência
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- $\mathbf X \sim \mathcal N(95, 9^2)$
+
+- A dois desvios-padrões de distância da média da variável $\mathbf X$ está a
+temperatura $95 + 2\cdot9 = 113 ^{\circ}\text{F}$
+:::
+
+::: {.column width="50%"}
+
+- $\mathbf Y \sim \mathcal N(35, 5^2)$
+
+- A dois desvios-padrões de distância da média da variável $\mathbf Y$ 
+encontra-se a temperatura $35+2\cdot 5 = 45 ^{\circ}\text{C}$
+:::
+::::
+
+
+- $^{\circ}\text{C} = \frac{113-32}{9/5} = 45$
+
+- A prob. de que a temp. média diária nessa localidade seja maior 
+do que 45ºC
+  - É igual à prob. de que a temp. média diária nesse local seja maior do que 113ºF!
+  
+. . .   
+  
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+1-pnorm(113, mean = 95, sd = 9)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+1-pnorm(45, mean = 35, sd = 5)
+```
+
+:::
+::::
+  
+- Que é também a prob. de que a variável $\mathbf Z \sim \mathcal N(0,1)$ seja 
+maior do que 2,0:
+
+. . . 
+
+```{r}
+#| echo: true
+1-pnorm(2)
+```
+
+
+
+
 
 
 
@@ -856,7 +937,12 @@ $Q_k$, é definido como o valor que separa a amostra em dois subconjuntos tal qu
     - São estimadores robustos!
 
 
-## Histograma
+## Histogramas
+
+- Os histogramas podem ser de frequência:
+
+. . . 
+
 
 ```{r}
 #| echo: true
@@ -865,7 +951,42 @@ hist(hprice1$price)
 
 
 
+## Histogramas
+
+- De frequência relativa:
+
+. . . 
+
+
+```{r}
+#| echo: true
+library(lattice)
+histogram(hprice1$price)
+```
+
+## Histogramas
+
+- Ou de densidade:
+
+. . . 
+
+```{r}
+hist(hprice1$price, freq = FALSE)
+```
+
+## Histograma com boxplot
+
+```{r}
+library(sfsmisc)
+histBxp(hprice1$price)
+```
+
+
 ## Densidade
+
+- Aos histogramas de densidade podemos acrescentar linhas de densidade:
+
+. . . 
 
 ```{r}
 #| echo: true
@@ -886,7 +1007,6 @@ lines(density(hprice1$PU, bw = "SJ"), col = "red")
 
 ```{r}
 #| echo: true
-hprice1$PU <- 1000*hprice1$price/hprice1$lotsize
 hist(hprice1$PU[hprice1$PU < 200], freq = FALSE)
 lines(density(hprice1$PU, bw = "SJ"), col = "red")
 ```
@@ -1193,11 +1313,16 @@ summary(fit)
 ```
 
 
-## Resíduos do Modelo
+## Gráfico de Tukey-Anscombe
+
+- O gráfico de Tukey-Anscombe mostra o comportamento dos resíduos ao longo da
+escala de valores ajustados [@TukeyAnscombe]:
+
+. . . 
 
 ```{r}
 #| echo: true
-plot(fit, which = 1)
+TA.plot(fit)
 ```
 
 
@@ -1209,11 +1334,11 @@ fit1 <- update(fit, subset = -c(47, 77))
 summary(fit1)
 ```
 
-## Resíduos do Modelo
+## Gráfico de Tukey-Anscombe
 
 ```{r}
 #| echo: true
-plot(fit1, which = 1)
+TA.plot(fit1, label = "*")
 ```
 
 
@@ -1234,8 +1359,6 @@ plot(log(PU) ~ log(lotsize), data = hprice1)
 abline(fit, col = "red")
 abline(fit1, col = "purple")
 ```
-
-
 
 ## Referências
 

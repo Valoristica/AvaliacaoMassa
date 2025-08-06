@@ -38,7 +38,7 @@ getwd()
 # Função para criar uma grade com tamanho de célula definido dentro de
 #   um polígono.
 # ==============================================================================
-cria_grid <- function(limite_polygon,cell_size = 20)
+cria_grid <- function(limite_polygon, cell_size = 20)
 {
   gridPpts <- sf::st_make_grid(limite_polygon,
                                what = "centers",
@@ -82,7 +82,7 @@ df_sf <- st_as_sf(df, coords = c("x", "y"), crs = 31984)
 # ==============================================================================
 ## Salvar dados espaciais no disco
 # ==============================================================================
-st_write(df_sf, "./KO/Cidade_Ecologiaca_VU.gpkg")
+st_write(df_sf, "./KO/Cidade_Ecologiaca_VU.gpkg", delete_layer = TRUE)
 
 # ==============================================================================
 # Criar uma grade (grid) para a Área de contorno
@@ -97,7 +97,7 @@ plot(grade_10_x_10)
 #-----------------------------------------
 # Variograma experimental
 #-----------------------------------------
-variograma <- variogram(z~1, data=df_sf, cressie=T, cutoff = 350)
+variograma <- variogram(z ~ 1, data = df_sf, cressie = T, cutoff = 350)
 plot(variograma, plot.numbers=TRUE)
 
 #-----------------------------------------
@@ -121,11 +121,11 @@ model_vario
 # Ordinary kriging (OK)
 #-----------------------------------------
 st_crs(grade_10_x_10) <- st_crs(df_sf)
-ko <- krige(z~ 1 ,                   # formula
+ko <- krige(z ~ 1 ,                  # formula
             df_sf,                   # data
             grade_10_x_10,           # newdata
             model_vario              # model
-            #, maxdist = 5          # local kriging: apenas 5 vizinhos
+            #, maxdist = 5           # local kriging: apenas 5 vizinhos
 )
 plot(ko)
 
@@ -134,14 +134,15 @@ plot(ko)
 # Ordinary kriging (OK) nos lotes
 #-----------------------------------------
 st_crs(lotes) <- st_crs(df_sf)
-ko_lotes <- krige(z~ 1 ,                   # formula
+ko_lotes <- krige(z ~ 1 ,            # formula
             df_sf,                   # data
-            lotes,           # newdata
+            lotes,                   # newdata
             model_vario              # model
             #, maxdist = 5           # local kriging: apenas 5 vizinhos
 )
 plot(ko_lotes[, "var1.pred"])
 plot(ko_lotes[, "var1.var"])
+
 #-----------------------------------------
 # Usando o pacote Automap
 #-----------------------------------------
@@ -196,12 +197,11 @@ coord <- st_coordinates(grade_10_x_10)
 
 # Cria o dataframe de exportação
 df_csv <- data.frame( coord ,
-                      ko_auto$krige_output$var1.pred ,
-                      ko_auto$krige_output$var1.var ,
-                      ko_auto$krige_output$var1.stdev)
+                      ko$var1.pred ,
+                      ko$var1.var)
 
 # Renomeia as colunas
-names(df_csv) <- c('x', 'y', 'predicao', 'variancia', 'desvpad')
+names(df_csv) <- c('x', 'y', 'predicao', 'variancia')
 
 
 # Exportar para CSV
@@ -255,7 +255,8 @@ mapa_ko <-
             inner.margins = c(0.1,0.1,0.1,0.1) # bottom, left, top, right
   ) +
   tm_compass() +
-  tm_scalebar()
+  tm_scalebar() +
+  tm_check_fix() 
 mapa_ko
 
 #-----------------------------------------

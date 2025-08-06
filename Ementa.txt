@@ -1,0 +1,41 @@
+1. Probabilidade: Definição Clássica e Axiomática; Espaço Amostral; Eventos
+mutuamente exclusivos; Probabilidade Complementar; Probabilidade Condicional;
+Teorema de Bayes; Teorema da Multiplicação; Variável Aleatória; Descrição de
+uma var. aleatória; Distribuição de Bernoulli; Distribuiçãõ Binomial; 
+Distribuição Normal Padrão; Transformações de uma var. aleatória; Distribuição
+Normal; Equivalência entre escalas; Distribuição chi-quadrado; Distribuição
+Lognormal
+
+2. Estatística Descritiva: percentis e quartis; cinco números de Tukey; gráficos
+unidimensionais: stripchart, boxplot, histograma de frequências e de 
+probabilidade e densidades; medidas de tendência central: moda, média, mediana,
+média harmônica, média geométrica e média aparada; medidas de dispersão: 
+variância, desvio-padrão e desvio-padrão geométrico; coeficiente de variação; 
+Gráficos em duas dimensões: diagrama de dispersão e gráfico de Tukey-Anscombe.
+
+3. Regressão Linear Simples: Valor Esperado; Valor esperado Condicional; 
+Regressão Linear Simples (RLS) vs. Médias isoladas; Modelo de Regressão Linear
+Clássico (MRLC); Análise de Variância; Testes de Hipótese; Testes de normalidade:
+Shapiro-Wilk e Kolgomorov-Smirnov; Análise de resíduos: gráfico QQ. Intervalos
+de Confiança; Bootstrap; R2; Erro-Padrão dos Resíduos (S); R2 vs. S; O Quarteto 
+de Anscombe; Elipses de Dados; Outliers e Pontos Influenciantes.
+
+4. Regressão Linear Múltipla: formulação matricial; notação chapéu; matriz
+chapéu; Alavancagem; Erros vs. Resíduos; Transformações dos resíduos: resíduos 
+padronizados e semi-studentizados; Distância de Cook; Gráfico Resíduos 
+Padronizados vs. Alavancagem; Viés; Tradeoff entre viés e variância;
+Sobreajustamento; Seleção de modelos: desempenho dentro e fora da amostra;
+Validação Cruzada; Reamostragem Jackknife; R2 preditivo; Comparação de modelos.
+
+5. Modelagem: Modelo Aditivo; Teorema Central do Limite; Convergência; Análise 
+das distribuições de probabilidade dos regressores; Resíduos Parciais;
+Variáveis Qualitativas: código alocado, dicotomia e dicotomia em grupo; 
+Métricas: RMSE, MAE, MAD, MADn e MAPE; Erros i.i.d.; Erros não-constantes;
+Estimador Sanduíche; Estimador MQP; Least Squares Percentage Regression;
+Transformações da variável dependente: Box-Cox; Modelo Multiplicativo; TCL
+multiplicativo; Seleção de Variáveis com R2 ajustado; Poder de Predição;
+Equação de Regressão e Equação de Estimação.
+
+6. Fatores: Derivação racional; homogeneização e previsão de valores.
+
+7. Regressão Espacial: 
