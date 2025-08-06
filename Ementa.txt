@@ -38,4 +38,11 @@ Equação de Regressão e Equação de Estimação.
 
 6. Fatores: Derivação racional; homogeneização e previsão de valores.
 
-7. Regressão Espacial: 
+7. Regressão Espacial: modelos espaciais: de Manski, do erro, da defasagem,
+SLX, modelo espacial Durbin;  Fluxograma de Anselin; Matriz de Pesos; 
+Verificação da dependência espacial: Estatística de Moran e Escores de Rao; 
+Ajuste de modelos espaciais
+
+8. Geoestatística: variáveis regionalizadas; semivariograma experimental;
+semivariograma teórico; Grau de aleatoriedade; Krigagem Ordinária.
+
