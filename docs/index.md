@@ -1,5 +1,3 @@
-# Avaliação em Massa
-
 ## Sobre o curso
 
 O objetivo desde curso é promover a capacitação de avaliadores nas melhores
@@ -23,7 +21,7 @@ práticas da avaliação em massa de imóveis.
 ## Ementa
 
 1. **Probabilidade**: 
-  - Definições:
+  - Definições
     - Clássica 
     - Axiomática 
   - Espaço Amostral
@@ -42,18 +40,19 @@ práticas da avaliação em massa de imóveis.
       - Equivalência entre escalas
     - Distribuição chi-quadrado
     - Distribuição Lognormal
+    
 2. **Estatística Descritiva e Análise Exploratória**: 
   - Percentis 
   - Quartis
   - Cinco números de Tukey 
-  - Medidas de tendência central: 
+  - Medidas de tendência central
     - moda 
     - média
     - mediana
     - média harmônica
     - média geométrica
     - média aparada
-  - Medidas de Dispersão:
+  - Medidas de Dispersão
     - variância
     - desvio-padrão
     - desvio-padrão geométrico
@@ -64,7 +63,7 @@ práticas da avaliação em massa de imóveis.
     - histograma de frequências
     - histograma de probabilidade
     - Densidades
-  - Gráficos bidimensionais: 
+  - Gráficos bidimensionais
     - diagrama de dispersão
     - gráfico de Tukey-Anscombe.
 
@@ -78,7 +77,7 @@ práticas da avaliação em massa de imóveis.
   - Testes de normalidade:
     - Shapiro-Wilk 
     - Kolgomorov-Smirnov
-  - Análise de resíduos: 
+  - Análise de resíduos
     - gráfico QQ
   - Intervalos de Confiança e Predição
     - Bootstrap
@@ -103,7 +102,7 @@ práticas da avaliação em massa de imóveis.
   - Viés
     - Tradeoff entre viés e variância;
     - Sobreajustamento
-  - Seleção de modelos: desempenho dentro e fora da amostra;
+  - Seleção de modelos: desempenho dentro e fora da amostra
     - Validação Cruzada 
     - Reamostragem Jackknife
     - R2 preditivo
