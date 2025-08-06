@@ -129,7 +129,7 @@ práticas da avaliação em massa de imóveis.
   - MAD
   - MADn
   - MAPE
-- Erros i.i.d.
+- Erros _i.i.d._
 - Erros não-constantes
 - Estimador Sanduíche
 - Estimador MQP
@@ -160,7 +160,7 @@ práticas da avaliação em massa de imóveis.
   - SLX
   - modelo espacial Durbin
 - Fluxograma de Anselin
-- Matriz de Pesos; 
+- Matriz de Pesos
 - Verificação da dependência espacial
   - Diagrama de Moran
   - Estatística de Moran
@@ -169,9 +169,9 @@ práticas da avaliação em massa de imóveis.
 
 8. **Geoestatística**:
 
-- variáveis regionalizadas
-- semivariograma experimental
-- semivariograma teórico
+- Vriáveis regionalizadas
+- Semivariograma experimental
+- Semivariograma teórico
 - Grau de aleatoriedade
 - Krigagem Ordinária
 
