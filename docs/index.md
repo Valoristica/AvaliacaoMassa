@@ -20,7 +20,7 @@ práticas da avaliação em massa de imóveis.
 
 ## Ementa
 
-**1. Probabilidade**: 
+1. **Probabilidade**: 
   - Definições:
     - Clássica 
     - Axiomática 
@@ -41,7 +41,7 @@ práticas da avaliação em massa de imóveis.
     - Distribuição chi-quadrado
     - Distribuição Lognormal
 
-**2. Estatística Descritiva e Análise Exploratória**: 
+2. **Estatística Descritiva e Análise Exploratória**: 
   - Percentis 
   - Quartis
   - Cinco números de Tukey 
@@ -67,7 +67,7 @@ práticas da avaliação em massa de imóveis.
     - diagrama de dispersão
     - gráfico de Tukey-Anscombe.
 
-**3. Regressão Linear Simples**:
+3. **Regressão Linear Simples**:
   - Valor Esperado
   - Valor esperado Condicional
   - Regressão Linear Simples (RLS) vs. Médias isoladas
@@ -88,7 +88,7 @@ práticas da avaliação em massa de imóveis.
   - Elipses de Dados
     - Outliers e Pontos Influenciantes.
 
-**4. Regressão Linear Múltipla**:
+4. **Regressão Linear Múltipla**:
  - formulação matricial
  - notação chapéu
  - matriz de projeção (matriz chapéu)
@@ -108,7 +108,7 @@ práticas da avaliação em massa de imóveis.
     - R2 preditivo
   - Comparação de modelos.
 
-**5. Modelagem**: 
+5. **Modelagem**: 
   - Modelo Aditivo
   - Teorema Central do Limite
     - Convergência
@@ -138,12 +138,12 @@ práticas da avaliação em massa de imóveis.
   - Equação de Regressão
   - Equação de Estimação.
 
-**6. Fatores**: 
+6. **Fatores**: 
   - Derivação racional
   - homogeneização
   - previsão de valores.
 
-**7. Regressão Espacial**:
+7. **Regressão Espacial**:
   - modelos espaciais
     - de Manski
     - do erro
@@ -158,7 +158,7 @@ práticas da avaliação em massa de imóveis.
     - Escores de Rao
   - Ajuste de modelos espaciais
 
-**8. Geoestatística**:
+8. **Geoestatística**:
   - variáveis regionalizadas
   - semivariograma experimental
   - semivariograma teórico

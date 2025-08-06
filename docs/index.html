@@ -382,57 +382,216 @@ de Avaliação em Massa</a></li>
 </div>
 <div id="ementa" class="section level2">
 <h2>Ementa</h2>
-<p><strong>1. Probabilidade</strong>: - Definições: - Clássica -
-Axiomática - Espaço Amostral - Eventos mutuamente exclusivos -
-Probabilidade Complementar - Probabilidade Condicional - Teorema de
-Bayes - Teorema da Multiplicação - Variável Aleatória - Descrição de uma
-var. aleatória - Distribuição de Bernoulli - Distribuiçãõ Binomial -
-Distribuição Normal Padrão - Transformações de uma var. aleatória -
-Distribuição Normal - Equivalência entre escalas - Distribuição
-chi-quadrado - Distribuição Lognormal</p>
-<p><strong>2. Estatística Descritiva e Análise Exploratória</strong>: -
-Percentis - Quartis - Cinco números de Tukey - Medidas de tendência
-central: - moda - média - mediana - média harmônica - média geométrica -
-média aparada - Medidas de Dispersão: - variância - desvio-padrão -
-desvio-padrão geométrico - coeficiente de variação - Gráficos
-unidimensionais - stripchart - boxplot - histograma de frequências -
-histograma de probabilidade - Densidades - Gráficos bidimensionais: -
-diagrama de dispersão - gráfico de Tukey-Anscombe.</p>
-<p><strong>3. Regressão Linear Simples</strong>: - Valor Esperado -
-Valor esperado Condicional - Regressão Linear Simples (RLS) vs. Médias
-isoladas - Modelo de Regressão Linear Clássico (MRLC) - Análise de
-Variância - Testes de Hipótese - Testes de normalidade: - Shapiro-Wilk -
-Kolgomorov-Smirnov - Análise de resíduos: - gráfico QQ - Intervalos de
-Confiança e Predição - Bootstrap - R2 - Erro-Padrão dos Resíduos (S) -
-R2 vs. S - O Quarteto de Anscombe - Elipses de Dados - Outliers e Pontos
-Influenciantes.</p>
-<p><strong>4. Regressão Linear Múltipla</strong>: - formulação matricial
-- notação chapéu - matriz de projeção (matriz chapéu) - Alavancagem -
-Erros vs. Resíduos - Transformações dos resíduos: - resíduos
-semi-studentizados - resíduos padronizados - Distância de Cook - Gráfico
-Resíduos Padronizados vs. Alavancagem - Viés - Tradeoff entre viés e
-variância; - Sobreajustamento - Seleção de modelos: desempenho dentro e
-fora da amostra; - Validação Cruzada - Reamostragem Jackknife - R2
-preditivo - Comparação de modelos.</p>
-<p><strong>5. Modelagem</strong>: - Modelo Aditivo - Teorema Central do
-Limite - Convergência - Análise das distribuições de probabilidade dos
-regressores - Resíduos Parciais; - Variáveis Qualitativas - código
-alocado - dicotomia simples - dicotomia em grupo - Métricas - RMSE - MAE
-- MAD - MADn - MAPE - Erros i.i.d. - Erros não-constantes - Estimador
-Sanduíche - Estimador MQP - Least Squares Percentage Regression; -
-Transformações da variável dependente: - Box-Cox - Modelo Multiplicativo
-- TCL multiplicativo - Seleção de Variáveis com R2 ajustado -Poder de
-Predição - Equação de Regressão - Equação de Estimação.</p>
-<p><strong>6. Fatores</strong>: - Derivação racional - homogeneização -
-previsão de valores.</p>
-<p><strong>7. Regressão Espacial</strong>: - modelos espaciais - de
-Manski - do erro - da defasagem - SLX - modelo espacial Durbin -
-Fluxograma de Anselin - Matriz de Pesos; - Verificação da dependência
-espacial - Diagrama de Moran - Estatística de Moran - Escores de Rao -
-Ajuste de modelos espaciais</p>
-<p><strong>8. Geoestatística</strong>: - variáveis regionalizadas -
-semivariograma experimental - semivariograma teórico - Grau de
-aleatoriedade - Krigagem Ordinária</p>
+<ol style="list-style-type: decimal">
+<li><strong>Probabilidade</strong>:</li>
+</ol>
+<ul>
+<li>Definições:
+<ul>
+<li>Clássica</li>
+<li>Axiomática</li>
+</ul></li>
+<li>Espaço Amostral</li>
+<li>Eventos mutuamente exclusivos</li>
+<li>Probabilidade Complementar</li>
+<li>Probabilidade Condicional</li>
+<li>Teorema de Bayes</li>
+<li>Teorema da Multiplicação</li>
+<li>Variável Aleatória</li>
+<li>Descrição de uma var. aleatória
+<ul>
+<li>Distribuição de Bernoulli</li>
+<li>Distribuiçãõ Binomial</li>
+<li>Distribuição Normal Padrão</li>
+</ul></li>
+<li>Transformações de uma var. aleatória
+<ul>
+<li>Distribuição Normal
+<ul>
+<li>Equivalência entre escalas</li>
+</ul></li>
+<li>Distribuição chi-quadrado</li>
+<li>Distribuição Lognormal</li>
+</ul></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Estatística Descritiva e Análise Exploratória</strong>:</li>
+</ol>
+<ul>
+<li>Percentis</li>
+<li>Quartis</li>
+<li>Cinco números de Tukey</li>
+<li>Medidas de tendência central:
+<ul>
+<li>moda</li>
+<li>média</li>
+<li>mediana</li>
+<li>média harmônica</li>
+<li>média geométrica</li>
+<li>média aparada</li>
+</ul></li>
+<li>Medidas de Dispersão:
+<ul>
+<li>variância</li>
+<li>desvio-padrão</li>
+<li>desvio-padrão geométrico</li>
+<li>coeficiente de variação</li>
+</ul></li>
+<li>Gráficos unidimensionais
+<ul>
+<li>stripchart</li>
+<li>boxplot</li>
+<li>histograma de frequências</li>
+<li>histograma de probabilidade</li>
+<li>Densidades</li>
+</ul></li>
+<li>Gráficos bidimensionais:
+<ul>
+<li>diagrama de dispersão</li>
+<li>gráfico de Tukey-Anscombe.</li>
+</ul></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Regressão Linear Simples</strong>:</li>
+</ol>
+<ul>
+<li>Valor Esperado</li>
+<li>Valor esperado Condicional</li>
+<li>Regressão Linear Simples (RLS) vs. Médias isoladas</li>
+<li>Modelo de Regressão Linear Clássico (MRLC)</li>
+<li>Análise de Variância</li>
+<li>Testes de Hipótese</li>
+<li>Testes de normalidade:
+<ul>
+<li>Shapiro-Wilk</li>
+<li>Kolgomorov-Smirnov</li>
+</ul></li>
+<li>Análise de resíduos:
+<ul>
+<li>gráfico QQ</li>
+</ul></li>
+<li>Intervalos de Confiança e Predição
+<ul>
+<li>Bootstrap</li>
+</ul></li>
+<li>R2</li>
+<li>Erro-Padrão dos Resíduos (S)</li>
+<li>R2 vs. S</li>
+<li>O Quarteto de Anscombe</li>
+<li>Elipses de Dados
+<ul>
+<li>Outliers e Pontos Influenciantes.</li>
+</ul></li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Regressão Linear Múltipla</strong>:</li>
+</ol>
+<ul>
+<li>formulação matricial</li>
+<li>notação chapéu</li>
+<li>matriz de projeção (matriz chapéu)</li>
+<li>Alavancagem</li>
+<li>Erros vs. Resíduos</li>
+<li>Transformações dos resíduos:</li>
+<li>resíduos semi-studentizados</li>
+<li>resíduos padronizados</li>
+<li>Distância de Cook</li>
+<li>Gráfico Resíduos Padronizados vs. Alavancagem</li>
+<li>Viés
+<ul>
+<li>Tradeoff entre viés e variância;</li>
+<li>Sobreajustamento</li>
+</ul></li>
+<li>Seleção de modelos: desempenho dentro e fora da amostra;
+<ul>
+<li>Validação Cruzada</li>
+<li>Reamostragem Jackknife</li>
+<li>R2 preditivo</li>
+</ul></li>
+<li>Comparação de modelos.</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Modelagem</strong>:</li>
+</ol>
+<ul>
+<li>Modelo Aditivo</li>
+<li>Teorema Central do Limite
+<ul>
+<li>Convergência</li>
+</ul></li>
+<li>Análise das distribuições de probabilidade dos regressores</li>
+<li>Resíduos Parciais;</li>
+<li>Variáveis Qualitativas
+<ul>
+<li>código alocado</li>
+<li>dicotomia simples</li>
+<li>dicotomia em grupo</li>
+</ul></li>
+<li>Métricas
+<ul>
+<li>RMSE</li>
+<li>MAE</li>
+<li>MAD</li>
+<li>MADn</li>
+<li>MAPE</li>
+</ul></li>
+<li>Erros i.i.d.</li>
+<li>Erros não-constantes</li>
+<li>Estimador Sanduíche</li>
+<li>Estimador MQP
+<ul>
+<li>Least Squares Percentage Regression;</li>
+</ul></li>
+<li>Transformações da variável dependente:
+<ul>
+<li>Box-Cox</li>
+</ul></li>
+<li>Modelo Multiplicativo</li>
+<li>TCL multiplicativo</li>
+<li>Seleção de Variáveis com R2 ajustado -Poder de Predição</li>
+<li>Equação de Regressão</li>
+<li>Equação de Estimação.</li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li><strong>Fatores</strong>:</li>
+</ol>
+<ul>
+<li>Derivação racional</li>
+<li>homogeneização</li>
+<li>previsão de valores.</li>
+</ul>
+<ol start="7" style="list-style-type: decimal">
+<li><strong>Regressão Espacial</strong>:</li>
+</ol>
+<ul>
+<li>modelos espaciais
+<ul>
+<li>de Manski</li>
+<li>do erro</li>
+<li>da defasagem</li>
+<li>SLX</li>
+<li>modelo espacial Durbin</li>
+</ul></li>
+<li>Fluxograma de Anselin</li>
+<li>Matriz de Pesos;</li>
+<li>Verificação da dependência espacial
+<ul>
+<li>Diagrama de Moran</li>
+<li>Estatística de Moran</li>
+<li>Escores de Rao</li>
+</ul></li>
+<li>Ajuste de modelos espaciais</li>
+</ul>
+<ol start="8" style="list-style-type: decimal">
+<li><strong>Geoestatística</strong>:</li>
+</ol>
+<ul>
+<li>variáveis regionalizadas</li>
+<li>semivariograma experimental</li>
+<li>semivariograma teórico</li>
+<li>Grau de aleatoriedade</li>
+<li>Krigagem Ordinária</li>
+</ul>
 </div>
 
 
