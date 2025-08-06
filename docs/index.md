@@ -1,3 +1,5 @@
+Bem-vindos à pagina do **Curso de Avaliação em Massa de Imóveis** da **Valorística**!
+
 ### Sobre o curso
 
 O objetivo desde curso é promover a capacitação de avaliadores nas melhores
