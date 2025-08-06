@@ -42,7 +42,6 @@ práticas da avaliação em massa de imóveis.
       - Equivalência entre escalas
     - Distribuição chi-quadrado
     - Distribuição Lognormal
-
 2. **Estatística Descritiva e Análise Exploratória**: 
   - Percentis 
   - Quartis
