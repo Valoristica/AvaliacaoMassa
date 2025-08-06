@@ -22,8 +22,8 @@ práticas da avaliação em massa de imóveis.
 
 1. **Probabilidade**: 
   - Definições
-    - Clássica 
-    - Axiomática 
+    - Clássica
+    - Axiomática
   - Espaço Amostral
   - Eventos mutuamente exclusivos
   - Probabilidade Complementar
@@ -34,7 +34,7 @@ práticas da avaliação em massa de imóveis.
   - Descrição de uma var. aleatória
     - Distribuição de Bernoulli
     - Distribuição Binomial
-    - Distribuição Normal Padrão 
+    - Distribuição Normal Padrão
   - Transformações de uma var. aleatória
     - Distribuição Normal
       - Equivalência entre escalas
