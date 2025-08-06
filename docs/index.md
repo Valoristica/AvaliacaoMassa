@@ -1,3 +1,5 @@
+# Avaliação em Massa
+
 ## Sobre o curso
 
 O objetivo desde curso é promover a capacitação de avaliadores nas melhores
@@ -33,7 +35,7 @@ práticas da avaliação em massa de imóveis.
   - Variável Aleatória
   - Descrição de uma var. aleatória
     - Distribuição de Bernoulli
-    - Distribuiçãõ Binomial
+    - Distribuição Binomial
     - Distribuição Normal Padrão 
   - Transformações de uma var. aleatória
     - Distribuição Normal
